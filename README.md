@@ -20,6 +20,19 @@ Each time a pod lands:
 
 Open the directory shown, read its `README.md`, copy the files.
 
+## Agent on the receiving side
+
+A skill for the receiving agent ships in this repo: `.claude/skills/pod-receive/SKILL.md`.
+Running Claude Code inside this clone loads it automatically. To use it from the target
+project instead, copy that directory once into `~/.claude/skills/` (global) or into the
+project's `.claude/skills/`. It knows the pod contract below and applies a pod step by step.
+
+## Pod contract
+
+Each pod `README.md` has four sections in this order: `## Context`, `## Decisions`,
+`## Apply`, `## Files`. Code is shipped as real files with their final names; the README
+never carries code. A pod is never edited after landing.
+
 ## Pods
 
 <!-- pods:index -->
