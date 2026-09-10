@@ -4,7 +4,7 @@ Instructions for any coding agent working in this clone or in a project that rec
 (Claude Code, OpenCode, IBM Bob, Codex, Copilot: all read this file or can be pointed at it).
 
 Drop-Pod is a one-way channel: capsules of code and notes launched from the author's home
-setup toward this machine. Repo clone: the directory holding this file's `.claude/`. Each
+setup toward this machine. Repo clone: the directory holding this file. Each
 pod is one directory `YYYY-MM-DD-<subject>/` and is never edited after landing.
 
 ## Pod contract
