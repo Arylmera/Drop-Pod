@@ -40,11 +40,11 @@ Open the directory shown, read its `README.md`, copy the files.
 
 ## 🤖 Agent on the receiving side
 
-A skill for the receiving agent ships in this repo:
-[`.claude/skills/pod-receive/SKILL.md`](.claude/skills/pod-receive/SKILL.md).
-Running Claude Code inside this clone loads it automatically. To use it from the target
-project instead, copy that directory once into `~/.claude/skills/` (global) or into the
-project's `.claude/skills/`. It knows the pod contract below and applies a pod step by step.
+The receiving procedure lives in [`AGENTS.md`](AGENTS.md), the file most coding agents read
+on their own (OpenCode, IBM Bob, Codex, Copilot). Claude Code gets the same procedure through
+[`.claude/skills/pod-receive/SKILL.md`](.claude/skills/pod-receive/SKILL.md), which only
+points at it. Working from the target project instead of this clone? Paste the relevant part
+of `AGENTS.md` into that project's agent file, or tell the agent to read it from the clone path.
 
 ## 📦 Pod contract
 
