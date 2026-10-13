@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI, the reality check</title>
+<style>:root{--accent:#F26B21}
+/* Shared design for the arc decks: a dark IDE (Darcula-like). Stage is 1600x900, scaled by deck.js. */
+:root {
+  --editor: #1e1f22; --panel: #2b2d30; --border: #393b40; --deep: #17181a;
+  --ink: #dfe1e5; --ink-2: #bcbec4; --muted: #868a91; --faint: #4b5059;
+  --kw: #cf8e6d; --str: #6aab73; --num: #2aacb8; --ann: #b3ae60; --fn: #56a8f5; --tag: #d5b778; --purple: #c77dbb;
+  --cool: #56a8f5;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --sans: "Inter", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #0b0c0e; overflow: hidden; font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+#deck { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center; }
+
+/* ---------- IDE window ---------- */
+.slide {
+  position: absolute; inset: 0; background: var(--editor); color: var(--ink); overflow: hidden;
+  visibility: hidden; opacity: 0; transition: opacity 220ms ease, visibility 0s linear 220ms;
+}
+.slide.active { visibility: visible; opacity: 1; transition: opacity 420ms var(--ease-out), visibility 0s; z-index: 1; }
+.slide.dark { background: var(--deep); }
+.slide.dark::after { /* accent glow on title, sections, closing slides */
+  content: ""; position: absolute; width: 1100px; height: 1100px; right: -380px; top: -420px; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%);
+}
+.chrome {
+  position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 46px; display: flex; align-items: stretch;
+  background: var(--panel); border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 15px; color: var(--muted);
+}
+.crumb, .cmdk { display: none; }
+.slide { counter-increment: slide; }
+#deck { counter-reset: slide; }
+.lights { display: flex; align-items: center; gap: 8px; padding: 0 22px; }
+.lights i { width: 13px; height: 13px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.tab { display: flex; align-items: center; padding: 0 22px; border-right: 1px solid var(--border); }
+.tab.active { background: var(--editor); color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
+.dark .tab.active { background: var(--deep); }
+.gutter {
+  position: absolute; z-index: 1; left: 0; top: 46px; bottom: 36px; width: 64px; padding: 22px 18px 0 0;
+  display: flex; flex-direction: column; align-items: flex-end;
+  font-family: var(--mono); font-size: 15px; line-height: 33px; color: var(--faint); border-right: 1px solid #2a2c30; overflow: hidden;
+}
+footer {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 36px; display: flex; justify-content: space-between; align-items: center;
+  padding: 0 20px; background: var(--panel); border-top: 1px solid var(--border); font-family: var(--mono); font-size: 15px; color: var(--muted);
+}
+footer b { font-weight: 500; color: var(--ink-2); margin-right: 18px; }
+.inner { position: relative; z-index: 1; height: 100%; padding: 92px 96px 84px 140px; display: flex; flex-direction: column; justify-content: center; }
+
+/* Reveal: every .r enters in order of --i */
+.slide .r { opacity: 0; }
+.slide.active .r { animation: rise 560ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 70ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Type ---------- */
+h1 { font-size: 88px; line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 1280px; }
+h2 { font-size: 66px; line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; }
+h3 { font-size: 48px; line-height: 1.12; letter-spacing: -0.015em; font-weight: 750; margin-bottom: 42px; }
+h3::before { content: "// "; font-family: var(--mono); font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.lead { font-size: 29px; line-height: 1.42; color: var(--ink-2); margin-top: 26px; max-width: 1220px; }
+.dot { display: inline-block; width: 22px; height: 22px; border-radius: 6px; background: var(--accent); flex: none; }
+.badge {
+  display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 10px; border-radius: 10px; flex: none;
+  background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent);
+  font-family: var(--mono); font-weight: 700; font-size: 20px;
+}
+.badge.lg { min-width: 60px; height: 60px; border-radius: 14px; font-size: 25px; }
+a { color: var(--fn); text-decoration-color: color-mix(in srgb, var(--fn) 50%, transparent); text-underline-offset: 4px; }
+
+/* Title */
+.kicker { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 22px; color: var(--muted); margin-bottom: 44px; }
+.kicker::before { content: "$"; color: var(--str); }
+.kicker .dot { display: none; }
+.t-title h1::after { content: "_"; color: var(--accent); animation: blink 1.1s steps(1) infinite; margin-left: 6px; }
+@keyframes blink { 50% { opacity: 0; } }
+.t-title .lead { font-family: var(--mono); font-size: 25px; color: var(--str); }
+.t-title .lead::before { content: "/* "; color: var(--muted); } .t-title .lead::after { content: " */"; color: var(--muted); }
+.brand { position: absolute; left: 140px; bottom: 84px; font-family: var(--mono); font-size: 20px; color: var(--accent); }
+
+/* Section */
+.sec { display: flex; align-items: center; gap: 52px; }
+.big-num {
+  width: 170px; height: 170px; border-radius: 30px; flex: none; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 84px; font-weight: 700; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.t-section h2::before, .t-takeaway h2::before { content: "## "; font-family: var(--mono); font-weight: 400; color: var(--muted); }
+
+/* Statement */
+.statement { font-size: 62px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; margin-top: 30px; max-width: 1320px; }
+.t-statement .lead { font-family: var(--mono); font-size: 23px; color: var(--muted); }
+.t-statement .lead::before { content: "// "; }
+
+/* Grids and panels */
+.grid { display: grid; gap: 24px; }
+.grid.fill { align-items: stretch; }
+.grid.fill .card { min-height: 200px; }
+.grid.five { grid-template-columns: repeat(6, 1fr); }
+.grid.five > .card { grid-column: span 2; }
+.grid.five > .card:nth-child(4) { grid-column: 2 / span 2; }
+.cols-1 { grid-template-columns: 1fr; } .cols-2 { grid-template-columns: repeat(2, 1fr); }
+.cols-3 { grid-template-columns: repeat(3, 1fr); } .cols-4 { grid-template-columns: repeat(4, 1fr); }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 32px 34px; min-height: 0; }
+.card.hot { background: var(--deep); border-color: color-mix(in srgb, var(--accent) 60%, transparent); box-shadow: 0 20px 50px -34px var(--accent); }
+.card-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.card-head b { font-size: 30px; line-height: 1.2; }
+.card p { font-size: 26px; line-height: 1.45; color: var(--ink-2); }
+.col-head { display: block; font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--fn); margin-bottom: 24px; }
+.card.hot .col-head { color: var(--accent); }
+.col-big { font-family: var(--mono); font-size: 100px; line-height: 1; font-weight: 700; color: var(--cool); margin-bottom: 16px; }
+.card.hot .col-big { color: var(--accent); }
+.card ul, .bul, .src { list-style: none; }
+.card li, .bul li { position: relative; padding-left: 38px; font-size: 28px; line-height: 1.4; margin-bottom: 16px; color: var(--ink-2); }
+.card li::before, .bul li::before { content: "›"; position: absolute; left: 6px; top: -1px; font-family: var(--mono); font-weight: 700; color: var(--accent); }
+.card.hot li { color: var(--ink); }
+
+/* Stats */
+.stat { padding: 40px 34px; }
+.stat .value { font-family: var(--mono); font-size: 88px; line-height: 1; font-weight: 700; letter-spacing: -0.03em; color: var(--num); margin-bottom: 26px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat .label { font-size: 26px; line-height: 1.4; color: var(--ink-2); }
+.cols-4 .stat .value { font-size: 68px; }
+.source { margin-top: 24px; font-family: var(--mono); font-size: 17px; color: var(--muted); }
+.source::before { content: "// "; }
+
+/* Steps */
+.steps { position: relative; display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 24px; }
+.rail { position: absolute; left: 30px; right: 30px; top: 29px; height: 2px; background: repeating-linear-gradient(90deg, var(--faint) 0 10px, transparent 10px 18px); transform-origin: left; }
+.slide.active .rail { animation: draw 900ms var(--ease-out) both 160ms; }
+@keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.step { position: relative; }
+.step .badge { background-color: var(--editor); }
+.step b { display: block; font-size: 28px; line-height: 1.2; margin: 24px 0 12px; }
+.step p { font-size: 23px; line-height: 1.45; color: var(--ink-2); hyphens: auto; overflow-wrap: anywhere; }
+
+/* Quote: a Javadoc block */
+.quote-mark { font-size: 0; margin-bottom: 18px; }
+.quote-mark::before { content: "/**"; font-family: var(--mono); font-size: 34px; color: var(--muted); }
+blockquote { position: relative; padding-left: 52px; font-size: 52px; line-height: 1.24; font-weight: 700; font-style: italic; letter-spacing: -0.015em; color: var(--str); max-width: 1300px; }
+blockquote::before { content: "*"; position: absolute; left: 14px; top: 0; font-family: var(--mono); font-style: normal; font-weight: 400; color: var(--muted); }
+.cite { margin-top: 26px; font-family: var(--mono); font-size: 23px; color: var(--muted); }
+.cite::before { content: " */  @author "; color: var(--ann); white-space: pre; }
+
+/* Bullets + aside */
+.split { display: grid; grid-template-columns: 1fr 470px; gap: 44px; }
+.split.solo { grid-template-columns: 1fr; }
+.bul li { font-size: 32px; margin-bottom: 22px; color: var(--ink); }
+.split aside { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; align-self: start; }
+.split aside .badge { background: color-mix(in srgb, var(--ann) 20%, transparent); color: var(--ann); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ann) 55%, transparent); }
+.split aside p { font-size: 28px; line-height: 1.45; }
+
+/* Code */
+pre {
+  flex: 0 1 auto; min-height: 0; background: var(--deep); color: var(--ink-2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 34px 40px; overflow: hidden; font-family: var(--mono); font-size: 25px; line-height: 1.55; white-space: pre;
+}
+.tk-c { color: #7a7e85; font-style: italic; } .tk-s { color: var(--str); } .tk-a { color: var(--ann); } .tk-k { color: var(--kw); }
+.tk-t { color: var(--tag); } .tk-n { color: var(--num); } .tk-y { color: var(--purple); }
+
+/* Takeaway */
+.take { list-style: none; margin-top: 52px; display: grid; gap: 32px; }
+.take li { display: flex; align-items: center; gap: 28px; font-size: 32px; line-height: 1.35; }
+
+/* Sources */
+.src li { font-family: var(--mono); font-size: 20px; line-height: 1.45; padding: 12px 0; border-bottom: 1px solid #2c2e33; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* Bars: one shared linear scale, direct value labels */
+.bars { display: grid; gap: 30px; }
+.bar-group { display: grid; gap: 14px; --bar: var(--cool); }
+.bar-group.hot { --bar: var(--accent); }
+.bar-head { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 20px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.swatch { width: 16px; height: 16px; border-radius: 4px; background: var(--bar); }
+.bar-row { display: grid; grid-template-columns: 380px 1fr; align-items: center; gap: 24px; }
+.bar-label { font-size: 26px; color: var(--ink-2); text-align: right; }
+.bar-track { position: relative; display: flex; align-items: center; height: 40px; }
+.bar { display: block; height: 100%; width: var(--w); min-width: 6px; background: var(--bar); border-radius: 0 6px 6px 0; transform-origin: left; }
+.slide.active .bar { animation: grow 900ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 70ms + 220ms); }
+.bar-val { margin-left: 16px; font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Formula: factor × (terms) */
+.f-lhs { font-family: var(--mono); font-size: 36px; color: var(--fn); margin-bottom: 28px; }
+.f-lhs span { color: var(--muted); margin-left: 8px; }
+.f-row { display: flex; align-items: center; gap: 28px; }
+.f-factor { font-family: var(--mono); font-size: 140px; line-height: 1; font-weight: 700; color: var(--accent); }
+.f-op { font-family: var(--mono); font-size: 80px; color: var(--muted); }
+.f-terms { display: flex; flex-direction: column; gap: 18px; padding: 26px 34px; border-left: 3px solid var(--faint); border-right: 3px solid var(--faint); border-radius: 36px; }
+.f-line { display: flex; align-items: center; gap: 14px; }
+.f-term { font-family: var(--mono); line-height: 1.2; font-size: 30px; font-weight: 600; padding: 12px 22px; border-radius: 10px; background: var(--panel); border: 1px solid var(--border); color: var(--str); }
+.f-term.f-lead { background: var(--accent); border-color: var(--accent); color: #fff; }
+.f-plus { font-family: var(--mono); font-size: 30px; color: var(--kw); }
+.f-cell { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; }
+.slide.active .f-cell { animation: rise 480ms var(--ease-out) both; animation-delay: calc(var(--j) * 90ms + 520ms); }
+
+/* Steps in labelled blocks */
+.sgs { display: flex; gap: 22px; align-items: stretch; }
+.sg { border-radius: 14px; padding: 28px 26px 30px; background: var(--panel); border: 1px solid var(--border); }
+.sg.hot { background: var(--deep); border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.sg.cool .badge { color: var(--cool); background-color: color-mix(in srgb, var(--cool) 18%, var(--panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cool) 55%, transparent); }
+.sg-head { margin-bottom: 28px; }
+.sg-head b { display: block; font-family: var(--mono); font-size: 27px; color: var(--cool); }
+.sg.hot .sg-head b { color: var(--accent); }
+.sg-head span { display: block; margin-top: 6px; font-size: 21px; color: var(--muted); }
+.sg .step b { font-size: 24px; margin: 22px 0 10px; }
+.sg .step p { font-size: 20px; }
+
+/* ---------- Chrome: progress, notes drawer, overview, presenter ---------- */
+#progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
+#notes-drawer {
+  position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
+  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55; white-space: pre-wrap;
+}
+body.notes #notes-drawer { display: block; }
+body.overview { overflow: auto; background: #0b0c0e; }
+body.overview #deck { position: static; transform: none !important; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, 368px); gap: 20px; padding: 24px; justify-content: center; }
+body.overview .slide { position: relative; inset: auto; width: 1600px; height: 900px; zoom: 0.23; visibility: visible; opacity: 1; cursor: pointer; border-radius: 16px; outline: 8px solid transparent; transition: none; }
+body.overview .slide.active { outline-color: var(--accent); }
+body.overview .slide .r, body.overview .rail, body.overview .bar, body.overview .f-cell { animation: none; opacity: 1; }
+
+body.presenter { overflow: auto; background: #0b0c0e; color: #e9ecf5; }
+body.presenter #deck, body.presenter #progress { display: none; }
+#presenter { display: grid; grid-template-columns: 1fr 380px; gap: 28px; padding: 28px 34px; min-height: 100vh; }
+#presenter .now { font-size: 15px; color: #a9b0c7; text-transform: uppercase; letter-spacing: 0.08em; }
+#presenter h4 { font-size: 30px; margin: 6px 0 20px; }
+#presenter .script { font-size: 23px; line-height: 1.6; white-space: pre-wrap; max-width: 75ch; }
+#presenter .side { display: flex; flex-direction: column; gap: 22px; }
+#presenter .box { background: #1e1f22; border-radius: 16px; padding: 18px 20px; }
+#presenter .clock { font-size: 54px; font-weight: 800; font-variant-numeric: tabular-nums; }
+#presenter .over { color: var(--accent); }
+#presenter .hint { font-size: 14px; color: #8a91a8; line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.active .r { animation: fade 300ms ease both; animation-delay: 0ms; }
+  .slide.active .rail, .slide.active .bar, .slide.active .f-cell, .t-title h1::after { animation: none; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+}
+
+@media print {
+  @page { size: 1600px 900px; margin: 0; }
+  html, body { overflow: visible; height: auto; background: none; }
+  #deck { position: static; transform: none !important; width: 1600px; height: auto; }
+  .slide { position: relative; visibility: visible; opacity: 1; width: 1600px; height: 900px; break-after: page; transition: none; }
+  .slide .r, .rail, .bar, .f-cell { animation: none !important; opacity: 1 !important; transform: none !important; }
+  #progress, #notes-drawer { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Rubber duck: progress marker on the status bar, waddles a step forward on each slide.
+   The track is the flexible gap between the two status texts; the duck walks from --p0 to --p. */
+footer { gap: 28px; }
+.duck-track { position: relative; flex: 1; align-self: center; height: 0; border-top: 2px dotted var(--faint); }
+.duck { --x: calc(var(--p) * (100% - 40px)); position: absolute; left: var(--x); bottom: -9px; width: 40px; height: 33px; }
+.duck svg { width: 100%; height: 100%; display: block; transform-origin: 50% 90%; }
+.slide.active .duck { animation: duck-walk 900ms var(--ease-out) both; }
+.slide.active .duck svg { animation: duck-waddle 300ms ease-in-out 3; }
+.slide.active .duck.end svg { animation: duck-waddle 300ms ease-in-out 3, duck-hop 700ms var(--ease-out) 950ms 2; }
+@keyframes duck-walk { from { left: calc(var(--p0) * (100% - 40px)); } to { left: var(--x); } }
+@keyframes duck-waddle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg); } 75% { transform: rotate(9deg); } }
+@keyframes duck-hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .slide.active .duck, .slide.active .duck svg { animation: none; } }
+@media print { .duck, .duck svg { animation: none !important; } }
+
+/* Modern editor theme (Zed / Cursor / Fleet feel), layered on deck.css.
+   Floating rounded window, glass header with breadcrumb, no gutter, translucent panels with hairline borders. */
+:root {
+  --bg: #08090b; --editor: #0f1013; --deep: #0b0c0e; --glass: rgba(255, 255, 255, 0.035); --hair: rgba(255, 255, 255, 0.08);
+  --ink: #ececf1; --ink-2: #b4b6c0; --muted: #7c7f8b; --faint: #3a3c44;
+}
+html, body { background: var(--bg); }
+
+/* Stage = desktop; the slide is a floating window on it */
+.slide, .slide.dark { background: var(--bg); }
+.slide::before { /* soft accent aurora + fine grid on the desktop */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 85% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    radial-gradient(700px 500px at -10% 110%, color-mix(in srgb, var(--cool) 12%, transparent), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px;
+}
+.slide.dark::after { display: none; }
+.slide > .inner::before { /* the window */
+  content: ""; position: absolute; inset: 22px 24px 22px 24px; z-index: -1; border-radius: 22px;
+  background: linear-gradient(180deg, rgba(22, 23, 27, 0.92), rgba(14, 15, 18, 0.94));
+  box-shadow: 0 0 0 1px var(--hair), 0 40px 120px -40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.slide.dark > .inner::before { background: linear-gradient(180deg, rgba(18, 19, 23, 0.78), rgba(11, 12, 14, 0.86)); }
+
+/* Header: lights, breadcrumb, ⌘K */
+.chrome {
+  left: 24px; right: 24px; top: 22px; height: 52px; background: transparent; border: 0; border-bottom: 1px solid var(--hair);
+  border-radius: 22px 22px 0 0; align-items: center; color: var(--muted); font-size: 15px;
+}
+.tab { display: none; }
+.crumb { display: block; flex: 1; text-align: center; letter-spacing: 0.01em; }
+.crumb em { font-style: normal; color: var(--faint); margin: 0 6px; }
+.crumb strong { color: var(--ink); font-weight: 500; }
+.cmdk { display: block; margin-right: 18px; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--hair); background: var(--glass); font-size: 13px; color: var(--muted); }
+.lights { padding: 0 20px; gap: 9px; }
+.lights i { width: 12px; height: 12px; opacity: 0.9; }
+.gutter { display: none; }
+
+/* Status: a quiet line inside the window */
+footer {
+  left: 24px; right: 24px; bottom: 22px; height: 40px; background: transparent; border: 0; border-top: 1px solid var(--hair);
+  border-radius: 0 0 22px 22px; padding: 0 26px; font-size: 14px; color: var(--muted);
+}
+footer b { color: var(--ink-2); font-weight: 500; }
+footer b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; margin-right: 10px; vertical-align: 2px; box-shadow: 0 0 10px #3ddc84; }
+
+.inner { padding: 110px 110px 96px 110px; }
+
+/* Titles: numbered mono eyebrow instead of // prefix */
+h3::before {
+  content: counter(slide, decimal-leading-zero); display: block; margin-bottom: 14px;
+  font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+}
+h3 { font-size: 50px; letter-spacing: -0.025em; margin-bottom: 40px; }
+.t-section h2::before, .t-takeaway h2::before { content: none; }
+.t-takeaway h2 { background: linear-gradient(90deg, var(--ink), var(--ink-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h1 { letter-spacing: -0.035em; background: linear-gradient(100deg, #fff 30%, color-mix(in srgb, var(--accent) 70%, #fff)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.t-title h1::after { -webkit-text-fill-color: var(--accent); }
+.kicker { font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; }
+.kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+.t-title .lead { color: var(--ink-2); font-family: var(--sans); font-size: 28px; }
+.t-title .lead::before, .t-title .lead::after { content: none; }
+.brand { left: 110px; bottom: 100px; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
+.statement { letter-spacing: -0.03em; }
+.t-statement .dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 16px var(--accent); }
+
+/* Section: glowing number tile */
+.big-num {
+  border-radius: 34px; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 30%, transparent), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 30px 80px -30px var(--accent);
+  color: #fff;
+}
+
+/* Panels: glass + hairline */
+.card, .sg {
+  background: var(--glass); border: 1px solid var(--hair); border-radius: 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.card.hot, .sg.hot {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, transparent), rgba(255, 255, 255, 0.02) 60%);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 30px 80px -40px var(--accent), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.badge { border-radius: 999px; }
+.badge.lg { border-radius: 999px; }
+.step .badge { background-color: var(--editor); }
+.card li::before, .bul li::before { content: ""; top: 0.6em; left: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent); }
+.col-head { font-family: var(--sans); font-weight: 700; }
+.col-big, .stat .value, .f-factor {
+  background: linear-gradient(120deg, var(--cool), color-mix(in srgb, var(--cool) 55%, #fff)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.card.hot .col-big, .f-factor { background-image: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #fff)); }
+.stat .value { background-image: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #fff)); }
+
+/* Code: borderless pane with a soft top glow */
+pre { background: rgba(0, 0, 0, 0.35); border: 1px solid var(--hair); border-radius: 16px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+
+/* Quote: big, clean, accent bar replaced by glow mark */
+.quote-mark::before { content: "\201C"; font-family: Georgia, serif; font-size: 160px; line-height: 0.6; color: var(--accent); text-shadow: 0 0 40px color-mix(in srgb, var(--accent) 60%, transparent); }
+.quote-mark { height: 80px; }
+blockquote { padding-left: 0; color: var(--ink); font-style: normal; font-weight: 750; letter-spacing: -0.025em; }
+blockquote::before { content: none; }
+.cite { font-family: var(--sans); color: var(--muted); }
+.cite::before { content: none; }
+
+/* Formula + bars keep their structure, softer surfaces */
+.f-term { background: var(--glass); border-color: var(--hair); border-radius: 999px; color: var(--ink); }
+.f-terms { border-color: var(--faint); }
+.f-lhs { color: var(--ink-2); }
+.bar { border-radius: 0 999px 999px 0; box-shadow: 0 0 24px -6px var(--bar); }
+.rail { background: linear-gradient(90deg, transparent, var(--faint) 10%, var(--faint) 90%, transparent); height: 1px; }
+.src li { border-bottom-color: var(--hair); }
+
+/* Takeaways: glass rows */
+.take li { padding: 20px 26px; border-radius: 18px; background: var(--glass); border: 1px solid var(--hair); }
+
+/* Series map, Previously, Next time */
+.map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.stop { position: relative; padding: 26px 24px 28px; border-radius: 18px; border: 1px solid var(--hair); background: var(--glass); min-height: 250px; }
+.stop-n { display: block; font-family: var(--mono); font-size: 40px; font-weight: 700; color: var(--faint); margin-bottom: 18px; }
+.stop b { display: block; font-size: 26px; line-height: 1.2; margin-bottom: 12px; }
+.stop-sub { font-size: 19px; line-height: 1.4; color: var(--muted); }
+.stop.done { opacity: 0.55; }
+.stop.done .stop-n::after { content: " \2713"; color: #3ddc84; font-size: 28px; }
+.stop.now { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, transparent), rgba(255, 255, 255, 0.02) 65%); box-shadow: 0 30px 80px -40px var(--accent); }
+.stop.now .stop-n { color: var(--accent); }
+.stop.bonus { border-style: dashed; }
+.eyebrow { font-family: var(--mono); font-size: 20px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.eyebrow::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); margin-right: 14px; vertical-align: 3px; }
+.t-previously .statement, .t-next .statement { margin-top: 26px; }
+.t-previously .lead, .t-next .lead { font-family: var(--mono); font-size: 23px; color: var(--muted); }
+
+/* Gradient text is painted only inside the element box: give descenders (g, y, p) room, then cancel the extra space. */
+h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; padding-right: 0.06em; }
+.stat .value, .col-big { padding-bottom: 0.16em; padding-right: 0.06em; }
+.stat .value { margin-bottom: 14px; }
+.col-big { margin-bottom: 4px; }
+
+/* Long labels shrink instead of wrapping into a wall of text */
+.col-big.sm { font-size: 54px; line-height: 1.1; letter-spacing: -0.02em; }
+.statement.long { font-size: 50px; line-height: 1.18; }
+.duck-track { border-top-color: rgba(255, 255, 255, 0.12); }
+</style></head>
+<body><main id="deck">
+<section class="slide t-title dark" data-title="AI, the reality check">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">01-ai-the-reality-check.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>01-ai-the-reality-check.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="kicker r" style="--i:0"><span class="dot"></span>Talk 1 - AI, the reality check</div>
+    <h1 class="r" style="--i:1">AI, the reality check</h1>
+    <p class="lead r" style="--i:2">What Devoxx Belgium 2026 actually showed about AI and delivery</p>
+    <div class="brand r" style="--i:3">Back from Devoxx Belgium 2026</div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.0000;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 1, Col 1 &middot; 1 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">- Thirty minutes: about twenty-five of talk, five of questions
+- Two sources: a METR controlled study and a Devoxx trust-ladder talk, plus a reconversion keynote
+- Talk 1 of 5: from chat to agents we can trust
+Transition: First, where this talk sits in the series.
+~1 min</template>
+</section>
+<section class="slide t-map" data-title="map">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">02-map.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>02-map.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">The series</h3>
+    <div class="map"><div class="stop now r" style="--i:1"><span class="stop-n">01</span><b>AI, the reality check</b><span class="stop-sub">What AI really delivers, and how far to trust it</span></div><div class="stop next r" style="--i:2"><span class="stop-n">02</span><b>The harness around the agent</b><span class="stop-sub">Rules in the build, bounded loops, honest checks</span></div><div class="stop next r" style="--i:3"><span class="stop-n">03</span><b>Context is the product</b><span class="stop-sub">Specs, docs and rules: what the agent reads</span></div><div class="stop next r" style="--i:4"><span class="stop-n">04</span><b>Trust at scale</b><span class="stop-sub">Sandboxes, permissions, review, dimming the lights</span></div><div class="stop next bonus r" style="--i:5"><span class="stop-n">&#9733;</span><b>Bonus: Java craft</b><span class="stop-sub">Integrity, coupling, seeing your architecture</span></div></div>
+    </div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.0526;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 2, Col 1 &middot; 2 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: This is talk 1 of a 5-talk series on AI and delivery.
+- Talk 1 of 5: AI, the reality check
+- Next: the harness, context, trust at scale, then a Java-craft bonus
+- Each talk stands alone; miss one, still follow the next
+Transition: Let's start with a show of hands.
+~1 min</template>
+</section>
+<section class="slide t-statement" data-title="They felt 20 % faster. The stopwatch said 19 % slower.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">03-they-felt-20-faster-the-stopwatch.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>03-they-felt-20-faster-the-stopwatch.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <span class="dot r" style="--i:0"></span>
+    <p class="statement r" style="--i:1">They felt 20 % faster. The stopwatch said 19 % slower.</p>
+    <p class="lead r" style="--i:2">Experienced developers, on their own projects — METR study, 2025</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.1053;--p0:0.0526"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: A feeling of speed is not proof of speed.
+- Show of hands: who feels faster coding with AI? Keep that hand in mind
+- The question this talk answers: does AI make us better at delivering, and how much do we hand an agent?
+- Same developers, same tasks: forecast faster, felt faster, measured slower
+- Example: A Spring Boot team shipping a feature &quot;in half the time&quot; with nothing to show the clock agrees
+Transition: Chapter one: what the numbers actually say.
+~2 min</template>
+</section>
+<section class="slide t-section dark" data-title="A feeling is not a measurement">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">04-a-feeling-is-not-a-measurement.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>04-a-feeling-is-not-a-measurement.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">1</div>
+      <div><h2 class="r" style="--i:1">A feeling is not a measurement</h2><p class="lead r" style="--i:2">What the numbers really say</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.1579;--p0:0.1053"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 4, Col 1 &middot; 4 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: When a number travels this far, go read where it came from.
+- A randomised controlled trial, not a survey
+- Real tasks, real developers, a stopwatch
+Transition: Here is what the study actually measured.
+~1 min</template>
+</section>
+<section class="slide t-stats" data-title="Forecast, felt, measured">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">05-forecast-felt-measured.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>05-forecast-felt-measured.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Forecast, felt, measured</h3>
+    <div class="grid cols-4">
+      <div class="card stat r" style="--i:1"><div class="value" data-count="-24 %">-24 %</div><div class="label">Time change developers forecast before starting</div></div>
+      <div class="card stat r" style="--i:2"><div class="value" data-count="-20 %">-20 %</div><div class="label">Time change they felt afterward, task done</div></div>
+      <div class="card stat r" style="--i:3"><div class="value" data-count="+19 %">+19 %</div><div class="label">Time change actually measured, with AI</div></div>
+      <div class="card stat r" style="--i:4"><div class="value" data-count="&lt; 44 %">&lt; 44 %</div><div class="label">Share of AI generations they actually kept</div></div>
+    </div>
+    <p class="source r" style="--i:5">METR - Becker, Rush, Barnes, Rein - arXiv 2507.09089 (2025)</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.2105;--p0:0.1579"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 5, Col 1 &middot; 5 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: The gap that matters is not the 19 %, it's felt versus measured.
+- Forecast minus 24 %, felt minus 20 %, measured plus 19 % slower
+- Economists and ML experts forecast minus 38-39 %, further off still
+- Under 44 % of AI generations were kept; most needed real clean-up
+- Example: A dev merges a generated Spring repository method, then spends longer fixing the N+1 query it hid
+Transition: To be fair, here's the setting this was measured in.
+~2.5 min</template>
+</section>
+<section class="slide t-cards" data-title="The study setting, to be fair">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">06-the-study-setting-to-be-fair.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>06-the-study-setting-to-be-fair.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">The study setting, to be fair</h3>
+    <div class="grid cols-2 fill">
+      <div class="card r" style="--i:1"><div class="card-head"><span class="badge">1</span><b>16 developers</b></div><p>Experienced open-source developers, averaging five years on the project they changed.</p></div>
+      <div class="card r" style="--i:2"><div class="card-head"><span class="badge">2</span><b>246 real tasks</b></div><p>In their own repositories. Real work, timed, not a lab exercise.</p></div>
+      <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Mature code</b></div><p>Repositories about ten years old, over 1.1 million lines.</p></div>
+      <div class="card r" style="--i:4"><div class="card-head"><span class="badge">4</span><b>Early-2025 tools</b></div><p>Mostly Cursor Pro with Claude 3.5/3.7 Sonnet, no agentic harness.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.2632;--p0:0.2105"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 6, Col 1 &middot; 6 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: This is not automatically our team or our stack.
+- Experienced people, on code they already know by heart
+- No agentic harness around the tools they used
+- Small sample, but a randomised trial on real work: a strong signal, not a universal law
+Transition: Now, does going faster at the keyboard mean the team ships faster?
+~2 min</template>
+</section>
+<section class="slide t-bars" data-title="More output, more breakage">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">07-more-output-more-breakage.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>07-more-output-more-breakage.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">More output, more breakage</h3>
+    <div class="bars">
+      <div class="bar-group cool">
+        <div class="bar-head r" style="--i:1"><span class="swatch"></span>Output per developer</div>
+        <div class="bar-row r" style="--i:2"><span class="bar-label">Epics completed</span>
+          <span class="bar-track"><span class="bar" style="--w:16.5%"></span><b class="bar-val">+66 %</b></span></div>
+        <div class="bar-row r" style="--i:3"><span class="bar-label">Task throughput</span>
+          <span class="bar-track"><span class="bar" style="--w:8.425%"></span><b class="bar-val">+33.7 %</b></span></div>
+      </div>
+      <div class="bar-group hot">
+        <div class="bar-head r" style="--i:4"><span class="swatch"></span>Instability downstream</div>
+        <div class="bar-row r" style="--i:5"><span class="bar-label">Incidents per PR</span>
+          <span class="bar-track"><span class="bar" style="--w:60.75000000000001%"></span><b class="bar-val">+243 %</b></span></div>
+        <div class="bar-row r" style="--i:6"><span class="bar-label">Time in review</span>
+          <span class="bar-track"><span class="bar" style="--w:100%"></span><b class="bar-val">~5x</b></span></div>
+      </div>
+    </div>
+    <p class="source r" style="--i:7">Faros AI, The Acceleration Whiplash - 22,000 developers, 2 years telemetry (vendor report)</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.3158;--p0:0.2632"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 7, Col 1 &middot; 7 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Local speed moves the cost downstream, it doesn't remove it.
+- Epics and throughput per developer genuinely rise
+- Incidents per pull request roughly triple, review time roughly five times
+- Vendor report, order of magnitude only, not an exact decimal
+- Example: A team's pull-request queue backs up until reviewers start rubber-stamping, which is its own number below
+Transition: One more data point, from a different population entirely.
+~2 min</template>
+</section>
+<section class="slide t-stats" data-title="A second data point: trust, not throughput">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">08-a-second-data-point-trust-not-thro.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>08-a-second-data-point-trust-not-thro.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">A second data point: trust, not throughput</h3>
+    <div class="grid cols-3">
+      <div class="card stat r" style="--i:1"><div class="value" data-count="84 %">84 %</div><div class="label">Developers who now use AI tools day to day</div></div>
+      <div class="card stat r" style="--i:2"><div class="value" data-count="29 %">29 %</div><div class="label">Who trust the accuracy of what it outputs, down from 40 %</div></div>
+      <div class="card stat r" style="--i:3"><div class="value" data-count="66 %">66 %</div><div class="label">Who hit &quot;almost right, but not quite&quot; regularly</div></div>
+    </div>
+    <p class="source r" style="--i:4">Stack Overflow Developer Survey 2025 (AI section)</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.3684;--p0:0.3158"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 8, Col 1 &middot; 8 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: A survey of developers tells the same story as a controlled study.
+- Adoption keeps climbing even as trust in accuracy falls
+- Two-thirds regularly see output that is close but wrong
+- Different method, different population, same shape as the METR gap
+Transition: So what does the speaker himself conclude from all this?
+~1.5 min</template>
+</section>
+<section class="slide t-quote" data-title="Only when you do it wrong.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">09-only-when-you-do-it-wrong.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>09-only-when-you-do-it-wrong.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="quote-mark r" style="--i:0">&ldquo;</div>
+    <blockquote class="r" style="--i:1">Only when you do it wrong.</blockquote>
+    <p class="cite r" style="--i:2">&mdash; Jonathan Vila Lopez, Devoxx Belgium 2026 - answering his own numbers</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.4211;--p0:0.3684"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 9, Col 1 &middot; 9 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: The numbers describe unstructured use, not AI itself.
+- His answer to slower, lower-DORA, under-44 %-kept: only when you do it wrong
+- A position from the stage, not a proven reversal of the 19 %
+- Every Devoxx talk that week pointed the same way: the harness around the agent
+Transition: He put a number on what &quot;doing it right&quot; multiplies.
+~1 min</template>
+</section>
+<section class="slide t-formula dark" data-title="formula">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">10-success.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>10-success.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <p class="f-lhs r" style="--i:0">Success <span>=</span></p>
+    <div class="f-row">
+      <span class="f-factor r" style="--i:1">AI</span><span class="f-op r" style="--i:2">&times;</span>
+      <div class="f-terms r" style="--i:3"><div class="f-line"><span class="f-cell" style="--j:0"><span class="f-term f-lead">You</span></span><span class="f-cell" style="--j:1"><span class="f-plus">+</span><span class="f-term">good practices</span></span><span class="f-cell" style="--j:2"><span class="f-plus">+</span><span class="f-term">team knowledge</span></span></div><div class="f-line"><span class="f-cell" style="--j:3"><span class="f-plus">+</span><span class="f-term">specs</span></span><span class="f-cell" style="--j:4"><span class="f-plus">+</span><span class="f-term">deterministic tools</span></span></div></div>
+    </div>
+    <p class="lead r" style="--i:4">&quot;Multiplied by AI, confident by humans&quot; - Jonathan Vila Lopez</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.4737;--p0:0.4211"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 10, Col 1 &middot; 10 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: AI multiplies whatever is already in the bracket, good or bad.
+- Success equals AI times you, practices, team knowledge, specs, deterministic tools
+- A weak bracket does not get fixed by a stronger model, it gets amplified
+- Asking the agent instead of a colleague quietly erodes the &quot;team knowledge&quot; term
+Transition: So the practical question becomes: how much do we let the agent do on its own?
+~1.5 min</template>
+</section>
+<section class="slide t-section dark" data-title="Trust is built in stages">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">11-trust-is-built-in-stages.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>11-trust-is-built-in-stages.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">2</div>
+      <div><h2 class="r" style="--i:1">Trust is built in stages</h2><p class="lead r" style="--i:2">How much do we let the agent do?</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.5263;--p0:0.4737"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 11, Col 1 &middot; 11 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Trust in an agent isn't a single on/off switch, it's a ladder.
+- Seven stages, from copy-paste chat to systems of agents
+- Each step up means you personally watch less
+Transition: Here is that ladder.
+~1 min</template>
+</section>
+<section class="slide t-steps" data-title="A trust ladder in seven stages">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">12-a-trust-ladder-in-seven-stages.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>12-a-trust-ladder-in-seven-stages.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">A trust ladder in seven stages</h3><div class="sgs"><div class="sg cool r" style="--i:1" style="flex:5">
+      <div class="sg-head"><b>Stages 1-5 - Permission</b><span>One agent, more rights. How much do I approve?</span></div>
+      <div class="steps" style="--n:5"><div class="rail"></div>
+        <div class="step"><span class="badge lg">1</span><b>Browser chat</b><p>Copy-paste by hand, both ways. Low trust, total control.</p></div>
+        <div class="step"><span class="badge lg">2</span><b>Approval</b><p>A coding agent; you approve every tool call.</p></div>
+        <div class="step"><span class="badge lg">3</span><b>Collaborator</b><p>File edits go through; shell commands still approved.</p></div>
+        <div class="step"><span class="badge lg">4</span><b>Director</b><p>High trust: you judge the end result, not each step.</p></div>
+        <div class="step"><span class="badge lg">5</span><b>YOLO mode</b><p>Full trust, fast autonomous iteration.</p></div>
+      </div></div><div class="sg hot r" style="--i:2" style="flex:2">
+      <div class="sg-head"><b>Stages 6-7 - Shape</b><span>Many agents. Who splits the work?</span></div>
+      <div class="steps" style="--n:2"><div class="rail"></div>
+        <div class="step"><span class="badge lg">6</span><b>Orchestrator</b><p>You coordinate a fleet of specialised subagents.</p></div>
+        <div class="step"><span class="badge lg">7</span><b>Architect</b><p>You design systems that design systems.</p></div>
+      </div></div></div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.5789;--p0:0.5263"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 12, Col 1 &middot; 12 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Stages 1-5 raise permission on one agent; 6-7 change the shape of the work entirely.
+- Climbing from stage 2 to 4 is only reasonable if something else is watching instead of you
+- A test, a build, a CI pipeline: that's what trust actually transfers to
+- This grouping is my reading of the ladder, not a slide shown on stage
+- Example: A team stays at stage 2 for a database migration but runs stage 4 for routine unit tests
+Transition: One illustrative example of how the right stage depends on the risk of the task.
+~3 min</template>
+</section>
+<section class="slide t-cards" data-title="The right stage depends on the risk">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">13-the-right-stage-depends-on-the-ris.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>13-the-right-stage-depends-on-the-ris.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">The right stage depends on the risk</h3>
+    <div class="grid cols-3 fill">
+      <div class="card r" style="--i:1"><div class="card-head"><span class="badge">1</span><b>Flyway migration script</b></div><p>Stage 2: every change approved by hand before it runs against a real schema.</p></div>
+      <div class="card r" style="--i:2"><div class="card-head"><span class="badge">2</span><b>Unit tests, Maven gate</b></div><p>Stage 4: agent writes freely, a required CI gate judges the result, not each step.</p></div>
+      <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Shared library refactor</b></div><p>Stage 3: edits go through automatically, but any shell command still needs a yes.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.6316;--p0:0.5789"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 13, Col 1 &middot; 13 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Same team, same agent, three different stages, chosen by what's at risk.
+- A schema migration stays closely watched; a test suite doesn't need to be
+- No new mechanism here, just the ladder applied task by task
+- How each gate is actually built is next talk's subject, not today's
+Transition: Before we leave the numbers behind: what should replace &quot;it feels fast&quot;?
+~2 min</template>
+</section>
+<section class="slide t-bullets" data-title="What do we measure instead of feeling?">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">14-what-do-we-measure-instead-of-feel.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>14-what-do-we-measure-instead-of-feel.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">What do we measure instead of feeling?</h3>
+    <div class="split ">
+      <ul class="bul"><li class="r" style="--i:1">Deployment frequency</li><li class="r" style="--i:2">Lead time for changes</li><li class="r" style="--i:3">Change failure rate</li><li class="r" style="--i:4">Time to restore service</li></ul>
+      <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>The DORA four. Not a new practice to adopt today, a yardstick that already exists.</p></aside>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.6842;--p0:0.6316"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 14, Col 1 &middot; 14 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: A one-line answer so this doesn't stay an open question through Q&amp;A.
+- Deployment frequency, lead time, change failure rate, time to restore
+- These already exist; AI doesn't need a new metric invented for it
+- How to wire that measurement in is left for a later talk
+Transition: One ceiling no stage of that ladder removes: the human side of the work.
+~1.5 min</template>
+</section>
+<section class="slide t-section dark" data-title="What the ladder doesn't climb">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">15-what-the-ladder-doesn-t-climb.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>15-what-the-ladder-doesn-t-climb.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">3</div>
+      <div><h2 class="r" style="--i:1">What the ladder doesn't climb</h2><p class="lead r" style="--i:2">The human cost of climbing it carelessly</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.7368;--p0:0.6842"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 15, Col 1 &middot; 15 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Climbing the ladder changes what you do, not what you're responsible for.
+- A reconversion keynote from the same conference, on the human side of this shift
+- Not a seatbelt, a warning about the driver
+Transition: Here's the part that isn't a number.
+~1 min</template>
+</section>
+<section class="slide t-bullets" data-title="The brain is the bottleneck">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">16-the-brain-is-the-bottleneck.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>16-the-brain-is-the-bottleneck.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">The brain is the bottleneck</h3>
+    <div class="split ">
+      <ul class="bul"><li class="r" style="--i:1">Decisions that took three days now take two hours</li><li class="r" style="--i:2">The danger zone: three or four parallel agent terminals, your only input is &quot;OK&quot;</li><li class="r" style="--i:3">Burnout and loss of agency are the real risk of climbing fast</li><li class="r" style="--i:4">System design stays human: you can't vibe your infrastructure</li></ul>
+      <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>An agent traced 17 memory leaks from a heap dump in 30 minutes.</p></aside>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.7895;--p0:0.7368"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 16, Col 1 &middot; 16 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Higher stages free your hands, then quietly spend your judgment instead.
+- The bottleneck moves from typing to deciding, and deciding all day burns out
+- Architecture, trade-offs, availability and scalability stay a human call at every stage
+- A vivid, credible win for Java ops work, explicitly his anecdote, not a study
+Transition: Which brings us back to the hook we opened with.
+~2.5 min
+Cut if short: say only the last bullet, skip the anecdote.</template>
+</section>
+<section class="slide t-statement dark" data-title="The problem isn't the model, it's what we put around it.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">17-the-problem-isn-t-the-model-it-s-w.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>17-the-problem-isn-t-the-model-it-s-w.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <span class="dot r" style="--i:0"></span>
+    <p class="statement r" style="--i:1">The problem isn't the model, it's what we put around it.</p>
+    <p class="lead r" style="--i:2">Feeling faster is not evidence; trust is transferred to mechanisms, not decreed</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.8421;--p0:0.7895"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 17, Col 1 &middot; 17 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: This is the one sentence that closes the loop the hook opened.
+- Feeling faster is not evidence, we opened on exactly that gap
+- Trust moves to mechanisms we build, never to the model by default
+- Everything in this talk points at the same gap, not at AI itself
+Transition: Three things to keep.
+~1 min</template>
+</section>
+<section class="slide t-takeaway dark" data-title="Key takeaways">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">18-key-takeaways.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>18-key-takeaways.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h2 class="r" style="--i:0">Key takeaways</h2>
+    <ol class="take"><li class="r" style="--i:1"><span class="badge lg">1</span><span>A feeling is not a measurement: judge AI by lead time, failure rate and rework, not by how fast it feels.</span></li><li class="r" style="--i:2"><span class="badge lg">2</span><span>Trust is transferred, not decreed: hand over control only where a test, a build or CI watches for you.</span></li><li class="r" style="--i:3"><span class="badge lg">3</span><span>The brain is the bottleneck, not the keyboard: climbing the ladder spends judgment, protect it.</span></li></ol></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.8947;--p0:0.8421"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 18, Col 1 &middot; 18 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: Three sentences worth carrying out of the room.
+- A feeling is not a measurement
+- Trust is transferred, not decreed
+- The brain is the bottleneck, not the keyboard
+Transition: So where does that trust actually get transferred to?
+~1.5 min</template>
+</section>
+<section class="slide t-next dark" data-title="So what do we put around it?">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">19-so-what-do-we-put-around-it.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>19-so-what-do-we-put-around-it.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <p class="eyebrow r" style="--i:0">Next time &middot; 2</p>
+    <p class="statement r" style="--i:1">So what do we put around it?</p>
+    <p class="lead r" style="--i:2">Talk 2: the harness around the agent</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.9474;--p0:0.8947"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 19, Col 1 &middot; 19 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: The question this talk leaves open, on purpose, for next time.
+- Next time: what, concretely, makes an agent's output trustworthy
+- Rules the build enforces, checks the agent can't game
+Transition: Sources, if you want to check any of this yourself.
+~0.5 min</template>
+</section>
+<section class="slide t-sources" data-title="sources">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">20-sources.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>20-sources.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Going further</h3>
+    <ul class="src"><li class="r" style="--i:1">Jonathan Vila Lopez - Agents With Seatbelts, Devoxx BE 2026 - <a href="https://dvbe26.cfp.dev/api/public/talks/9032" target="_blank" rel="noopener">https://dvbe26.cfp.dev/api/public/talks/9032</a></li><li class="r" style="--i:2">METR - Early-2025 AI and experienced open-source developers - <a href="https://arxiv.org/abs/2507.09089" target="_blank" rel="noopener">https://arxiv.org/abs/2507.09089</a></li><li class="r" style="--i:3">DORA 2025 - State of AI-assisted Software Development - <a href="https://dora.dev/research/2025/" target="_blank" rel="noopener">https://dora.dev/research/2025/</a></li><li class="r" style="--i:4">Faros AI - The Acceleration Whiplash (vendor report) - <a href="https://faros.ai/research/ai-acceleration-whiplash" target="_blank" rel="noopener">https://faros.ai/research/ai-acceleration-whiplash</a></li><li class="r" style="--i:5">Stack Overflow Developer Survey 2025 (AI section) - <a href="https://survey.stackoverflow.co/2025/ai" target="_blank" rel="noopener">https://survey.stackoverflow.co/2025/ai</a></li><li class="r" style="--i:6">Victor Rentea - Agentic Engineering Reconversion (keynote) - <a href="https://www.youtube.com/watch?v=vAfQ4f8wIVI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vAfQ4f8wIVI</a></li></ul></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck end" style="--p:1.0000;--p0:0.9474"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 20, Col 1 &middot; 20 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">- No replay yet of the Devoxx BE 2026 talks themselves
+- METR paper is open access, start with its introduction
+Transition: Thank you, questions.
+~0.5 min</template>
+</section>
+</main>
+<div id="progress"></div><div id="notes-drawer"></div>
+<script>// Deck runtime: navigation, scaling, stat count-up, notes, overview, presenter window.
+(() => {
+  const deck = document.getElementById("deck");
+  const slides = [...document.querySelectorAll(".slide")];
+  const notes = slides.map((s) => s.querySelector("template.notes").content.textContent.trim());
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const chan = "BroadcastChannel" in window ? new BroadcastChannel("deck:" + document.title) : null;
+  const presenter = location.hash === "#presenter";
+  let cur = -1;
+
+  function fit() {
+    if (document.body.classList.contains("overview")) return;
+    const k = Math.min(innerWidth / 1600, innerHeight / 900);
+    deck.style.transform = `translate(-50%, -50%) scale(${k})`;
+  }
+
+  // "−19 %" → animates 0 → 19 keeping prefix/suffix; anything it can't parse stays static.
+  function countUp(el) {
+    const raw = el.dataset.count, m = raw.match(/\d[\d\s.,]*\d|\d/);
+    if (!m || reduce) return;
+    const tok = m[0], thousands = /[\s,.]\d{3}$/.test(tok) && !/[.,]\d{1,2}$/.test(tok);
+    const sep = thousands ? (tok.match(/[\s,.]/) || [" "])[0] : "";
+    const decMatch = !thousands && tok.match(/[.,](\d+)$/);
+    const decimals = decMatch ? decMatch[1].length : 0;
+    const target = parseFloat(thousands ? tok.replace(/[\s,.]/g, "") : tok.replace(",", "."));
+    if (!isFinite(target)) return;
+    const fmt = (v) => {
+      let s = v.toFixed(decimals);
+      if (decMatch) s = s.replace(".", tok.includes(",") ? "," : ".");
+      if (thousands) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+      return raw.slice(0, m.index) + s + raw.slice(m.index + tok.length);
+    };
+    const t0 = performance.now(), dur = 1100;
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = fmt(target * e);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = fmt(0);
+    setTimeout(() => requestAnimationFrame(tick), 250);
+  }
+
+  function go(n, from) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (n === cur) return;
+    if (cur >= 0) slides[cur].classList.remove("active");
+    cur = n;
+    const s = slides[cur];
+    void s.offsetWidth; // restart the reveal animations
+    s.classList.add("active");
+    if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
+    document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
+    document.getElementById("notes-drawer").textContent = notes[cur];
+    if (!presenter) history.replaceState(null, "", "#" + (cur + 1));
+    if (chan && from !== "remote") chan.postMessage({ slide: cur });
+    if (presenter) renderPresenter();
+  }
+
+  // Presenter window: script of the current slide, next slide, timer.
+  let start = null;
+  function renderPresenter() {
+    let p = document.getElementById("presenter");
+    if (!p) {
+      document.body.classList.add("presenter");
+      p = document.createElement("div");
+      p.id = "presenter";
+      document.body.appendChild(p);
+    }
+    const next = slides[cur + 1];
+    p.innerHTML = `<div><div class="now">Slide ${cur + 1} / ${slides.length}</div><h4></h4><div class="script"></div></div>
+      <div class="side"><div class="box"><div class="now">Elapsed · target 25 min</div><div class="clock" id="clk">0:00</div></div>
+      <div class="box"><div class="now">Next</div><h4 style="font-size:22px"></h4></div>
+      <div class="hint">→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
+    p.querySelector("h4").textContent = slides[cur].dataset.title;
+    p.querySelector(".script").textContent = notes[cur];
+    p.querySelectorAll("h4")[1].textContent = next ? next.dataset.title : "— end —";
+    tickClock();
+  }
+  function tickClock() {
+    const el = document.getElementById("clk");
+    if (!el || start === null) return;
+    const s = Math.floor((Date.now() - start) / 1000);
+    el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+    el.classList.toggle("over", s > 25 * 60);
+  }
+
+  addEventListener("keydown", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key;
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    else if (k === "Home") go(0);
+    else if (k === "End") go(slides.length - 1);
+    else if (k === "n" || k === "N") document.body.classList.toggle("notes");
+    else if (k === "f" || k === "F") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    else if ((k === "o" || k === "O" || k === "Escape") && !presenter) {
+      const on = k === "Escape" ? false : !document.body.classList.contains("overview");
+      document.body.classList.toggle("overview", on);
+      if (on) { deck.style.transform = "none"; slides[cur].scrollIntoView({ block: "center" }); } else fit();
+    }
+    else if ((k === "s" || k === "S") && !presenter) window.open(location.href.split("#")[0] + "#presenter", "presenter", "width=1200,height=800");
+    else if ((k === "r" || k === "R") && presenter) { start = Date.now(); tickClock(); }
+  });
+  deck.addEventListener("click", (e) => {
+    const s = e.target.closest(".slide");
+    if (document.body.classList.contains("overview") && s) {
+      document.body.classList.remove("overview");
+      fit();
+      go(slides.indexOf(s));
+    }
+  });
+  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); };
+  addEventListener("resize", fit);
+
+  fit();
+  if (presenter) { start = Date.now(); setInterval(tickClock, 1000); }
+  const h = parseInt(location.hash.slice(1), 10);
+  go(isFinite(h) ? h - 1 : 0);
+})();
+</script></body></html>

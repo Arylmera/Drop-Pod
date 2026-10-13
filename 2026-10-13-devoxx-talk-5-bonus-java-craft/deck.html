@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bonus: Java craft</title>
+<style>:root{--accent:#3B8EEA}
+/* Shared design for the arc decks: a dark IDE (Darcula-like). Stage is 1600x900, scaled by deck.js. */
+:root {
+  --editor: #1e1f22; --panel: #2b2d30; --border: #393b40; --deep: #17181a;
+  --ink: #dfe1e5; --ink-2: #bcbec4; --muted: #868a91; --faint: #4b5059;
+  --kw: #cf8e6d; --str: #6aab73; --num: #2aacb8; --ann: #b3ae60; --fn: #56a8f5; --tag: #d5b778; --purple: #c77dbb;
+  --cool: #56a8f5;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --sans: "Inter", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #0b0c0e; overflow: hidden; font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+#deck { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center; }
+
+/* ---------- IDE window ---------- */
+.slide {
+  position: absolute; inset: 0; background: var(--editor); color: var(--ink); overflow: hidden;
+  visibility: hidden; opacity: 0; transition: opacity 220ms ease, visibility 0s linear 220ms;
+}
+.slide.active { visibility: visible; opacity: 1; transition: opacity 420ms var(--ease-out), visibility 0s; z-index: 1; }
+.slide.dark { background: var(--deep); }
+.slide.dark::after { /* accent glow on title, sections, closing slides */
+  content: ""; position: absolute; width: 1100px; height: 1100px; right: -380px; top: -420px; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%);
+}
+.chrome {
+  position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 46px; display: flex; align-items: stretch;
+  background: var(--panel); border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 15px; color: var(--muted);
+}
+.crumb, .cmdk { display: none; }
+.slide { counter-increment: slide; }
+#deck { counter-reset: slide; }
+.lights { display: flex; align-items: center; gap: 8px; padding: 0 22px; }
+.lights i { width: 13px; height: 13px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.tab { display: flex; align-items: center; padding: 0 22px; border-right: 1px solid var(--border); }
+.tab.active { background: var(--editor); color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
+.dark .tab.active { background: var(--deep); }
+.gutter {
+  position: absolute; z-index: 1; left: 0; top: 46px; bottom: 36px; width: 64px; padding: 22px 18px 0 0;
+  display: flex; flex-direction: column; align-items: flex-end;
+  font-family: var(--mono); font-size: 15px; line-height: 33px; color: var(--faint); border-right: 1px solid #2a2c30; overflow: hidden;
+}
+footer {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 36px; display: flex; justify-content: space-between; align-items: center;
+  padding: 0 20px; background: var(--panel); border-top: 1px solid var(--border); font-family: var(--mono); font-size: 15px; color: var(--muted);
+}
+footer b { font-weight: 500; color: var(--ink-2); margin-right: 18px; }
+.inner { position: relative; z-index: 1; height: 100%; padding: 92px 96px 84px 140px; display: flex; flex-direction: column; justify-content: center; }
+
+/* Reveal: every .r enters in order of --i */
+.slide .r { opacity: 0; }
+.slide.active .r { animation: rise 560ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 70ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Type ---------- */
+h1 { font-size: 88px; line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 1280px; }
+h2 { font-size: 66px; line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; }
+h3 { font-size: 48px; line-height: 1.12; letter-spacing: -0.015em; font-weight: 750; margin-bottom: 42px; }
+h3::before { content: "// "; font-family: var(--mono); font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.lead { font-size: 29px; line-height: 1.42; color: var(--ink-2); margin-top: 26px; max-width: 1220px; }
+.dot { display: inline-block; width: 22px; height: 22px; border-radius: 6px; background: var(--accent); flex: none; }
+.badge {
+  display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 10px; border-radius: 10px; flex: none;
+  background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent);
+  font-family: var(--mono); font-weight: 700; font-size: 20px;
+}
+.badge.lg { min-width: 60px; height: 60px; border-radius: 14px; font-size: 25px; }
+a { color: var(--fn); text-decoration-color: color-mix(in srgb, var(--fn) 50%, transparent); text-underline-offset: 4px; }
+
+/* Title */
+.kicker { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 22px; color: var(--muted); margin-bottom: 44px; }
+.kicker::before { content: "$"; color: var(--str); }
+.kicker .dot { display: none; }
+.t-title h1::after { content: "_"; color: var(--accent); animation: blink 1.1s steps(1) infinite; margin-left: 6px; }
+@keyframes blink { 50% { opacity: 0; } }
+.t-title .lead { font-family: var(--mono); font-size: 25px; color: var(--str); }
+.t-title .lead::before { content: "/* "; color: var(--muted); } .t-title .lead::after { content: " */"; color: var(--muted); }
+.brand { position: absolute; left: 140px; bottom: 84px; font-family: var(--mono); font-size: 20px; color: var(--accent); }
+
+/* Section */
+.sec { display: flex; align-items: center; gap: 52px; }
+.big-num {
+  width: 170px; height: 170px; border-radius: 30px; flex: none; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 84px; font-weight: 700; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.t-section h2::before, .t-takeaway h2::before { content: "## "; font-family: var(--mono); font-weight: 400; color: var(--muted); }
+
+/* Statement */
+.statement { font-size: 62px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; margin-top: 30px; max-width: 1320px; }
+.t-statement .lead { font-family: var(--mono); font-size: 23px; color: var(--muted); }
+.t-statement .lead::before { content: "// "; }
+
+/* Grids and panels */
+.grid { display: grid; gap: 24px; }
+.grid.fill { align-items: stretch; }
+.grid.fill .card { min-height: 200px; }
+.grid.five { grid-template-columns: repeat(6, 1fr); }
+.grid.five > .card { grid-column: span 2; }
+.grid.five > .card:nth-child(4) { grid-column: 2 / span 2; }
+.cols-1 { grid-template-columns: 1fr; } .cols-2 { grid-template-columns: repeat(2, 1fr); }
+.cols-3 { grid-template-columns: repeat(3, 1fr); } .cols-4 { grid-template-columns: repeat(4, 1fr); }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 32px 34px; min-height: 0; }
+.card.hot { background: var(--deep); border-color: color-mix(in srgb, var(--accent) 60%, transparent); box-shadow: 0 20px 50px -34px var(--accent); }
+.card-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.card-head b { font-size: 30px; line-height: 1.2; }
+.card p { font-size: 26px; line-height: 1.45; color: var(--ink-2); }
+.col-head { display: block; font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--fn); margin-bottom: 24px; }
+.card.hot .col-head { color: var(--accent); }
+.col-big { font-family: var(--mono); font-size: 100px; line-height: 1; font-weight: 700; color: var(--cool); margin-bottom: 16px; }
+.card.hot .col-big { color: var(--accent); }
+.card ul, .bul, .src { list-style: none; }
+.card li, .bul li { position: relative; padding-left: 38px; font-size: 28px; line-height: 1.4; margin-bottom: 16px; color: var(--ink-2); }
+.card li::before, .bul li::before { content: "›"; position: absolute; left: 6px; top: -1px; font-family: var(--mono); font-weight: 700; color: var(--accent); }
+.card.hot li { color: var(--ink); }
+
+/* Stats */
+.stat { padding: 40px 34px; }
+.stat .value { font-family: var(--mono); font-size: 88px; line-height: 1; font-weight: 700; letter-spacing: -0.03em; color: var(--num); margin-bottom: 26px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat .label { font-size: 26px; line-height: 1.4; color: var(--ink-2); }
+.cols-4 .stat .value { font-size: 68px; }
+.source { margin-top: 24px; font-family: var(--mono); font-size: 17px; color: var(--muted); }
+.source::before { content: "// "; }
+
+/* Steps */
+.steps { position: relative; display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 24px; }
+.rail { position: absolute; left: 30px; right: 30px; top: 29px; height: 2px; background: repeating-linear-gradient(90deg, var(--faint) 0 10px, transparent 10px 18px); transform-origin: left; }
+.slide.active .rail { animation: draw 900ms var(--ease-out) both 160ms; }
+@keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.step { position: relative; }
+.step .badge { background-color: var(--editor); }
+.step b { display: block; font-size: 28px; line-height: 1.2; margin: 24px 0 12px; }
+.step p { font-size: 23px; line-height: 1.45; color: var(--ink-2); hyphens: auto; overflow-wrap: anywhere; }
+
+/* Quote: a Javadoc block */
+.quote-mark { font-size: 0; margin-bottom: 18px; }
+.quote-mark::before { content: "/**"; font-family: var(--mono); font-size: 34px; color: var(--muted); }
+blockquote { position: relative; padding-left: 52px; font-size: 52px; line-height: 1.24; font-weight: 700; font-style: italic; letter-spacing: -0.015em; color: var(--str); max-width: 1300px; }
+blockquote::before { content: "*"; position: absolute; left: 14px; top: 0; font-family: var(--mono); font-style: normal; font-weight: 400; color: var(--muted); }
+.cite { margin-top: 26px; font-family: var(--mono); font-size: 23px; color: var(--muted); }
+.cite::before { content: " */  @author "; color: var(--ann); white-space: pre; }
+
+/* Bullets + aside */
+.split { display: grid; grid-template-columns: 1fr 470px; gap: 44px; }
+.split.solo { grid-template-columns: 1fr; }
+.bul li { font-size: 32px; margin-bottom: 22px; color: var(--ink); }
+.split aside { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; align-self: start; }
+.split aside .badge { background: color-mix(in srgb, var(--ann) 20%, transparent); color: var(--ann); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ann) 55%, transparent); }
+.split aside p { font-size: 28px; line-height: 1.45; }
+
+/* Code */
+pre {
+  flex: 0 1 auto; min-height: 0; background: var(--deep); color: var(--ink-2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 34px 40px; overflow: hidden; font-family: var(--mono); font-size: 25px; line-height: 1.55; white-space: pre;
+}
+.tk-c { color: #7a7e85; font-style: italic; } .tk-s { color: var(--str); } .tk-a { color: var(--ann); } .tk-k { color: var(--kw); }
+.tk-t { color: var(--tag); } .tk-n { color: var(--num); } .tk-y { color: var(--purple); }
+
+/* Takeaway */
+.take { list-style: none; margin-top: 52px; display: grid; gap: 32px; }
+.take li { display: flex; align-items: center; gap: 28px; font-size: 32px; line-height: 1.35; }
+
+/* Sources */
+.src li { font-family: var(--mono); font-size: 20px; line-height: 1.45; padding: 12px 0; border-bottom: 1px solid #2c2e33; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* Bars: one shared linear scale, direct value labels */
+.bars { display: grid; gap: 30px; }
+.bar-group { display: grid; gap: 14px; --bar: var(--cool); }
+.bar-group.hot { --bar: var(--accent); }
+.bar-head { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 20px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.swatch { width: 16px; height: 16px; border-radius: 4px; background: var(--bar); }
+.bar-row { display: grid; grid-template-columns: 380px 1fr; align-items: center; gap: 24px; }
+.bar-label { font-size: 26px; color: var(--ink-2); text-align: right; }
+.bar-track { position: relative; display: flex; align-items: center; height: 40px; }
+.bar { display: block; height: 100%; width: var(--w); min-width: 6px; background: var(--bar); border-radius: 0 6px 6px 0; transform-origin: left; }
+.slide.active .bar { animation: grow 900ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 70ms + 220ms); }
+.bar-val { margin-left: 16px; font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Formula: factor × (terms) */
+.f-lhs { font-family: var(--mono); font-size: 36px; color: var(--fn); margin-bottom: 28px; }
+.f-lhs span { color: var(--muted); margin-left: 8px; }
+.f-row { display: flex; align-items: center; gap: 28px; }
+.f-factor { font-family: var(--mono); font-size: 140px; line-height: 1; font-weight: 700; color: var(--accent); }
+.f-op { font-family: var(--mono); font-size: 80px; color: var(--muted); }
+.f-terms { display: flex; flex-direction: column; gap: 18px; padding: 26px 34px; border-left: 3px solid var(--faint); border-right: 3px solid var(--faint); border-radius: 36px; }
+.f-line { display: flex; align-items: center; gap: 14px; }
+.f-term { font-family: var(--mono); line-height: 1.2; font-size: 30px; font-weight: 600; padding: 12px 22px; border-radius: 10px; background: var(--panel); border: 1px solid var(--border); color: var(--str); }
+.f-term.f-lead { background: var(--accent); border-color: var(--accent); color: #fff; }
+.f-plus { font-family: var(--mono); font-size: 30px; color: var(--kw); }
+.f-cell { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; }
+.slide.active .f-cell { animation: rise 480ms var(--ease-out) both; animation-delay: calc(var(--j) * 90ms + 520ms); }
+
+/* Steps in labelled blocks */
+.sgs { display: flex; gap: 22px; align-items: stretch; }
+.sg { border-radius: 14px; padding: 28px 26px 30px; background: var(--panel); border: 1px solid var(--border); }
+.sg.hot { background: var(--deep); border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.sg.cool .badge { color: var(--cool); background-color: color-mix(in srgb, var(--cool) 18%, var(--panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cool) 55%, transparent); }
+.sg-head { margin-bottom: 28px; }
+.sg-head b { display: block; font-family: var(--mono); font-size: 27px; color: var(--cool); }
+.sg.hot .sg-head b { color: var(--accent); }
+.sg-head span { display: block; margin-top: 6px; font-size: 21px; color: var(--muted); }
+.sg .step b { font-size: 24px; margin: 22px 0 10px; }
+.sg .step p { font-size: 20px; }
+
+/* ---------- Chrome: progress, notes drawer, overview, presenter ---------- */
+#progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
+#notes-drawer {
+  position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
+  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55; white-space: pre-wrap;
+}
+body.notes #notes-drawer { display: block; }
+body.overview { overflow: auto; background: #0b0c0e; }
+body.overview #deck { position: static; transform: none !important; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, 368px); gap: 20px; padding: 24px; justify-content: center; }
+body.overview .slide { position: relative; inset: auto; width: 1600px; height: 900px; zoom: 0.23; visibility: visible; opacity: 1; cursor: pointer; border-radius: 16px; outline: 8px solid transparent; transition: none; }
+body.overview .slide.active { outline-color: var(--accent); }
+body.overview .slide .r, body.overview .rail, body.overview .bar, body.overview .f-cell { animation: none; opacity: 1; }
+
+body.presenter { overflow: auto; background: #0b0c0e; color: #e9ecf5; }
+body.presenter #deck, body.presenter #progress { display: none; }
+#presenter { display: grid; grid-template-columns: 1fr 380px; gap: 28px; padding: 28px 34px; min-height: 100vh; }
+#presenter .now { font-size: 15px; color: #a9b0c7; text-transform: uppercase; letter-spacing: 0.08em; }
+#presenter h4 { font-size: 30px; margin: 6px 0 20px; }
+#presenter .script { font-size: 23px; line-height: 1.6; white-space: pre-wrap; max-width: 75ch; }
+#presenter .side { display: flex; flex-direction: column; gap: 22px; }
+#presenter .box { background: #1e1f22; border-radius: 16px; padding: 18px 20px; }
+#presenter .clock { font-size: 54px; font-weight: 800; font-variant-numeric: tabular-nums; }
+#presenter .over { color: var(--accent); }
+#presenter .hint { font-size: 14px; color: #8a91a8; line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.active .r { animation: fade 300ms ease both; animation-delay: 0ms; }
+  .slide.active .rail, .slide.active .bar, .slide.active .f-cell, .t-title h1::after { animation: none; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+}
+
+@media print {
+  @page { size: 1600px 900px; margin: 0; }
+  html, body { overflow: visible; height: auto; background: none; }
+  #deck { position: static; transform: none !important; width: 1600px; height: auto; }
+  .slide { position: relative; visibility: visible; opacity: 1; width: 1600px; height: 900px; break-after: page; transition: none; }
+  .slide .r, .rail, .bar, .f-cell { animation: none !important; opacity: 1 !important; transform: none !important; }
+  #progress, #notes-drawer { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Rubber duck: progress marker on the status bar, waddles a step forward on each slide.
+   The track is the flexible gap between the two status texts; the duck walks from --p0 to --p. */
+footer { gap: 28px; }
+.duck-track { position: relative; flex: 1; align-self: center; height: 0; border-top: 2px dotted var(--faint); }
+.duck { --x: calc(var(--p) * (100% - 40px)); position: absolute; left: var(--x); bottom: -9px; width: 40px; height: 33px; }
+.duck svg { width: 100%; height: 100%; display: block; transform-origin: 50% 90%; }
+.slide.active .duck { animation: duck-walk 900ms var(--ease-out) both; }
+.slide.active .duck svg { animation: duck-waddle 300ms ease-in-out 3; }
+.slide.active .duck.end svg { animation: duck-waddle 300ms ease-in-out 3, duck-hop 700ms var(--ease-out) 950ms 2; }
+@keyframes duck-walk { from { left: calc(var(--p0) * (100% - 40px)); } to { left: var(--x); } }
+@keyframes duck-waddle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg); } 75% { transform: rotate(9deg); } }
+@keyframes duck-hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .slide.active .duck, .slide.active .duck svg { animation: none; } }
+@media print { .duck, .duck svg { animation: none !important; } }
+
+/* Modern editor theme (Zed / Cursor / Fleet feel), layered on deck.css.
+   Floating rounded window, glass header with breadcrumb, no gutter, translucent panels with hairline borders. */
+:root {
+  --bg: #08090b; --editor: #0f1013; --deep: #0b0c0e; --glass: rgba(255, 255, 255, 0.035); --hair: rgba(255, 255, 255, 0.08);
+  --ink: #ececf1; --ink-2: #b4b6c0; --muted: #7c7f8b; --faint: #3a3c44;
+}
+html, body { background: var(--bg); }
+
+/* Stage = desktop; the slide is a floating window on it */
+.slide, .slide.dark { background: var(--bg); }
+.slide::before { /* soft accent aurora + fine grid on the desktop */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 85% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    radial-gradient(700px 500px at -10% 110%, color-mix(in srgb, var(--cool) 12%, transparent), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px;
+}
+.slide.dark::after { display: none; }
+.slide > .inner::before { /* the window */
+  content: ""; position: absolute; inset: 22px 24px 22px 24px; z-index: -1; border-radius: 22px;
+  background: linear-gradient(180deg, rgba(22, 23, 27, 0.92), rgba(14, 15, 18, 0.94));
+  box-shadow: 0 0 0 1px var(--hair), 0 40px 120px -40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.slide.dark > .inner::before { background: linear-gradient(180deg, rgba(18, 19, 23, 0.78), rgba(11, 12, 14, 0.86)); }
+
+/* Header: lights, breadcrumb, ⌘K */
+.chrome {
+  left: 24px; right: 24px; top: 22px; height: 52px; background: transparent; border: 0; border-bottom: 1px solid var(--hair);
+  border-radius: 22px 22px 0 0; align-items: center; color: var(--muted); font-size: 15px;
+}
+.tab { display: none; }
+.crumb { display: block; flex: 1; text-align: center; letter-spacing: 0.01em; }
+.crumb em { font-style: normal; color: var(--faint); margin: 0 6px; }
+.crumb strong { color: var(--ink); font-weight: 500; }
+.cmdk { display: block; margin-right: 18px; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--hair); background: var(--glass); font-size: 13px; color: var(--muted); }
+.lights { padding: 0 20px; gap: 9px; }
+.lights i { width: 12px; height: 12px; opacity: 0.9; }
+.gutter { display: none; }
+
+/* Status: a quiet line inside the window */
+footer {
+  left: 24px; right: 24px; bottom: 22px; height: 40px; background: transparent; border: 0; border-top: 1px solid var(--hair);
+  border-radius: 0 0 22px 22px; padding: 0 26px; font-size: 14px; color: var(--muted);
+}
+footer b { color: var(--ink-2); font-weight: 500; }
+footer b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; margin-right: 10px; vertical-align: 2px; box-shadow: 0 0 10px #3ddc84; }
+
+.inner { padding: 110px 110px 96px 110px; }
+
+/* Titles: numbered mono eyebrow instead of // prefix */
+h3::before {
+  content: counter(slide, decimal-leading-zero); display: block; margin-bottom: 14px;
+  font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+}
+h3 { font-size: 50px; letter-spacing: -0.025em; margin-bottom: 40px; }
+.t-section h2::before, .t-takeaway h2::before { content: none; }
+.t-takeaway h2 { background: linear-gradient(90deg, var(--ink), var(--ink-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h1 { letter-spacing: -0.035em; background: linear-gradient(100deg, #fff 30%, color-mix(in srgb, var(--accent) 70%, #fff)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.t-title h1::after { -webkit-text-fill-color: var(--accent); }
+.kicker { font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; }
+.kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+.t-title .lead { color: var(--ink-2); font-family: var(--sans); font-size: 28px; }
+.t-title .lead::before, .t-title .lead::after { content: none; }
+.brand { left: 110px; bottom: 100px; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
+.statement { letter-spacing: -0.03em; }
+.t-statement .dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 16px var(--accent); }
+
+/* Section: glowing number tile */
+.big-num {
+  border-radius: 34px; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 30%, transparent), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 30px 80px -30px var(--accent);
+  color: #fff;
+}
+
+/* Panels: glass + hairline */
+.card, .sg {
+  background: var(--glass); border: 1px solid var(--hair); border-radius: 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.card.hot, .sg.hot {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, transparent), rgba(255, 255, 255, 0.02) 60%);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 30px 80px -40px var(--accent), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.badge { border-radius: 999px; }
+.badge.lg { border-radius: 999px; }
+.step .badge { background-color: var(--editor); }
+.card li::before, .bul li::before { content: ""; top: 0.6em; left: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent); }
+.col-head { font-family: var(--sans); font-weight: 700; }
+.col-big, .stat .value, .f-factor {
+  background: linear-gradient(120deg, var(--cool), color-mix(in srgb, var(--cool) 55%, #fff)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.card.hot .col-big, .f-factor { background-image: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #fff)); }
+.stat .value { background-image: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #fff)); }
+
+/* Code: borderless pane with a soft top glow */
+pre { background: rgba(0, 0, 0, 0.35); border: 1px solid var(--hair); border-radius: 16px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+
+/* Quote: big, clean, accent bar replaced by glow mark */
+.quote-mark::before { content: "\201C"; font-family: Georgia, serif; font-size: 160px; line-height: 0.6; color: var(--accent); text-shadow: 0 0 40px color-mix(in srgb, var(--accent) 60%, transparent); }
+.quote-mark { height: 80px; }
+blockquote { padding-left: 0; color: var(--ink); font-style: normal; font-weight: 750; letter-spacing: -0.025em; }
+blockquote::before { content: none; }
+.cite { font-family: var(--sans); color: var(--muted); }
+.cite::before { content: none; }
+
+/* Formula + bars keep their structure, softer surfaces */
+.f-term { background: var(--glass); border-color: var(--hair); border-radius: 999px; color: var(--ink); }
+.f-terms { border-color: var(--faint); }
+.f-lhs { color: var(--ink-2); }
+.bar { border-radius: 0 999px 999px 0; box-shadow: 0 0 24px -6px var(--bar); }
+.rail { background: linear-gradient(90deg, transparent, var(--faint) 10%, var(--faint) 90%, transparent); height: 1px; }
+.src li { border-bottom-color: var(--hair); }
+
+/* Takeaways: glass rows */
+.take li { padding: 20px 26px; border-radius: 18px; background: var(--glass); border: 1px solid var(--hair); }
+
+/* Series map, Previously, Next time */
+.map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.stop { position: relative; padding: 26px 24px 28px; border-radius: 18px; border: 1px solid var(--hair); background: var(--glass); min-height: 250px; }
+.stop-n { display: block; font-family: var(--mono); font-size: 40px; font-weight: 700; color: var(--faint); margin-bottom: 18px; }
+.stop b { display: block; font-size: 26px; line-height: 1.2; margin-bottom: 12px; }
+.stop-sub { font-size: 19px; line-height: 1.4; color: var(--muted); }
+.stop.done { opacity: 0.55; }
+.stop.done .stop-n::after { content: " \2713"; color: #3ddc84; font-size: 28px; }
+.stop.now { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, transparent), rgba(255, 255, 255, 0.02) 65%); box-shadow: 0 30px 80px -40px var(--accent); }
+.stop.now .stop-n { color: var(--accent); }
+.stop.bonus { border-style: dashed; }
+.eyebrow { font-family: var(--mono); font-size: 20px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.eyebrow::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); margin-right: 14px; vertical-align: 3px; }
+.t-previously .statement, .t-next .statement { margin-top: 26px; }
+.t-previously .lead, .t-next .lead { font-family: var(--mono); font-size: 23px; color: var(--muted); }
+
+/* Gradient text is painted only inside the element box: give descenders (g, y, p) room, then cancel the extra space. */
+h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; padding-right: 0.06em; }
+.stat .value, .col-big { padding-bottom: 0.16em; padding-right: 0.06em; }
+.stat .value { margin-bottom: 14px; }
+.col-big { margin-bottom: 4px; }
+
+/* Long labels shrink instead of wrapping into a wall of text */
+.col-big.sm { font-size: 54px; line-height: 1.1; letter-spacing: -0.02em; }
+.statement.long { font-size: 50px; line-height: 1.18; }
+.duck-track { border-top-color: rgba(255, 255, 255, 0.12); }
+</style></head>
+<body><main id="deck">
+<section class="slide t-title dark" data-title="Bonus: Java craft">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">01-bonus-java-craft.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>01-bonus-java-craft.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="kicker r" style="--i:0"><span class="dot"></span>Bonus — Java craft</div>
+    <h1 class="r" style="--i:1">Bonus: Java craft</h1>
+    <p class="lead r" style="--i:2">Close the Distance — final fields, coupling and the views that keep their word</p>
+    <div class="brand r" style="--i:3">Back from Devoxx Belgium 2026</div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.0000;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 1, Col 1 &middot; 1 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Series finale, bonus talk, no AI this time.
+- Three Java crafts, one thread: the distance between what we promise and what is actually true
+- Final fields, coupling depth, and architecture views that stay honest
+- Example: a final field that still changes, shown live on the next slide
+Transition: find yourself on the series map
+~0.5 min</template>
+</section>
+<section class="slide t-map" data-title="Series map">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">02-series-map.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>02-series-map.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Series map</h3>
+    <div class="map"><div class="stop done r" style="--i:1"><span class="stop-n">01</span><b>AI, the reality check</b><span class="stop-sub">What AI really delivers, and how far to trust it</span></div><div class="stop done r" style="--i:2"><span class="stop-n">02</span><b>The harness around the agent</b><span class="stop-sub">Rules in the build, bounded loops, honest checks</span></div><div class="stop done r" style="--i:3"><span class="stop-n">03</span><b>Context is the product</b><span class="stop-sub">Specs, docs and rules: what the agent reads</span></div><div class="stop done r" style="--i:4"><span class="stop-n">04</span><b>Trust at scale</b><span class="stop-sub">Sandboxes, permissions, review, dimming the lights</span></div><div class="stop now bonus r" style="--i:5"><span class="stop-n">&#9733;</span><b>Bonus: Java craft</b><span class="stop-sub">Integrity, coupling, seeing your architecture</span></div></div>
+    <p class="lead r" style="--i:7">Bonus — series end</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.0476;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 2, Col 1 &middot; 2 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: five talks, four on agents, this one on Java itself.
+- Series map, current stop: the bonus
+- No next-time slide after this one — the series ends here
+Transition: a quick nod to last time before the hook
+~0.5 min</template>
+</section>
+<section class="slide t-previously" data-title="Boundaries it cannot negotiate. A second AI, then a human, as trust is earned. Measured by outcomes.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">03-boundaries-it-cannot-negotiate-a-s.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>03-boundaries-it-cannot-negotiate-a-s.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <p class="eyebrow r" style="--i:0">Previously &middot; Talk 4 — Trust at scale</p>
+    <p class="statement long r" style="--i:1">Boundaries it cannot negotiate. A second AI, then a human, as trust is earned. Measured by outcomes.</p>
+    <p class="lead r" style="--i:2">Talk 4's image: a dimmer, not an on/off trust decision</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.0952;--p0:0.0476"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: last time was dimmers, not switches — trust earned in steps, enforced by a boundary.
+- One sentence: sandboxes and a second reviewer, trust turned up only as it is earned
+- The image to keep: a dimmer switch, not a toggle
+Transition: today drops the agent entirely — same instinct, pointed at the Java platform and at architecture
+~0.5 min</template>
+</section>
+<section class="slide t-statement dark" data-title="A final field can still change its value. So can the dependency you called ‘just an interface.’">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">04-a-final-field-can-still-change-its.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>04-a-final-field-can-still-change-its.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <span class="dot r" style="--i:0"></span>
+    <p class="statement long r" style="--i:1">A final field can still change its value. So can the dependency you called ‘just an interface.’</p>
+    <p class="lead r" style="--i:2">Three crafts, one question: what do you actually promise, and what actually holds?</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.1429;--p0:0.0952"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 4, Col 1 &middot; 4 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: the whole talk is one question — is this guarantee promised, or enforced?
+- final has always meant ‘trust me’, not ‘guaranteed’
+- An interface looks like a stronger promise; mostly, it isn’t
+- Example: next slide: three lines of code break a promise you thought was absolute
+Transition: watch it happen
+~1 min</template>
+</section>
+<section class="slide t-code" data-title="Three lines that mutate a final field">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">05-three-lines-that-mutate-a-final-fi.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>05-three-lines-that-mutate-a-final-fi.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Three lines that mutate a final field</h3>
+    <pre class="r" style="--i:1"><code><span class="tk-k">class</span> Account {
+    <span class="tk-k">private</span> <span class="tk-k">final</span> <span class="tk-k">String</span> iban;
+    Account(<span class="tk-k">String</span> iban) { <span class="tk-k">this</span>.iban = iban; }
+    <span class="tk-k">String</span> iban() { <span class="tk-k">return</span> iban; }
+}
+
+<span class="tk-k">var</span> a = <span class="tk-k">new</span> Account(<span class="tk-s">&quot;old&quot;</span>);
+Field f = Account.<span class="tk-k">class</span>.getDeclaredField(&quot;iban&quot;);
+f.setAccessible(<span class="tk-k">true</span>);           <span class="tk-c">// deep reflection</span>
+f.set(a, &quot;<span class="tk-k">new</span>&quot;);                 <span class="tk-c">// writes into a final</span>
+a.iban();                        <span class="tk-c">// &quot;new&quot;, no warning</span></code></pre>
+    <p class="source r" style="--i:2">Ordinary class, final instance field — on today's LTS (JDK 25) this succeeds silently</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.1905;--p0:0.1429"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 5, Col 1 &middot; 5 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: deep reflection has always been able to rewrite a field you declared final.
+- setAccessible(true) switches off the access check
+- Field.set then writes straight through, no exception
+- Example: an Account with a final iban, overwritten after construction — nothing logged, nothing thrown
+Transition: that quiet success is exactly what the JVM is now closing
+~1.5 min</template>
+</section>
+<section class="slide t-section dark" data-title="Final means final">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">06-final-means-final.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>06-final-means-final.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">1</div>
+      <div><h2 class="r" style="--i:1">Final means final</h2><p class="lead r" style="--i:2">Why the JVM stopped taking final on trust</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.2381;--p0:0.1905"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 6, Col 1 &middot; 6 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: chapter one — the JDK is turning a promise into an enforced rule, one JEP at a time.
+- Reflection's real costs, then JEP 500 itself
+- The LTS angle: why a regulated, LTS-only estate should care now, not later
+Transition: start with what reflection actually costs
+~0.25 min</template>
+</section>
+<section class="slide t-cards" data-title="What reflection actually costs">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">07-what-reflection-actually-costs.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>07-what-reflection-actually-costs.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">What reflection actually costs</h3>
+    <div class="grid five fill">
+      <div class="card r" style="--i:1"><div class="card-head"><span class="badge">1</span><b>Speed</b></div><p>Every call re-checks access and re-converts arguments before it invokes anything.</p></div>
+      <div class="card r" style="--i:2"><div class="card-head"><span class="badge">2</span><b>Safety</b></div><p>No compile-time check: a rename breaks at run time, not at build time.</p></div>
+      <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Integrity</b></div><p>Deep reflection can read private state and rewrite fields declared final.</p></div>
+      <div class="card r" style="--i:4"><div class="card-head"><span class="badge">4</span><b>AOT / native</b></div><p>GraalVM native-image needs every reflective access declared up front.</p></div>
+      <div class="card r" style="--i:5"><div class="card-head"><span class="badge">5</span><b>Readability</b></div><p>The behaviour is invisible to a human just reading the class.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.2857;--p0:0.2381"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 7, Col 1 &middot; 7 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: reflection is the plumbing under Spring, Hibernate, Jackson, JUnit and Mockito — and it isn’t free.
+- Speed and safety: slower calls, and no compiler to catch a rename
+- Integrity: it can read private state and rewrite a final field
+- Example: readability — the behaviour is invisible to a human just reading the class
+Transition: that integrity cost is the one the platform is now closing
+~2 min</template>
+</section>
+<section class="slide t-steps" data-title="Integrity by default, one door at a time">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">08-integrity-by-default-one-door-at-a.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>08-integrity-by-default-one-door-at-a.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Integrity by default, one door at a time</h3>
+    <div class="steps" style="--n:3"><div class="rail"></div>
+      <div class="step r" style="--i:1"><span class="badge lg">1</span><b>Encapsulation</b><p>Cross-module setAccessible fails unless the package is opened.</p></div>
+      <div class="step r" style="--i:2"><span class="badge lg">2</span><b>Unsafe &amp; JNI</b><p>Java instrumentation agents, Unsafe, JNI: deprecated, then warned, same ladder every time.</p></div>
+      <div class="step r" style="--i:3"><span class="badge lg">3</span><b>JEP 500</b><p>“Prepare to Make Final Mean Final” — the one that matters here.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.3333;--p0:0.2857"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 8, Col 1 &middot; 8 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: ‘integrity by default’ isn’t one JEP — it’s a policy, closing one loophole at a time, warn before deny.
+- Strong encapsulation first: cross-module setAccessible fails without opens
+- Then Unsafe, dynamic agents, JNI: deprecated, then warned
+- Example: JEP 500, ‘Prepare to Make Final Mean Final’ — today's subject
+Transition: what JEP 500 actually changes, in practice
+~1.5 min</template>
+</section>
+<section class="slide t-stats" data-title="JEP 500 on an LTS-only estate">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">09-jep-500-on-an-lts-only-estate.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>09-jep-500-on-an-lts-only-estate.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">JEP 500 on an LTS-only estate</h3>
+    <div class="grid cols-4">
+      <div class="card stat r" style="--i:1"><div class="value" data-count="JDK 25">JDK 25</div><div class="label">today's LTS: a final field still changes silently through deep reflection</div></div>
+      <div class="card stat r" style="--i:2"><div class="value" data-count="JDK 29">JDK 29</div><div class="label">next LTS (~Sept 2027, projected): the first LTS where the mutation warns</div></div>
+      <div class="card stat r" style="--i:3"><div class="value" data-count="deny">deny</div><div class="label">a later release makes it throw IllegalAccessException; no version announced</div></div>
+      <div class="card stat r" style="--i:4"><div class="value" data-count="CI">CI</div><div class="label">illustrative: build on the latest JDK in CI only, to see the warnings years early</div></div>
+    </div>
+    <p class="source r" style="--i:5">openjdk.org/jeps/500 (warn mode lands in JDK 26, a non-LTS) · JDK 29 date is a projection, not an announcement</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.3810;--p0:0.3333"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 9, Col 1 &middot; 9 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: an LTS-only shop meets JEP 500 in JDK 29, not in JDK 26 — that's the real deadline.
+- JDK 25, today's LTS: the silent mutation still works
+- The warn mode ships in JDK 26, a non-LTS we won't run in production; JDK 29 is the first LTS that has it
+- A later release denies it outright; no version given yet
+- Example: run the build on the newest JDK in CI only and the warnings show up years before the LTS upgrade; --illegal-final-field-mutation=deny previews the break
+Transition: that's the JVM's promise turning into enforcement — the same ladder exists for coupling
+~2 min</template>
+</section>
+<section class="slide t-section dark" data-title="Coupling has a depth">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">10-coupling-has-a-depth.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>10-coupling-has-a-depth.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">2</div>
+      <div><h2 class="r" style="--i:1">Coupling has a depth</h2><p class="lead r" style="--i:2">Reflection was chapter one's worst case: intrusive coupling, the depth the JVM just refused</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.4286;--p0:0.3810"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 10, Col 1 &middot; 10 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: chapter two — the same question, asked of our own code instead of the JVM's internals.
+- Reflection reaching into private state is intrusive coupling, the deepest and worst kind
+- Depth, connectivity, distance: three ways to measure how coupled you really are
+Transition: start with why we add layers at all
+~0.25 min</template>
+</section>
+<section class="slide t-cards" data-title="Every layer pays rent">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">11-every-layer-pays-rent.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>11-every-layer-pays-rent.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">Every layer pays rent</h3>
+    <div class="grid cols-2 fill">
+      <div class="card r" style="--i:1"><div class="card-head"><span class="badge">1</span><b>Gain: less to hold in your head</b></div><p>Splitting a problem lowers local cognitive load. The only clean line in the gains column.</p></div>
+      <div class="card r" style="--i:2"><div class="card-head"><span class="badge">2</span><b>The dependency relocates</b></div><p>You never escape it — you now depend on the abstraction instead.</p></div>
+      <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Leaky by nature</b></div><p>“All non-trivial abstractions, to some degree, are leaky.” — Joel Spolsky</p></div>
+      <div class="card r" style="--i:4"><div class="card-head"><span class="badge">4</span><b>More hops to follow</b></div><p>A more complicated path topology: every call crosses more files to reach the logic.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.4762;--p0:0.4286"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 11, Col 1 &middot; 11 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: a layer buys one real thing — less to hold in your head — and quietly charges for several others.
+- Gain: splitting a problem lowers local cognitive load
+- Cost: the dependency doesn't vanish, it moves to the abstraction
+- Example: a clean repository layer, bypassed by a native query the day performance actually matters
+Transition: so which dependencies are worth keeping, and at what depth?
+~2 min</template>
+</section>
+<section class="slide t-compare" data-title="Coupling, graded by depth">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">12-coupling-graded-by-depth.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>12-coupling-graded-by-depth.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Coupling, graded by depth</h3>
+    <div class="grid cols-2 fill">
+      <div class="card  r" style="--i:1"><b class="col-head">Depths to avoid</b>
+        <ul><li>Intrusive: reflection, or casting an interface to its implementation</li><li>Functional: A quietly breaks B — the common default</li></ul></div>
+      <div class="card hot r" style="--i:2"><b class="col-head">The target: contract</b>
+        <ul><li>Explicit: a function signature, a REST API, a schema</li><li>An interface is not a stronger contract — the signature already was</li></ul></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.5238;--p0:0.4762"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 12, Col 1 &middot; 12 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: coupling has depth, worst to best, and most code sits one level short of where it should be.
+- Intrusive (worst): reflection, or casting an interface back to its implementation
+- Functional (the default): a change in A quietly breaks B
+- Contract (the target): the explicit signature, API, or schema itself
+- Example: OrderService plus OrderServiceImpl, forever one implementation — the interface buys distance, not a stronger contract; and yes, Mockito mocks a concrete class just fine without it
+Transition: van de Ven turns this into an actual formula
+~1.75 min</template>
+</section>
+<section class="slide t-formula dark" data-title="formula">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">13-pain.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>13-pain.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <p class="f-lhs r" style="--i:0">Pain <span>=</span></p>
+    <div class="f-row">
+      <span class="f-factor r" style="--i:1">Volatility</span><span class="f-op r" style="--i:2">&times;</span>
+      <div class="f-terms r" style="--i:3"><div class="f-line"><span class="f-cell" style="--j:0"><span class="f-term f-lead">Coupling</span></span></div><div class="f-line"><span class="f-cell" style="--j:1"><span class="f-plus">+</span><span class="f-term">Cohesion debt</span></span></div></div>
+    </div>
+    <p class="lead r" style="--i:4">Coupling = Depth × Connectivity. No units, no absolute scale — a ranking tool, not a measurement.</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.5714;--p0:0.5238"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 13, Col 1 &middot; 13 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: one formula chains three ideas — how deep you're coupled, how many places feel it, and how often it changes.
+- Coupling = depth × connectivity: chance of breaking, times blast radius
+- Pain = (coupling + cohesion debt) × volatility — no change means no pain
+- Example: the measurable half already exists: git churn per file, fan-in and fan-out from the import graph
+Transition: watch the formula applied to one real architecture
+~1.5 min</template>
+</section>
+<section class="slide t-steps" data-title="One external call, seven hops">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">14-one-external-call-seven-hops.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>14-one-external-call-seven-hops.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">One external call, seven hops</h3>
+    <div class="steps" style="--n:7"><div class="rail"></div>
+      <div class="step r" style="--i:1"><span class="badge lg">1</span><b>Incoming adapter</b><p>Where the outside world enters.</p></div>
+      <div class="step r" style="--i:2"><span class="badge lg">2</span><b>Anti-corruption</b><p>Absorbs the outside system's shape.</p></div>
+      <div class="step r" style="--i:3"><span class="badge lg">3</span><b>Incoming port</b><p>The contract the core actually trusts.</p></div>
+      <div class="step r" style="--i:4"><span class="badge lg">4</span><b>Business logic</b><p>The candy — what this was all for.</p></div>
+      <div class="step r" style="--i:5"><span class="badge lg">5</span><b>Outgoing port</b><p>The contract going back out.</p></div>
+      <div class="step r" style="--i:6"><span class="badge lg">6</span><b>Anti-corruption</b><p>Absorbs the next system's shape.</p></div>
+      <div class="step r" style="--i:7"><span class="badge lg">7</span><b>Outgoing adapter</b><p>Where the call finally leaves.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.6190;--p0:0.5714"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 14, Col 1 &middot; 14 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: hexagonal architecture is the pain formula made concrete — distance bought on purpose, for a price.
+- Seven hops for one external call: adapter, anti-corruption, port, logic, port, anti-corruption, adapter
+- It pays off where the boundary is volatile — the port absorbs the external change instead of the core
+- Example: a boundary that never actually changes is pure upfront cost, with nothing to show for it
+Transition: not dogma either way — next, how a team actually sees where it stands
+~1.75 min</template>
+</section>
+<section class="slide t-section dark" data-title="Seeing it, enforcing it">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">15-seeing-it-enforcing-it.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>15-seeing-it-enforcing-it.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <div class="sec">
+      <div class="big-num r" style="--i:0">3</div>
+      <div><h2 class="r" style="--i:1">Seeing it, enforcing it</h2><p class="lead r" style="--i:2">Views that are checked, not just drawn</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.6667;--p0:0.6190"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 15, Col 1 &middot; 15 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: chapter three — the same honesty problem, now about the picture of the system instead of the code.
+- Three views answer three different questions
+- A view only stays true if something keeps checking it
+Transition: start with the one everyone half-knows already
+~0.25 min</template>
+</section>
+<section class="slide t-cards" data-title="Three views, three questions">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">16-three-views-three-questions.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>16-three-views-three-questions.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">Three views, three questions</h3>
+    <div class="grid cols-3 fill">
+      <div class="card r" style="--i:1"><div class="card-head"><span class="badge">1</span><b>C4</b></div><p>What is it meant to be? Human-curated levels, kept in Structurizr DSL or C4-PlantUML — most teams only need level 1 and 2.</p></div>
+      <div class="card r" style="--i:2"><div class="card-head"><span class="badge">2</span><b>A live code map</b></div><p>What is it, right now? A deterministic scan, rebuilt from the code; curation survives the rescan.</p></div>
+      <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>A code city</b></div><p>Where is the mass, and the risk? Size turned into a skyline.</p></div>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.7143;--p0:0.6667"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 16, Col 1 &middot; 16 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: no single diagram answers everything — intent, truth and shape are three different questions.
+- C4: what the system is meant to be, for a given audience
+- A deterministic scanner: a live map rebuilt from the code itself, every time
+- Example: a code city turns size into a skyline — skyscrapers are god-class candidates, flat buildings are data classes
+Transition: C4 only stays honest if something enforces it
+~2 min</template>
+</section>
+<section class="slide t-bullets" data-title="A rule the build enforces">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">17-a-rule-the-build-enforces.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>17-a-rule-the-build-enforces.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">A rule the build enforces</h3>
+    <div class="split ">
+      <ul class="bul"><li class="r" style="--i:1">Most teams only need level 1 (context) and level 2 (containers)</li><li class="r" style="--i:2">A hand-drawn diagram is a photo — it ages the moment the code moves</li><li class="r" style="--i:3">Generate or test it: reflection, migrations, traces — not opinion</li><li class="r" style="--i:4">Same idea as the harness talk — a rule the build enforces, now pointed at layers</li></ul>
+      <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>Example: a guardrail test catching a controller class calling the repository layer directly, skipping the service in between.</p></aside>
+    </div></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.7619;--p0:0.7143"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 17, Col 1 &middot; 17 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: a diagram only stays true if it's generated from the code, or tested against it.
+- Levels 1 and 2 cover most teams; level 4 is rarely worth drawing by hand
+- Same idea as the harness talk — a rule the build enforces, now pointed at architecture
+- Example: a guardrail test catching a controller class calling the repository layer directly, skipping the service
+Transition: and where a diagram can't show it, size and shape can
+~2 min</template>
+</section>
+<section class="slide t-bars" data-title="What seeing the shape is worth">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">18-what-seeing-the-shape-is-worth.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>18-what-seeing-the-shape-is-worth.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner"><h3 class="r" style="--i:0">What seeing the shape is worth</h3>
+    <div class="bars">
+      <div class="bar-group cool">
+        <div class="bar-head r" style="--i:1"><span class="swatch"></span>Comprehension tasks, vs Eclipse + spreadsheets</div>
+        <div class="bar-row r" style="--i:2"><span class="bar-label">Correctness</span>
+          <span class="bar-track"><span class="bar" style="--w:100%"></span><b class="bar-val">+24.26 %</b></span></div>
+        <div class="bar-row r" style="--i:3"><span class="bar-label">Time to finish (lower is better)</span>
+          <span class="bar-track"><span class="bar" style="--w:49.50535861500412%"></span><b class="bar-val">−12.01 %</b></span></div>
+      </div>
+    </div>
+    <p class="source r" style="--i:4">Wettel, Lanza &amp; Robbes, ICSE 2011 — about 41 participants; a 2011 study, worth saying out loud</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.8095;--p0:0.7619"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 18, Col 1 &middot; 18 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: seeing shape, not just structure, measurably changed how fast and how correctly people understood code.
+- A controlled study: a code city versus Eclipse plus spreadsheets, on comprehension tasks
+- +24.26% correct, −12.01% time to finish
+- Example: worth saying out loud — about 41 participants, fifteen years old, not a large or recent sample
+Transition: enough evidence to answer the hook
+~1.5 min
+Cut if short: say only the +24.26% correctness figure, skip the time-to-finish line.</template>
+</section>
+<section class="slide t-statement dark" data-title="The same final field, under a future JDK, throws instead of lying. That's the whole talk.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">19-the-same-final-field-under-a-futur.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>19-the-same-final-field-under-a-futur.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <span class="dot r" style="--i:0"></span>
+    <p class="statement long r" style="--i:1">The same final field, under a future JDK, throws instead of lying. That's the whole talk.</p>
+    <p class="lead r" style="--i:2">Depth you can name. Distance you chose on purpose. Views that are checked, not just drawn.</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.8571;--p0:0.8095"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 19, Col 1 &middot; 19 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: a promise becomes a guarantee only when something enforces it, not when we just agree to keep it.
+- final becomes enforced, one JDK at a time
+- A layer or an interface is worth it only where it absorbs real volatility
+- Example: the same three-line snippet, under a future deny mode, throws instead of silently succeeding
+Transition: three things to carry out of this room
+~1 min</template>
+</section>
+<section class="slide t-takeaway dark" data-title="Key takeaways">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">20-key-takeaways.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>20-key-takeaways.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h2 class="r" style="--i:0">Key takeaways</h2>
+    <ol class="take"><li class="r" style="--i:1"><span class="badge lg">1</span><span>final is becoming enforced — constructor and record binding are already safe in every mode</span></li><li class="r" style="--i:2"><span class="badge lg">2</span><span>An interface isn't a stronger contract — measure volatility before adding a layer or a port</span></li><li class="r" style="--i:3"><span class="badge lg">3</span><span>Generate or test your architecture view — a hand-drawn diagram is a photo, not a mirror</span></li></ol></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.9048;--p0:0.8571"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 20, Col 1 &middot; 20 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: three habits worth taking back to your own codebase.
+- final is becoming enforced — bind through constructors and records, safe in every mode
+- An interface is not a stronger contract — measure volatility before adding a layer
+- Example: generate or test your diagrams instead of just drawing them
+Transition: one last thought before the source list
+~1 min</template>
+</section>
+<section class="slide t-statement" data-title="The other four talks were about agents. This one was about the ground they stand on.">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">21-the-other-four-talks-were-about-ag.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>21-the-other-four-talks-were-about-ag.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <span class="dot r" style="--i:0"></span>
+    <p class="statement long r" style="--i:1">The other four talks were about agents. This one was about the ground they stand on.</p>
+    <p class="lead r" style="--i:2">Series end — thank you for four talks, and this one</p></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck" style="--p:0.9524;--p0:0.9048"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 21, Col 1 &middot; 21 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Idea: the one sanctioned link back to the rest of the series, saved for the very last word.
+- Four talks asked how far to trust an agent
+- This one asked how far you're coupled to anything at all, agent-written or not
+Transition: thank you — questions, then the source list
+~0.5 min</template>
+</section>
+<section class="slide t-sources" data-title="sources">
+  <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-5-java-craft</span><span class="tab active">22-sources.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-5-java-craft <em>/</em> <strong>22-sources.md</strong></span><span class="cmdk">&#8984;K</span></div>
+  <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+  <div class="inner">
+    <h3 class="r" style="--i:0">Going further</h3>
+    <ul class="src"><li class="r" style="--i:1">JEP 500 — Prepare to Make Final Mean Final: <a href="https://openjdk.org/jeps/500" target="_blank" rel="noopener">https://openjdk.org/jeps/500</a></li><li class="r" style="--i:2">JEP 416 — Core reflection on method handles: <a href="https://openjdk.org/jeps/416" target="_blank" rel="noopener">https://openjdk.org/jeps/416</a></li><li class="r" style="--i:3">Field.set Javadoc, JDK 25: <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/reflect/Field.html" target="_blank" rel="noopener">https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/reflect/Field.html</a></li><li class="r" style="--i:4">Ties van de Ven — The Hexagonal Hangover (CFP): <a href="https://dvbe26.cfp.dev/api/public/talks/8186" target="_blank" rel="noopener">https://dvbe26.cfp.dev/api/public/talks/8186</a></li><li class="r" style="--i:5">Vlad Khononov, Balancing Coupling in Software Design (2024)</li><li class="r" style="--i:6">Joel Spolsky — The Law of Leaky Abstractions: <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank" rel="noopener">https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/</a></li><li class="r" style="--i:7">c4model.com — Simon Brown</li><li class="r" style="--i:8">Wettel, Lanza &amp; Robbes — Software Systems as Cities, ICSE 2011: <a href="https://www.inf.usi.ch/faculty/lanza/PUBS/M/Wett2010a.pdf" target="_blank" rel="noopener">https://www.inf.usi.ch/faculty/lanza/PUBS/M/Wett2010a.pdf</a></li></ul></div>
+  <footer><span><b>&#x2387; devoxx-2026</b>Bonus: Java craft</span><span class="duck-track"><span class="duck end" style="--p:1.0000;--p0:0.9524"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 22, Col 1 &middot; 22 / 22 &middot; UTF-8 &middot; Markdown</span></footer>
+  <template class="notes">Full source list for everything mentioned today.
+- JEPs and Javadoc for the Java chapter
+- Van de Ven, Khononov and Spolsky for coupling
+- C4, a live code map and the code-city study for the views chapter
+Transition: thanks — happy to take questions
+~0.25 min</template>
+</section>
+</main>
+<div id="progress"></div><div id="notes-drawer"></div>
+<script>// Deck runtime: navigation, scaling, stat count-up, notes, overview, presenter window.
+(() => {
+  const deck = document.getElementById("deck");
+  const slides = [...document.querySelectorAll(".slide")];
+  const notes = slides.map((s) => s.querySelector("template.notes").content.textContent.trim());
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const chan = "BroadcastChannel" in window ? new BroadcastChannel("deck:" + document.title) : null;
+  const presenter = location.hash === "#presenter";
+  let cur = -1;
+
+  function fit() {
+    if (document.body.classList.contains("overview")) return;
+    const k = Math.min(innerWidth / 1600, innerHeight / 900);
+    deck.style.transform = `translate(-50%, -50%) scale(${k})`;
+  }
+
+  // "−19 %" → animates 0 → 19 keeping prefix/suffix; anything it can't parse stays static.
+  function countUp(el) {
+    const raw = el.dataset.count, m = raw.match(/\d[\d\s.,]*\d|\d/);
+    if (!m || reduce) return;
+    const tok = m[0], thousands = /[\s,.]\d{3}$/.test(tok) && !/[.,]\d{1,2}$/.test(tok);
+    const sep = thousands ? (tok.match(/[\s,.]/) || [" "])[0] : "";
+    const decMatch = !thousands && tok.match(/[.,](\d+)$/);
+    const decimals = decMatch ? decMatch[1].length : 0;
+    const target = parseFloat(thousands ? tok.replace(/[\s,.]/g, "") : tok.replace(",", "."));
+    if (!isFinite(target)) return;
+    const fmt = (v) => {
+      let s = v.toFixed(decimals);
+      if (decMatch) s = s.replace(".", tok.includes(",") ? "," : ".");
+      if (thousands) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+      return raw.slice(0, m.index) + s + raw.slice(m.index + tok.length);
+    };
+    const t0 = performance.now(), dur = 1100;
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = fmt(target * e);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = fmt(0);
+    setTimeout(() => requestAnimationFrame(tick), 250);
+  }
+
+  function go(n, from) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (n === cur) return;
+    if (cur >= 0) slides[cur].classList.remove("active");
+    cur = n;
+    const s = slides[cur];
+    void s.offsetWidth; // restart the reveal animations
+    s.classList.add("active");
+    if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
+    document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
+    document.getElementById("notes-drawer").textContent = notes[cur];
+    if (!presenter) history.replaceState(null, "", "#" + (cur + 1));
+    if (chan && from !== "remote") chan.postMessage({ slide: cur });
+    if (presenter) renderPresenter();
+  }
+
+  // Presenter window: script of the current slide, next slide, timer.
+  let start = null;
+  function renderPresenter() {
+    let p = document.getElementById("presenter");
+    if (!p) {
+      document.body.classList.add("presenter");
+      p = document.createElement("div");
+      p.id = "presenter";
+      document.body.appendChild(p);
+    }
+    const next = slides[cur + 1];
+    p.innerHTML = `<div><div class="now">Slide ${cur + 1} / ${slides.length}</div><h4></h4><div class="script"></div></div>
+      <div class="side"><div class="box"><div class="now">Elapsed · target 25 min</div><div class="clock" id="clk">0:00</div></div>
+      <div class="box"><div class="now">Next</div><h4 style="font-size:22px"></h4></div>
+      <div class="hint">→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
+    p.querySelector("h4").textContent = slides[cur].dataset.title;
+    p.querySelector(".script").textContent = notes[cur];
+    p.querySelectorAll("h4")[1].textContent = next ? next.dataset.title : "— end —";
+    tickClock();
+  }
+  function tickClock() {
+    const el = document.getElementById("clk");
+    if (!el || start === null) return;
+    const s = Math.floor((Date.now() - start) / 1000);
+    el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+    el.classList.toggle("over", s > 25 * 60);
+  }
+
+  addEventListener("keydown", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key;
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    else if (k === "Home") go(0);
+    else if (k === "End") go(slides.length - 1);
+    else if (k === "n" || k === "N") document.body.classList.toggle("notes");
+    else if (k === "f" || k === "F") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    else if ((k === "o" || k === "O" || k === "Escape") && !presenter) {
+      const on = k === "Escape" ? false : !document.body.classList.contains("overview");
+      document.body.classList.toggle("overview", on);
+      if (on) { deck.style.transform = "none"; slides[cur].scrollIntoView({ block: "center" }); } else fit();
+    }
+    else if ((k === "s" || k === "S") && !presenter) window.open(location.href.split("#")[0] + "#presenter", "presenter", "width=1200,height=800");
+    else if ((k === "r" || k === "R") && presenter) { start = Date.now(); tickClock(); }
+  });
+  deck.addEventListener("click", (e) => {
+    const s = e.target.closest(".slide");
+    if (document.body.classList.contains("overview") && s) {
+      document.body.classList.remove("overview");
+      fit();
+      go(slides.indexOf(s));
+    }
+  });
+  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); };
+  addEventListener("resize", fit);
+
+  fit();
+  if (presenter) { start = Date.now(); setInterval(tickClock, 1000); }
+  const h = parseInt(location.hash.slice(1), 10);
+  go(isFinite(h) ? h - 1 : 0);
+})();
+</script></body></html>

@@ -61,4 +61,9 @@ A pod is never edited after landing.
 ## 🪂 Pods
 
 <!-- pods:index -->
+- [2026-10-13-devoxx-talk-1-ai-reality-check](2026-10-13-devoxx-talk-1-ai-reality-check/) — Devoxx 2026 series, talk 1 of 5: AI, the reality check (HTML deck + talking points)
+- [2026-10-13-devoxx-talk-2-harness](2026-10-13-devoxx-talk-2-harness/) — Devoxx 2026 series, talk 2 of 5: The harness around the agent (HTML deck + talking points)
+- [2026-10-13-devoxx-talk-3-context](2026-10-13-devoxx-talk-3-context/) — Devoxx 2026 series, talk 3 of 5: Context is the product (HTML deck + talking points)
+- [2026-10-13-devoxx-talk-4-trust-at-scale](2026-10-13-devoxx-talk-4-trust-at-scale/) — Devoxx 2026 series, talk 4 of 5: Trust at scale (HTML deck + talking points)
+- [2026-10-13-devoxx-talk-5-bonus-java-craft](2026-10-13-devoxx-talk-5-bonus-java-craft/) — Devoxx 2026 series, bonus talk (5 of 5): Bonus: Java craft (HTML deck + talking points)
 <!-- /pods:index -->
