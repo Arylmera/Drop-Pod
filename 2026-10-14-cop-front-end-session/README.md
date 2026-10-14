@@ -12,7 +12,7 @@ Target: no code project — presentation material to open and present from the w
 
 ## Apply
 1. Open `deck.html` in a browser from the Drop-Pod clone (double-click). F = fullscreen, → / Space / clicker = next, ← = previous.
-2. On the game slide (5): Space reveals the answer, → / ← move between riddles, T starts or pauses the timer, N skips to the next slide. After the last riddle, → moves on to slide 6.
+2. On the game slide (5): Space reveals the answer, → / ← move between riddles, T starts or pauses the timer, N skips to the next slide; on a touch screen use the buttons under the answer, and tap the right or left half of other slides to move. After the last riddle, → moves on to slide 6.
 3. Before the session, replace the bracketed placeholders in `deck.html` with the real values.
 4. Share the browser window in the call so remote people see the same screen as the room.
 

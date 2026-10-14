@@ -168,6 +168,12 @@ a { color: var(--green); }
     <div class="board">
       <div class="emoji" id="emoji">🐳📦</div>
       <div class="answer" id="answer"></div>
+      <div class="btns">
+        <button id="gPrev" type="button">← Riddle</button>
+        <button id="gReveal" type="button">Reveal</button>
+        <button id="gNext" type="button">Riddle →</button>
+        <button id="gSkip" type="button">Next slide ⇥</button>
+      </div>
     </div>
     <div class="side">
       <div class="timer-box">
@@ -296,6 +302,7 @@ function renderGame() {
   $("count").textContent = `${String(qi + 1).padStart(2, "0")} / ${Q.length}`;
   $("rounds").innerHTML = ROUNDS.map((n, r) => `<span class="${q.r === r ? "on" : ""}">${r + 1}. ${n}</span>`).join("");
   $("emoji").textContent = q.e;
+  $("gReveal").textContent = revealed ? "Hide" : "Reveal";
   const ans = $("answer");
   ans.className = "answer" + (revealed ? " shown" : "");
   ans.innerHTML = revealed ? '<span class="a"></span><span class="why"></span>' : '<span class="hint"></span>';
@@ -323,6 +330,13 @@ function toggleTimer() {
 }
 $("tStart").onclick = (e) => { toggleTimer(); e.currentTarget.blur(); };
 $("tLen").onclick = (e) => { const o = [30, 45, 60, 90]; len = o[(o.indexOf(len) + 1) % o.length]; resetTimer(); e.currentTarget.blur(); };
+function toggleReveal() { revealed = !revealed; if (revealed) pauseTimer(); renderGame(); }
+function nextQ() { qi < Q.length - 1 ? gotoQ(qi + 1) : show(cur + 1); }
+function prevQ() { qi > 0 ? gotoQ(qi - 1) : show(cur - 1); }
+$("gReveal").onclick = (e) => { toggleReveal(); e.currentTarget.blur(); };
+$("gNext").onclick = (e) => { nextQ(); e.currentTarget.blur(); };
+$("gPrev").onclick = (e) => { prevQ(); e.currentTarget.blur(); };
+$("gSkip").onclick = (e) => { show(cur + 1); e.currentTarget.blur(); };
 
 // ---------- Keys ----------
 document.addEventListener("keydown", (e) => {
@@ -331,11 +345,11 @@ document.addEventListener("keydown", (e) => {
   const next = k === "ArrowRight" || k === "PageDown" || k === "ArrowDown" || k === "Enter";
   const prev = k === "ArrowLeft" || k === "PageUp" || k === "ArrowUp" || k === "Backspace";
   if (cur === gameSlide) {
-    if (k === " ") { e.preventDefault(); revealed = !revealed; if (revealed) pauseTimer(); renderGame(); return; }
+    if (k === " ") { e.preventDefault(); return toggleReveal(); }
     if (k === "t" || k === "T") return toggleTimer();
     if (k === "n" || k === "N") return show(cur + 1);
-    if (next) { e.preventDefault(); return qi < Q.length - 1 ? gotoQ(qi + 1) : show(cur + 1); }
-    if (prev) { e.preventDefault(); return qi > 0 ? gotoQ(qi - 1) : show(cur - 1); }
+    if (next) { e.preventDefault(); return nextQ(); }
+    if (prev) { e.preventDefault(); return prevQ(); }
     return;
   }
   if (next || k === " ") { e.preventDefault(); show(cur + 1); }
