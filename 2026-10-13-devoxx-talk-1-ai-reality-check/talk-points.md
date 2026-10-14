@@ -24,6 +24,8 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 >
 > Today is the **reality check**: not what AI promises, but what the evidence says it **actually delivers**.
 >
+> What follows is **my take**: my reading of what I saw, not the final word. I'm sharing it to **hear yours**, so if you see it differently, **say so**, during the talk or after.
+>
 > I lean on three sources: a **controlled study by METR**, a Devoxx talk by **Jonathan Vila Lopez** on how far to trust an agent, and a keynote by **Victor Rentea** on how our job is changing.
 >
 
