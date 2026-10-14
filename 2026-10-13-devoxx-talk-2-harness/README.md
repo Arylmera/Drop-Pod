@@ -1,7 +1,7 @@
-# The harness around the agent — Talk 2 of 5
+# The harness around the agent — Talk 2 of 4
 
 ## Context
-Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 2 of 5, 30 minutes (24 slides), follows 2026-10-13-devoxx-talk-1-ai-reality-check.
+Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 2 of 4, 30 minutes (24 slides), follows 2026-10-13-devoxx-talk-1-ai-reality-check.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions

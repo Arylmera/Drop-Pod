@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CoP Front-end</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,800;1,400&family=Rubik:wght@400;500&display=swap">
+<style>
+/* A dark green IDE: explorer on the left (doubles as navigation), tab + breadcrumb on top, status bar at the bottom.
+   Stage is 1600x900, scaled to the window. Works offline with fallback fonts. */
+:root {
+  --frame: #08110d; --editor: #0d1a14; --panel: #0a1510; --line: #1d3328; --hover: #13241b; --sel: #173226;
+  --ink: #dcebe2; --ink-2: #a9c2b4; --muted: #6b8a7a; --faint: #355244;
+  --green: #5fd38d; --mint: #a8ecc4;
+  --kw: #5fd38d; --str: #e6d49a; --fn: #8fd3ff; --num: #f2a97a; --type: #7ee0c3; --com: #5f7d6d; --pun: #8aa597; --err: #ff8a73;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, "Courier New", monospace;
+  --sans: "Rubik", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #040906; overflow: hidden; font-family: var(--mono); color: var(--ink); -webkit-font-smoothing: antialiased; }
+#deck { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center; background: var(--frame); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px var(--line); }
+
+/* ---------- Window chrome ---------- */
+.chrome { position: absolute; left: 0; right: 0; top: 0; height: 44px; display: flex; align-items: stretch; background: var(--panel); border-bottom: 1px solid var(--line); font-size: 15px; color: var(--muted); z-index: 5; }
+.lights { display: flex; align-items: center; gap: 8px; padding: 0 20px; width: 260px; }
+.lights i { width: 13px; height: 13px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.lights b { margin-left: 14px; font-weight: 600; color: var(--ink-2); font-size: 14px; letter-spacing: .5px; }
+.tab { display: flex; align-items: center; gap: 10px; padding: 0 22px; border-right: 1px solid var(--line); background: var(--editor); color: var(--ink); box-shadow: inset 0 2px 0 var(--green); }
+.tab .x { color: var(--faint); }
+.chrome .run { margin-left: auto; display: flex; align-items: center; gap: 10px; padding: 0 20px; color: var(--green); }
+.chrome .run .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--err); box-shadow: 0 0 0 0 rgba(255,138,115,.6); animation: rec 1.8s infinite; }
+@keyframes rec { 0% { box-shadow: 0 0 0 0 rgba(255,138,115,.55); } 70% { box-shadow: 0 0 0 10px rgba(255,138,115,0); } 100% { box-shadow: 0 0 0 0 rgba(255,138,115,0); } }
+
+/* ---------- Explorer ---------- */
+.explorer { position: absolute; left: 0; top: 44px; bottom: 32px; width: 260px; background: var(--panel); border-right: 1px solid var(--line); padding: 16px 0; font-size: 15px; z-index: 4; }
+.explorer h6 { font: 600 12px var(--mono); letter-spacing: 2px; color: var(--muted); padding: 0 20px 12px; }
+.explorer .folder { padding: 6px 20px; color: var(--ink-2); }
+.explorer ul { list-style: none; }
+.explorer li { position: relative; display: flex; align-items: center; gap: 8px; padding: 7px 12px 7px 30px; font-size: 14px; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .2s, background .2s; }
+.explorer li:hover { background: var(--hover); color: var(--ink-2); }
+.explorer li.on { background: var(--sel); color: var(--ink); }
+.explorer li.on::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--green); }
+.ic { font: 600 11px var(--mono); width: 24px; text-align: center; border-radius: 4px; padding: 1px 0; }
+.ic.md { color: #8fd3ff; } .ic.ts { color: #6aa7ff; } .ic.sh { color: var(--green); } .ic.tsx { color: #7ee0c3; }
+.ic.yml { color: var(--str); } .ic.java { color: var(--num); } .ic.log { color: var(--muted); }
+.explorer .outline { position: absolute; left: 0; right: 0; bottom: 14px; padding: 0 20px; font-size: 13px; color: var(--faint); line-height: 1.7; }
+
+/* ---------- Breadcrumb + gutter + status ---------- */
+.crumbs { position: absolute; left: 260px; right: 0; top: 44px; height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 22px; font-size: 14px; color: var(--muted); border-bottom: 1px solid var(--line); background: var(--editor); z-index: 4; }
+.crumbs b { color: var(--ink-2); font-weight: 400; }
+.gutter { position: absolute; left: 260px; top: 76px; bottom: 32px; width: 60px; padding-top: 30px; text-align: right; padding-right: 16px; font-size: 15px; line-height: 32px; color: var(--faint); background: var(--editor); z-index: 3; }
+.gutter span.cur { color: var(--green); }
+.status { position: absolute; left: 0; right: 0; bottom: 0; height: 32px; display: flex; align-items: center; gap: 22px; padding: 0 16px; font-size: 13.5px; background: #0f3a25; color: #cfeedd; z-index: 5; }
+.status .sp { flex: 1; }
+.status .live { color: #ffd2c9; }
+#progress { position: absolute; left: 0; bottom: 32px; height: 2px; background: var(--green); z-index: 6; transition: width .5s var(--ease); box-shadow: 0 0 12px var(--green); }
+
+/* ---------- Editor & slides ---------- */
+.editor { position: absolute; left: 320px; right: 0; top: 76px; bottom: 32px; background: var(--editor); overflow: hidden; }
+.editor::before { /* slow ambient glow */
+  content: ""; position: absolute; width: 900px; height: 900px; right: -300px; top: -380px; pointer-events: none;
+  background: radial-gradient(circle, rgba(95,211,141,.13), transparent 62%); animation: drift 18s ease-in-out infinite alternate;
+}
+@keyframes drift { to { transform: translate(-260px, 220px) scale(1.15); } }
+.slide { position: absolute; inset: 0; padding: 30px 56px 30px 28px; display: flex; flex-direction: column; gap: 26px;
+  visibility: hidden; opacity: 0; transform: translateX(24px); transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
+.slide.active { visibility: visible; opacity: 1; transform: none; transition: opacity .45s var(--ease), transform .55s var(--ease), visibility 0s; z-index: 1; }
+.slide.left { transform: translateX(-24px); }
+
+/* staggered entrance */
+.r { opacity: 0; }
+.slide.active .r { animation: rise .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
+.slide.active .grow { animation: grow .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); transform-origin: left; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: none; } }
+
+/* type */
+.code { font-size: 26px; line-height: 32px; white-space: pre; color: var(--ink-2); }
+.k { color: var(--kw); } .s { color: var(--str); } .f { color: var(--fn); } .n { color: var(--num); } .t { color: var(--type); }
+.c { color: var(--com); font-style: italic; } .p { color: var(--pun); }
+.big { font: 800 84px/1.04 var(--mono); letter-spacing: -3px; color: var(--ink); }
+.big em { font-style: normal; color: var(--green); }
+.h2 { font: 800 56px/1.1 var(--mono); letter-spacing: -2px; color: var(--ink); }
+.lead { font: 400 28px/1.45 var(--sans); color: var(--ink-2); }
+.spacer { flex: 1; }
+.caret { display: inline-block; width: 13px; height: 28px; background: var(--green); vertical-align: -5px; margin-left: 4px; animation: blink 1.05s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.term { font-size: 26px; color: var(--ink); }
+.term .ps { color: var(--green); }
+.chip { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--hover); color: var(--ink-2); }
+.chip.g { border-color: rgba(95,211,141,.5); color: var(--green); }
+.row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+/* agenda table as CLI output */
+.cli { display: flex; flex-direction: column; font-size: 24px; }
+.cli > div { display: grid; grid-template-columns: 70px 1fr 260px 120px; }
+.cli span { padding: 13px 10px; border-bottom: 1px dashed var(--line); }
+.cli .hd span { color: var(--muted); font-size: 16px; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(--line); }
+.cli .bonus span { color: var(--mint); background: rgba(95,211,141,.06); }
+.cli .r1 { text-align: right; }
+.cli .bonus + div span { border-top: 1px solid var(--line); }
+.logs { display: flex; flex-direction: column; gap: 14px; font-size: 28px; }
+.logs .lv { display: inline-block; width: 92px; font-weight: 600; }
+.lv.warn { color: var(--str); } .lv.err { color: var(--err); } .lv.info { color: var(--fn); }
+
+/* energizer statement */
+.banner { border: 1px solid rgba(95,211,141,.4); background: linear-gradient(135deg, rgba(95,211,141,.18), rgba(95,211,141,.04)); border-radius: 16px; padding: 34px 40px; display: flex; align-items: center; gap: 40px; }
+.banner .em { font-family: var(--emoji); font-size: 112px; line-height: 1; }
+.banner .arrow { font: 800 90px var(--mono); color: var(--green); }
+.q { font: 800 110px var(--mono); color: var(--ink); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { color: var(--green); text-shadow: 0 0 30px rgba(95,211,141,.6); } }
+
+/* markdown checklist */
+.mdlist { display: flex; flex-direction: column; gap: 20px; font-size: 34px; }
+.mdlist div { display: flex; align-items: center; gap: 20px; color: var(--ink); }
+.box { width: 32px; height: 32px; border: 2px solid var(--green); border-radius: 6px; flex: none; }
+
+/* yaml card */
+.yaml { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 26px 30px; font-size: 28px; line-height: 44px; white-space: pre; }
+.blinkq { color: var(--err); animation: glowq 1.6s ease-in-out infinite; }
+@keyframes glowq { 50% { color: var(--str); text-shadow: 0 0 18px rgba(230,212,154,.6); } }
+
+/* ---------- Game ---------- */
+.game { gap: 20px; }
+.gbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.rounds { display: flex; gap: 8px; }
+.rounds span { font-size: 15px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); }
+.rounds span.on { background: var(--green); border-color: var(--green); color: #06120c; font-weight: 600; }
+.count { font-size: 16px; color: var(--muted); }
+.gmain { flex: 1; display: grid; grid-template-columns: 1fr 270px; gap: 22px; min-height: 0; }
+.board { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 24px; }
+.emoji { font-family: var(--emoji); font-size: 130px; line-height: 1.1; letter-spacing: 8px; text-align: center; }
+.emoji.pop { animation: pop .5s var(--ease); }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+.answer { width: 100%; min-height: 104px; border: 2px dashed var(--line); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 12px 18px; text-align: center; }
+.answer .hint { font-size: 18px; color: var(--muted); }
+.answer .a { font: 800 40px var(--mono); color: #06120c; letter-spacing: -1px; }
+.answer .why { font: 400 20px var(--sans); color: #0b2a19; }
+.answer.shown { background: var(--green); border-color: var(--green); animation: flash .45s var(--ease); }
+@keyframes flash { from { transform: scale(.96); box-shadow: 0 0 0 0 rgba(95,211,141,.7); } to { transform: none; box-shadow: 0 0 0 18px rgba(95,211,141,0); } }
+.side { display: flex; flex-direction: column; gap: 16px; }
+.tbox { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.timer { font: 600 64px var(--mono); font-variant-numeric: tabular-nums; line-height: 1; }
+.timer.low { color: var(--err); }
+.tbar { width: 100%; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.tbar i { display: block; height: 100%; width: 100%; background: var(--green); transition: width .25s linear; }
+.keys { font-size: 14px; color: var(--muted); line-height: 2.1; }
+kbd { font: 13px var(--mono); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px; padding: 1px 7px; color: var(--ink-2); background: var(--editor); }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.btns button { font: 500 16px var(--mono); color: var(--ink); background: var(--editor); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; transition: border-color .2s, transform .1s; }
+.btns button:hover { border-color: var(--green); }
+.btns button:active { transform: scale(.96); }
+button:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+a { color: var(--green); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .r { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<div class="chrome">
+  <div class="lights"><i></i><i></i><i></i><b>cop-front-end</b></div>
+  <div class="tab"><span class="ic" id="tabIc"></span><span id="tabName">cover.md</span><span class="x">×</span></div>
+  <div class="run"><span class="dot"></span>live · on site + remote</div>
+</div>
+
+<nav class="explorer">
+  <h6>EXPLORER</h6>
+  <div class="folder">▾ cop-front-end</div>
+  <ul id="files"></ul>
+  <div class="outline">2026-10-15<br>community of practice</div>
+</nav>
+
+<div class="crumbs">cop-front-end <span>›</span> <b id="crumb">cover.md</b></div>
+<div class="gutter" id="gutter"></div>
+
+<main class="editor">
+
+<!-- 1. Cover -->
+<section class="slide" data-file="cover.md" data-ic="md" data-lang="Markdown">
+  <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="open front-end --session 2026-10-15"></span><span class="caret"></span></p>
+  <div class="spacer"></div>
+  <p class="code c r" style="--i:2">// community of practice</p>
+  <h1 class="big r" style="--i:3">Community of<br>Practice <em>Front-end</em></h1>
+  <p class="code r" style="--i:4"><span class="k">const</span> <span class="f">session</span> <span class="p">=</span> <span class="p">{</span> date<span class="p">:</span> <span class="s">"2026-10-15"</span><span class="p">,</span> mode<span class="p">:</span> <span class="p">[</span><span class="s">"on-site"</span><span class="p">,</span> <span class="s">"remote"</span><span class="p">]</span> <span class="p">};</span></p>
+  <div class="spacer"></div>
+</section>
+
+<!-- 2. Agenda -->
+<section class="slide" data-file="agenda.ts" data-ic="ts" data-lang="TypeScript">
+  <p class="term r" style="--i:0"><span class="ps">$</span> <span class="type" data-text="cop agenda --today"></span><span class="caret"></span></p>
+  <div class="cli">
+    <div class="hd r" style="--i:2"><span>#</span><span>topic</span><span>who</span><span class="r1">time</span></div>
+    <div class="r" style="--i:3"><span class="n">01</span><span>Intro</span><span>Guillaume</span><span class="r1"></span></div>
+    <div class="r" style="--i:4"><span class="n">02</span><span>Energizer: guess the tech from emojis</span><span>Guillaume</span><span class="r1">10 min</span></div>
+    <div class="r" style="--i:5"><span class="n">03</span><span>Cascading info</span><span>Chapter lead</span><span class="r1"></span></div>
+    <div class="r" style="--i:6"><span class="n">04</span><span>Team board &amp; GitLab bridge, built with Bob</span><span>Naveen</span><span class="r1">20 min</span></div>
+    <div class="r" style="--i:7"><span class="n">05</span><span>Harnessing heroes</span><span>Samar &amp; Laurent</span><span class="r1">15 min</span></div>
+    <div class="bonus r" style="--i:8"><span>++</span><span>Bonus: AI, the reality check (if time)</span><span>Guillaume</span><span class="r1"></span></div>
+    <div class="r" style="--i:9"><span class="n">06</span><span>Ventilation session: open floor</span><span>Everyone</span><span class="r1"></span></div>
+  </div>
+  <p class="code c r" style="--i:10">// 7 items · exit code 0</p>
+</section>
+
+<!-- 3. Energizer intro -->
+<section class="slide" data-file="energizer.sh" data-ic="sh" data-lang="Shell">
+  <p class="code c r" style="--i:0"># 02 · energizer · 10 min</p>
+  <h1 class="big r" style="--i:1">Guess the tech<br><em>from emojis</em></h1>
+  <div class="banner r" style="--i:2"><span class="em">🐳📦</span><span class="arrow">→</span><span class="q">?</span></div>
+  <div class="spacer"></div>
+  <p class="lead r" style="--i:3">24 riddles in 3 rounds: languages and tools, the stack, dev culture.<br>Answer in the call chat. First right answer wins.</p>
+</section>
+
+<!-- 4. Game -->
+<section class="slide game" id="game" data-file="game.tsx" data-ic="tsx" data-lang="TSX">
+  <div class="gbar">
+    <div class="rounds" id="rounds"></div>
+    <span class="count" id="count">01 / 24</span>
+  </div>
+  <div class="gmain">
+    <div class="board">
+      <div class="emoji" id="emoji">🐳📦</div>
+      <div class="answer" id="answer"></div>
+      <div class="btns">
+        <button id="gPrev" type="button">← riddle</button>
+        <button id="gReveal" type="button">reveal()</button>
+        <button id="gNext" type="button">riddle →</button>
+        <button id="gSkip" type="button">next slide ⇥</button>
+      </div>
+    </div>
+    <div class="side">
+      <div class="tbox">
+        <div class="timer" id="timer">0:45</div>
+        <div class="tbar"><i id="tbar"></i></div>
+        <div class="btns"><button id="tStart" type="button">Start</button><button id="tLen" type="button">45 s</button></div>
+      </div>
+      <div class="keys">
+        <kbd>Space</kbd> reveal<br>
+        <kbd>→</kbd> next riddle<br>
+        <kbd>←</kbd> previous riddle<br>
+        <kbd>T</kbd> start / pause timer<br>
+        <kbd>N</kbd> skip to next slide
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Cascading info -->
+<section class="slide" data-file="cascading-info.md" data-ic="md" data-lang="Markdown">
+  <p class="code c r" style="--i:0">&lt;!-- 03 · from the chapter lead --&gt;</p>
+  <h2 class="h2 r" style="--i:1"><span class="k"># </span>Cascading info</h2>
+  <div class="mdlist">
+    <div class="r" style="--i:2"><span class="box"></span>What's new</div>
+    <div class="r" style="--i:3"><span class="box"></span>What was decided</div>
+    <div class="r" style="--i:4"><span class="box"></span>What's coming</div>
+  </div>
+</section>
+
+<!-- 6. Team board & GitLab bridge -->
+<section class="slide" data-file="team-board.ts" data-ic="ts" data-lang="TypeScript">
+  <p class="code r" style="--i:0"><span class="k">import</span> <span class="p">{</span> <span class="t">TeamBoard</span><span class="p">,</span> <span class="t">GitLabBridge</span> <span class="p">}</span> <span class="k">from</span> <span class="s">"./demo"</span><span class="p">;</span></p>
+  <p class="code c r" style="--i:1">// 04 · demo · built with Bob</p>
+  <div class="spacer"></div>
+  <h1 class="big r" style="--i:2">Team board &amp;<br><em>GitLab bridge</em></h1>
+  <div class="row r" style="--i:3"><span class="chip g">@naveen</span><span class="chip">⏱ 20 min</span><span class="chip">built with Bob</span></div>
+  <div class="spacer"></div>
+  <p class="code r" style="--i:4"><span class="k">await</span> <span class="f">demo</span><span class="p">.</span><span class="f">run</span><span class="p">();</span> <span class="caret"></span></p>
+</section>
+
+<!-- 7. Harnessing heroes -->
+<section class="slide" data-file="harnessing-heroes.ts" data-ic="ts" data-lang="TypeScript">
+  <p class="code r" style="--i:0"><span class="k">class</span> <span class="t">HarnessingHeroes</span> <span class="k">extends</span> <span class="t">Talk</span> <span class="p">{</span></p>
+  <p class="code r" style="--i:1">  speakers <span class="p">=</span> <span class="p">[</span><span class="s">"Samar"</span><span class="p">,</span> <span class="s">"Laurent"</span><span class="p">];</span></p>
+  <p class="code r" style="--i:2">  minutes <span class="p">=</span> <span class="n">15</span><span class="p">;</span></p>
+  <p class="code r" style="--i:3"><span class="p">}</span></p>
+  <div class="spacer"></div>
+  <h1 class="big r" style="--i:4">Harnessing<br><em>heroes</em></h1>
+  <div class="row r" style="--i:5"><span class="chip g">@samar</span><span class="chip g">@laurent</span><span class="chip">⏱ 15 min</span></div>
+  <div class="spacer"></div>
+</section>
+
+<!-- 8. Bonus -->
+<section class="slide" data-file="reality-check.test.ts" data-ic="ts" data-lang="TypeScript">
+  <p class="code c r" style="--i:0">// bonus · if time allows · talk 1 of 4</p>
+  <p class="code r" style="--i:1"><span class="f">describe</span><span class="p">(</span><span class="s">"AI, the reality check"</span><span class="p">, () =&gt; {</span></p>
+  <div class="spacer"></div>
+  <h1 class="big r" style="--i:2">AI, the<br><em>reality check</em></h1>
+  <p class="lead r" style="--i:3">They felt 20% faster. The stopwatch said 19% slower.</p>
+  <p class="code r" style="--i:4">  <span class="f">expect</span><span class="p">(</span>feeling<span class="p">).</span><span class="f">not</span><span class="p">.</span><span class="f">toBe</span><span class="p">(</span>evidence<span class="p">);</span> <span class="caret"></span></p>
+  <div class="spacer"></div>
+  <p class="code r" style="--i:5"><span class="p">});</span> <span class="c">// deck: <a href="../2026-10-13-devoxx-talk-1-ai-reality-check/deck.html">2026-10-13-devoxx-talk-1-ai-reality-check/deck.html</a></span></p>
+</section>
+
+<!-- 9. Next hosts -->
+<section class="slide" data-file="next-cop.yml" data-ic="yml" data-lang="YAML">
+  <p class="code c r" style="--i:0"># next CoP · volunteers wanted</p>
+  <h2 class="h2 r" style="--i:1">Who takes over next time?</h2>
+  <div class="yaml r" style="--i:2"><span class="k">next_cop</span><span class="p">:</span>
+  <span class="k">facilitator</span><span class="p">:</span> <span class="blinkq">???</span>  <span class="c"># runs the next session</span>
+  <span class="k">energizer</span><span class="p">:</span>   <span class="blinkq">???</span>  <span class="c"># brings a 10-min game</span></div>
+  <div class="spacer"></div>
+  <p class="lead r" style="--i:3">Any volunteers? Raise your hand in the room or in the chat.</p>
+  <p class="code r" style="--i:4"><span class="k">$</span> git commit -m <span class="s">"feat: next hosts assigned"</span> <span class="caret"></span></p>
+</section>
+
+<!-- 10. Ventilation -->
+<section class="slide" data-file="ventilation.log" data-ic="log" data-lang="Log">
+  <p class="term r" style="--i:0"><span class="ps">$</span> <span class="type" data-text="tail -f ventilation.log"></span><span class="caret"></span></p>
+  <h1 class="big r" style="--i:2">Ventilation<br><em>session</em></h1>
+  <div class="logs">
+    <p class="r" style="--i:3"><span class="lv err">ERROR</span>What slowed you down lately?</p>
+    <p class="r" style="--i:4"><span class="lv warn">WARN</span>What keeps annoying you?</p>
+    <p class="r" style="--i:5"><span class="lv info">INFO</span>What should we fix together?</p>
+  </div>
+  <div class="spacer"></div>
+  <p class="lead r" style="--i:6">Open floor, room and remote. We listen and note it down, no judgement.</p>
+</section>
+
+<!-- 11. Close -->
+<section class="slide" data-file="exit.log" data-ic="log" data-lang="Log">
+  <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="exit 0"></span><span class="caret"></span></p>
+  <div class="spacer"></div>
+  <h1 class="big r" style="--i:2"><em>Thanks!</em></h1>
+  <p class="code c r" style="--i:3">// community of practice front-end · 2026-10-15</p>
+  <div class="spacer"></div>
+  <p class="code r" style="--i:4"><span class="k">process</span><span class="p">.</span><span class="f">exit</span><span class="p">(</span><span class="n">0</span><span class="p">);</span></p>
+</section>
+
+</main>
+
+<div id="progress"></div>
+<div class="status">
+  <span>⎇ main</span><span>✓ 0 problems</span><span class="live">● live</span>
+  <span class="sp"></span>
+  <span id="stPos">Ln 1, Col 1</span><span>UTF-8</span><span id="stLang">Markdown</span><span id="stSlide">1 / 11</span>
+</div>
+</div>
+
+<script>
+const slides = [...document.querySelectorAll(".slide")];
+const gameSlide = slides.indexOf(document.getElementById("game"));
+const $ = (id) => document.getElementById(id);
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let cur = 0;
+
+// Explorer doubles as navigation
+slides.forEach((s, i) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="ic ${s.dataset.ic}">${s.dataset.ic.toUpperCase()}</span><span></span>`;
+  li.lastChild.textContent = `${String(i + 1).padStart(2, "0")}-${s.dataset.file}`;
+  li.onclick = (e) => { e.stopPropagation(); show(i); };
+  $("files").appendChild(li);
+});
+const fileItems = [...$("files").children];
+$("gutter").innerHTML = Array.from({ length: 24 }, (_, i) => `<span>${i + 1}</span>`).join("<br>");
+const gutterLines = [...$("gutter").children].filter((n) => n.tagName === "SPAN");
+
+function fit() {
+  const s = Math.min(window.innerWidth / 1640, window.innerHeight / 940);
+  $("deck").style.transform = `translate(-50%, -50%) scale(${s})`;
+}
+
+let typingTimers = [];
+function typeIn(slide) {
+  typingTimers.forEach(clearTimeout); typingTimers = [];
+  slide.querySelectorAll(".type").forEach((el) => {
+    const text = el.dataset.text;
+    if (reduce) { el.textContent = text; return; }
+    el.textContent = "";
+    [...text].forEach((ch, k) => typingTimers.push(setTimeout(() => { el.textContent += ch; }, 260 + k * 38)));
+  });
+}
+
+function show(i) {
+  const prev = cur;
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((el, k) => { el.classList.toggle("active", k === cur); el.classList.toggle("left", k < cur); });
+  const s = slides[cur];
+  fileItems.forEach((li, k) => li.classList.toggle("on", k === cur));
+  $("tabName").textContent = s.dataset.file;
+  $("crumb").textContent = s.dataset.file;
+  $("tabIc").className = "ic " + s.dataset.ic; $("tabIc").textContent = s.dataset.ic.toUpperCase();
+  $("stLang").textContent = s.dataset.lang;
+  $("stSlide").textContent = `${cur + 1} / ${slides.length}`;
+  const ln = 3 + ((cur * 7) % 18);
+  $("stPos").textContent = `Ln ${ln}, Col ${1 + ((cur * 13) % 40)}`;
+  gutterLines.forEach((g, k) => g.classList.toggle("cur", k + 1 === ln));
+  $("progress").style.width = `${((cur + 1) / slides.length) * 100}%`;
+  if (cur !== prev || !s.dataset.typed) { typeIn(s); s.dataset.typed = "1"; }
+  if (cur !== gameSlide) pauseTimer();
+  try { history.replaceState(null, "", "#" + (cur + 1)); } catch {}
+}
+
+// ---------- Game ----------
+const ROUNDS = ["Languages & tools", "The stack", "Dev culture"];
+const Q = [
+  { r: 0, e: "🐳📦", a: "Docker", w: "A whale carrying containers." },
+  { r: 0, e: "🐙🐱", a: "GitHub", w: "The Octocat: half octopus, half cat." },
+  { r: 0, e: "🦀", a: "Rust", w: "Ferris the crab, the unofficial mascot." },
+  { r: 0, e: "☕", a: "Java", w: "Coffee from the island of Java." },
+  { r: 0, e: "🐦🍎", a: "Swift", w: "Apple's swift bird." },
+  { r: 0, e: "🐹", a: "Go", w: "The Gopher." },
+  { r: 0, e: "🐘🗄️", a: "PostgreSQL", w: "Slonik the elephant (PHP accepted for the elephant alone)." },
+  { r: 0, e: "💎🛤️", a: "Ruby on Rails", w: "A ruby on rails." },
+  { r: 1, e: "☸️⛵", a: "Kubernetes", w: "Greek for helmsman, hence the ship's wheel." },
+  { r: 1, e: "🐍🐼", a: "pandas", w: "The Python data library." },
+  { r: 1, e: "🔥🗄️", a: "Firebase", w: "A database on fire." },
+  { r: 1, e: "🍃🗄️", a: "MongoDB", w: "The green leaf logo." },
+  { r: 1, e: "🌍🏗️", a: "Terraform", w: "Terra + form: building the planet (the infra)." },
+  { r: 1, e: "🍺", a: "Homebrew", w: "Home-brewed beer, the macOS package manager." },
+  { r: 1, e: "🧶", a: "Yarn", w: "A ball of yarn, the JS package manager." },
+  { r: 1, e: "⚛️", a: "React", w: "The atom logo." },
+  { r: 2, e: "🍝🧑‍💻", a: "Spaghetti code", w: "Everything is tangled." },
+  { r: 2, e: "🦆💬🐛", a: "Rubber duck debugging", w: "Explain your bug to a rubber duck." },
+  { r: 2, e: "🍒⛏️", a: "git cherry-pick", w: "Pick one cherry: a single commit." },
+  { r: 2, e: "🚀📅5️⃣🔥", a: "Deploying on a Friday", w: "Ship on day 5, watch it burn." },
+  { r: 2, e: "🐛➡️✨", a: "It's not a bug, it's a feature", w: "The bug becomes a feature." },
+  { r: 2, e: "🧑‍💻🤝🧑‍💻⌨️", a: "Pair programming", w: "Two devs, one keyboard." },
+  { r: 2, e: "🃏📋⏱️", a: "Planning poker", w: "Cards to estimate stories." },
+  { r: 2, e: "🤷💻✅", a: "Works on my machine", w: "The classic." },
+];
+let qi = 0, revealed = false;
+
+function renderGame(pop) {
+  const q = Q[qi];
+  $("count").textContent = `${String(qi + 1).padStart(2, "0")} / ${Q.length}`;
+  $("rounds").innerHTML = ROUNDS.map((n, r) => `<span class="${q.r === r ? "on" : ""}">${r + 1}. ${n}</span>`).join("");
+  const em = $("emoji");
+  em.textContent = q.e;
+  if (pop) { em.classList.remove("pop"); void em.offsetWidth; em.classList.add("pop"); }
+  $("gReveal").textContent = revealed ? "hide()" : "reveal()";
+  const ans = $("answer");
+  ans.className = "answer" + (revealed ? " shown" : "");
+  ans.innerHTML = revealed ? '<span class="a"></span><span class="why"></span>' : '<span class="hint"></span>';
+  if (revealed) { ans.querySelector(".a").textContent = q.a; ans.querySelector(".why").textContent = q.w; }
+  else ans.querySelector(".hint").textContent = `// answer hidden · ${q.a.length} chars`;
+}
+function gotoQ(i) { qi = i; revealed = false; resetTimer(); renderGame(true); }
+
+let len = 45, left = 45, tick = null;
+function renderTimer() {
+  $("timer").textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+  $("timer").classList.toggle("low", left <= 10);
+  $("tbar").style.width = `${(left / len) * 100}%`;
+  $("tStart").textContent = tick ? "Pause" : left === 0 ? "Time's up" : "Start";
+  $("tLen").textContent = `${len} s`;
+}
+function pauseTimer() { clearInterval(tick); tick = null; renderTimer(); }
+function resetTimer() { clearInterval(tick); tick = null; left = len; renderTimer(); }
+function toggleTimer() {
+  if (tick) return pauseTimer();
+  if (left === 0) left = len;
+  tick = setInterval(() => { left = Math.max(0, left - 1); if (left === 0) { clearInterval(tick); tick = null; } renderTimer(); }, 1000);
+  renderTimer();
+}
+function toggleReveal() { revealed = !revealed; if (revealed) pauseTimer(); renderGame(false); }
+function nextQ() { qi < Q.length - 1 ? gotoQ(qi + 1) : show(cur + 1); }
+function prevQ() { qi > 0 ? gotoQ(qi - 1) : show(cur - 1); }
+const btn = (id, fn) => { $(id).onclick = (e) => { fn(); e.currentTarget.blur(); }; };
+btn("tStart", toggleTimer);
+btn("tLen", () => { const o = [30, 45, 60, 90]; len = o[(o.indexOf(len) + 1) % o.length]; resetTimer(); });
+btn("gReveal", toggleReveal); btn("gNext", nextQ); btn("gPrev", prevQ); btn("gSkip", () => show(cur + 1));
+
+// ---------- Keys & taps ----------
+document.addEventListener("keydown", (e) => {
+  const k = e.key;
+  if (k === "f" || k === "F") { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {}); else document.exitFullscreen?.(); return; }
+  const next = k === "ArrowRight" || k === "PageDown" || k === "ArrowDown" || k === "Enter";
+  const prev = k === "ArrowLeft" || k === "PageUp" || k === "ArrowUp" || k === "Backspace";
+  if (cur === gameSlide) {
+    if (k === " ") { e.preventDefault(); return toggleReveal(); }
+    if (k === "t" || k === "T") return toggleTimer();
+    if (k === "n" || k === "N") return show(cur + 1);
+    if (next) { e.preventDefault(); return nextQ(); }
+    if (prev) { e.preventDefault(); return prevQ(); }
+    return;
+  }
+  if (next || k === " ") { e.preventDefault(); show(cur + 1); }
+  else if (prev) { e.preventDefault(); show(cur - 1); }
+  else if (k === "Home") show(0);
+  else if (k === "End") show(slides.length - 1);
+});
+document.querySelector(".editor").addEventListener("click", (e) => {
+  if (e.target.closest("a, button") || cur === gameSlide) return;
+  show(cur + (e.clientX > window.innerWidth / 2 ? 1 : -1));
+});
+
+window.addEventListener("resize", fit);
+fit(); renderGame(false); renderTimer();
+show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body></html>

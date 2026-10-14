@@ -59,10 +59,9 @@ Autonomy at scale needs two separate mechanisms, in order: a boundary the agent 
 | 20 | Real ending | 1.5 | Answers the hook |
 | 21 | Takeaways | 1 | Three sentences |
 | 22 | Open questions | 1 | Series close, genuinely open |
-| 23 | Next (Bonus) | 0.5 | Promised/enforced bridge |
-| 24 | Sources | — | — |
+| 23 | Sources | — | — |
 
-Sum ≈ 24.5 min talk + 5 min Q&A ≈ 30 min total.
+Sum ≈ 24 min talk + 5 min Q&A ≈ 30 min total.
 
 **If running long:** cut slide 12 ("Five knights of MCP") to its gateway/Cedar point alone, skipping the knight mnemonic — a mid-chapter illustrative aside, not the boundary itself — saving ~1 min. **Pre-series:** do one timed improv read-through before the real talk.
 

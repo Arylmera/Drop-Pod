@@ -22,11 +22,11 @@ Welcome back for part three of this series. Talk two built the harness that chec
 
 ## Slide 2 — Map
 
-**Idea:** this is talk three of five on moving from chat to agentic coding.
+**Idea:** this is talk three of four on moving from chat to agentic coding.
 - Talk one: does AI actually make us faster
 - Talk two: the harness that makes an agent's output trustworthy
 - Talk three, today: what the agent reads before it starts
-- **Example:** two more stops after this — autonomy at scale, then a Java-craft bonus with no AI at all
+- **Example:** one more stop after this — autonomy at scale, which closes the series
 **Transition:** a quick look back at talk two before we start.
 
 *~0.5 min*

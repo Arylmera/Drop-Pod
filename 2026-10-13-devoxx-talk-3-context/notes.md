@@ -11,7 +11,7 @@ tags:
 
 # Arc 3 — Context is the product
 
-Talk 3 of 5. **Delivery: improvisation** — talking-points cards only (`Arc-3-Context-Talk-Points.md`), no script to read. Deck: `Arc-3-Context.html` (23 slides). Pure explanation: no live demo, no exercise to take away.
+Talk 3 of 4. **Delivery: improvisation** — talking-points cards only (`Arc-3-Context-Talk-Points.md`), no script to read. Deck: `Arc-3-Context.html` (23 slides). Pure explanation: no live demo, no exercise to take away.
 
 ## Goal
 

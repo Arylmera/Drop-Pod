@@ -21,9 +21,9 @@ Welcome back. Last time we asked whether AI makes us better at delivering softwa
 
 ## Slide 2 — Map
 
-**Idea:** Five talks, one spine — this is stop two.
+**Idea:** Four talks, one spine — this is stop two.
 - Talk 1 asked whether AI makes us faster; talk 2 asks what makes its output trustworthy
-- Talks 3 and 4 build on today's answer; a bonus closes the series
+- Talks 3 and 4 build on today's answer; talk 4 closes the series
 **Transition:** Quick reminder of where we left off last time.
 
 *~0.5 min*

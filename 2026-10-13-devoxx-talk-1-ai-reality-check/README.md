@@ -1,7 +1,7 @@
-# AI, the reality check — Talk 1 of 5
+# AI, the reality check — Talk 1 of 4
 
 ## Context
-Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 1 of 5, 30 minutes (20 slides), first of a 5-talk series.
+Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 1 of 4, 30 minutes (20 slides), first of a 4-talk series.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
