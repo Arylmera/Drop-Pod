@@ -1,7 +1,7 @@
-# Context is the product — Talk 3 of 5
+# Context is the product — Talk 3 of 4
 
 ## Context
-Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 3 of 5, 30 minutes (23 slides), follows 2026-10-13-devoxx-talk-2-harness.
+Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 3 of 4, 30 minutes (23 slides), follows 2026-10-13-devoxx-talk-2-harness.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions

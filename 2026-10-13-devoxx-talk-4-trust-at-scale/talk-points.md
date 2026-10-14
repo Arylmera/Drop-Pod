@@ -208,19 +208,10 @@ Cut if short: name only the gateway mitigation, skip the other four.
 **Idea:** the series closes as questions, not a roadmap — these are for this team to answer, not for one talk to settle.
 - None of these have a slide-ready answer tonight, on purpose
 - **Example:** "who approves the exception when one ticket genuinely needs a boundary relaxed, and for how long?"
-**Transition:** one more thing we promise but don't yet enforce.
+**Transition:** sources for tonight, for anyone who wants the originals.
 
 *~1 min*
 
-## Slide 23 — We promise final means final. The language doesn't enforce it.
-
-**Idea:** the same promised-versus-enforced question that ran through tonight closes the AI series and opens the bonus talk.
-- No AI in that talk — just the craft side of Devoxx
-- **Example:** one more case where we trust a keyword to mean what it says, and the runtime quietly allows otherwise
-**Transition:** sources for tonight, for anyone who wants the originals.
-
-*~0.5 min*
-
-## Slide 24 — Sources
+## Slide 23 — Sources
 
 Sources for tonight's talk, for anyone who wants to go to the originals.

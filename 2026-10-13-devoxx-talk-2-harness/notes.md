@@ -11,7 +11,7 @@ tags:
 
 # Arc 2 — The harness around the agent — notes
 
-Talk 2 of 5 in the series *From chat to agents we can trust* (Series-Plan). 30 minutes (~25 min talk + ~5 min questions), delivered in **improvisation mode**: talking-points cards, no script, no live demo, no exercise for the audience. Deck: `Arc-2-Harness.html` (24 slides). Cards: Arc-2-Harness-Talk-Points.
+Talk 2 of 4 in the series *From chat to agents we can trust* (Series-Plan). 30 minutes (~25 min talk + ~5 min questions), delivered in **improvisation mode**: talking-points cards, no script, no live demo, no exercise for the audience. Deck: `Arc-2-Harness.html` (24 slides). Cards: Arc-2-Harness-Talk-Points.
 
 ## Goal
 

@@ -17,16 +17,16 @@ Improvisation-mode talking-points cards, one per slide. No script: idea, 2-4 poi
 
 - Thirty minutes: about twenty-five of talk, five of questions
 - Two sources: a METR controlled study and a Devoxx trust-ladder talk, plus a reconversion keynote
-- Talk 1 of 5: from chat to agents we can trust
+- Talk 1 of 4: from chat to agents we can trust
 **Transition:** First, where this talk sits in the series.
 
 *~1 min*
 
 ## Slide 2 — Map
 
-**Idea:** This is talk 1 of a 5-talk series on AI and delivery.
-- Talk 1 of 5: AI, the reality check
-- Next: the harness, context, trust at scale, then a Java-craft bonus
+**Idea:** This is talk 1 of a 4-talk series on AI and delivery.
+- Talk 1 of 4: AI, the reality check
+- Next: the harness, context, then trust at scale
 - Each talk stands alone; miss one, still follow the next
 **Transition:** Let's start with a show of hands.
 

@@ -1,7 +1,7 @@
-# Trust at scale — Talk 4 of 5
+# Trust at scale — Talk 4 of 4
 
 ## Context
-Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 4 of 5, 30 minutes (24 slides), follows 2026-10-13-devoxx-talk-3-context.
+Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 4 of 4, 30 minutes (23 slides), follows 2026-10-13-devoxx-talk-3-context.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
@@ -16,6 +16,6 @@ Target: no code project — presentation material to open and present from the w
 4. Ctrl+P exports the deck to PDF, one slide per page, if a PDF is needed.
 
 ## Files
-- deck.html — the slide deck (24 slides), self-contained
+- deck.html — the slide deck (23 slides), self-contained
 - talk-points.md — one talking-points card per slide (also shown in the presenter window)
 - notes.md — preparation notes: goal, thesis, timing, facts with sources, Q&A, council debate
