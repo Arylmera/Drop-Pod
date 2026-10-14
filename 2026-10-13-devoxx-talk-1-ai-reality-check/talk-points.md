@@ -295,7 +295,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 > **One keynote** was about how our job changes. The speaker's line: **the brain is the bottleneck**. Decisions that used to take **three days now take two hours**.
 >
-> His danger zone: **three or four agent terminals in parallel**, and your only input is **"OK"**. The risk of climbing fast isn't one bad commit, it's **burnout and loss of agency**.
+> His danger zone: **three or four agent terminals in parallel**, and your only input is **"OK"**. The risk of climbing fast isn't one bad commit, it's **burnout** and **losing your agency**: you stop deciding, you just say OK. And when you stop deciding, you slowly stop **owning** the code too.
 >
 > And at every stage, **system design stays human**: architecture, trade-offs, availability, scalability. In his words: **you can't vibe your infrastructure**.
 >
