@@ -238,11 +238,15 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - **Shared library refactor** → stage 3, shell still needs a yes
 - Illustrative; **how to build the gates is talk 2**
 
-> An illustrative example: same team, same agent, three stages.
+> How does that work in practice? Imagine **one team, one agent, three different tasks**. For each one, the question is: **if the agent gets it wrong, how bad is it?**
 >
-> A **Flyway migration** against a real schema: **stage two**, every change approved by hand. **Unit tests behind a required Maven gate**: **stage four**: the agent writes freely, **CI judges the result**. A **shared library refactor**: **stage three**: edits go through, any shell command still needs a yes.
+> **Example 1: a database migration.** A Flyway script that changes a real schema. If it's wrong, we can lose data. So it stays at **stage two**: **I approve every change by hand** before it runs.
 >
-> Nothing new, just **the ladder applied by risk**. How to build those gates is the **next talk**.
+> **Example 2: writing unit tests.** If they're wrong, a required check in CI fails and the build goes red. So it can go to **stage four**: the agent works on its own, and **the CI pipeline checks the result** instead of me.
+>
+> **Example 3: refactoring a shared library.** In between. The agent can **edit the files freely**, but **any command it wants to run still needs my yes**. That's **stage three**.
+>
+> So: **the riskier the task, the lower the stage**, and you only go higher when **something automatic is checking for you**. How to build those checks is the **next talk**.
 >
 
 *Short route:* One line: a migration stays at stage 2, tests behind a CI gate can go to stage 4.
