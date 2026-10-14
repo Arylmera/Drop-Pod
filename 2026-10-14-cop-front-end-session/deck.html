@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CoP Front-end</title>
+<title>CoP Developers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,800;1,400&family=Rubik:wght@400;500&display=swap">
@@ -165,29 +165,29 @@ a { color: var(--green); }
 <div id="deck">
 
 <div class="chrome">
-  <div class="lights"><i></i><i></i><i></i><b>cop-front-end</b></div>
+  <div class="lights"><i></i><i></i><i></i><b>cop-developers</b></div>
   <div class="tab"><span class="ic" id="tabIc"></span><span id="tabName">cover.md</span><span class="x">×</span></div>
   <div class="run"><span class="dot"></span>live · on site + remote</div>
 </div>
 
 <nav class="explorer">
   <h6>EXPLORER</h6>
-  <div class="folder">▾ cop-front-end</div>
+  <div class="folder">▾ cop-developers</div>
   <ul id="files"></ul>
   <div class="outline">2026-10-15<br>community of practice</div>
 </nav>
 
-<div class="crumbs">cop-front-end <span>›</span> <b id="crumb">cover.md</b></div>
+<div class="crumbs">cop-developers <span>›</span> <b id="crumb">cover.md</b></div>
 <div class="gutter" id="gutter"></div>
 
 <main class="editor">
 
 <!-- 1. Cover -->
 <section class="slide" data-file="cover.md" data-ic="md" data-lang="Markdown">
-  <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="open front-end --session 2026-10-15"></span><span class="caret"></span></p>
+  <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="open developers --session 2026-10-15"></span><span class="caret"></span></p>
   <div class="spacer"></div>
   <p class="code c r" style="--i:2">// community of practice</p>
-  <h1 class="big r" style="--i:3">Community of<br>Practice <em>Front-end</em></h1>
+  <h1 class="big r" style="--i:3">Community of<br>Practice <em>Developers</em></h1>
   <p class="code r" style="--i:4"><span class="k">const</span> <span class="f">session</span> <span class="p">=</span> <span class="p">{</span> date<span class="p">:</span> <span class="s">"2026-10-15"</span><span class="p">,</span> mode<span class="p">:</span> <span class="p">[</span><span class="s">"on-site"</span><span class="p">,</span> <span class="s">"remote"</span><span class="p">]</span> <span class="p">};</span></p>
   <div class="spacer"></div>
 </section>
@@ -327,7 +327,7 @@ a { color: var(--green); }
   <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="exit 0"></span><span class="caret"></span></p>
   <div class="spacer"></div>
   <h1 class="big r" style="--i:2"><em>Thanks!</em></h1>
-  <p class="code c r" style="--i:3">// community of practice front-end · 2026-10-15</p>
+  <p class="code c r" style="--i:3">// community of practice developers · 2026-10-15</p>
   <div class="spacer"></div>
   <p class="code r" style="--i:4"><span class="k">process</span><span class="p">.</span><span class="f">exit</span><span class="p">(</span><span class="n">0</span><span class="p">);</span></p>
 </section>
@@ -394,6 +394,7 @@ function show(i) {
   $("progress").style.width = `${((cur + 1) / slides.length) * 100}%`;
   if (cur !== prev || !s.dataset.typed) { typeIn(s); s.dataset.typed = "1"; }
   if (cur !== gameSlide) pauseTimer();
+  else if (prev !== gameSlide || !tick) { resetTimer(); startTimer(); }
   try { history.replaceState(null, "", "#" + (cur + 1)); } catch {}
 }
 
@@ -441,7 +442,7 @@ function renderGame(pop) {
   if (revealed) { ans.querySelector(".a").textContent = q.a; ans.querySelector(".why").textContent = q.w; }
   else ans.querySelector(".hint").textContent = `// answer hidden · ${q.a.length} chars`;
 }
-function gotoQ(i) { qi = i; revealed = false; resetTimer(); renderGame(true); }
+function gotoQ(i) { qi = i; revealed = false; resetTimer(); startTimer(); renderGame(true); }
 
 let len = 45, left = 45, tick = null;
 function renderTimer() {
@@ -453,6 +454,11 @@ function renderTimer() {
 }
 function pauseTimer() { clearInterval(tick); tick = null; renderTimer(); }
 function resetTimer() { clearInterval(tick); tick = null; left = len; renderTimer(); }
+function startTimer() {
+  clearInterval(tick);
+  tick = setInterval(() => { left = Math.max(0, left - 1); if (left === 0) { clearInterval(tick); tick = null; } renderTimer(); }, 1000);
+  renderTimer();
+}
 function toggleTimer() {
   if (tick) return pauseTimer();
   if (left === 0) left = len;
