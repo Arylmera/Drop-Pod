@@ -100,6 +100,10 @@ html, body { height: 100%; background: #040906; overflow: hidden; font-family: v
 .cli .hd span { color: var(--muted); font-size: 16px; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(--line); }
 .cli .bonus span { color: var(--mint); background: rgba(95,211,141,.06); }
 .cli .r1 { text-align: right; }
+.cli .bonus + div span { border-top: 1px solid var(--line); }
+.logs { display: flex; flex-direction: column; gap: 14px; font-size: 28px; }
+.logs .lv { display: inline-block; width: 92px; font-weight: 600; }
+.lv.warn { color: var(--str); } .lv.err { color: var(--err); } .lv.info { color: var(--fn); }
 
 /* energizer statement */
 .banner { border: 1px solid rgba(95,211,141,.4); background: linear-gradient(135deg, rgba(95,211,141,.18), rgba(95,211,141,.04)); border-radius: 16px; padding: 34px 40px; display: flex; align-items: center; gap: 40px; }
@@ -198,9 +202,10 @@ a { color: var(--green); }
     <div class="r" style="--i:5"><span class="n">03</span><span>Cascading info</span><span>Chapter lead</span><span class="r1"></span></div>
     <div class="r" style="--i:6"><span class="n">04</span><span>Team board &amp; GitLab bridge, built with Bob</span><span>Naveen</span><span class="r1">20 min</span></div>
     <div class="r" style="--i:7"><span class="n">05</span><span>Harnessing heroes</span><span>Samar &amp; Laurent</span><span class="r1">15 min</span></div>
-    <div class="bonus r" style="--i:8"><span>++</span><span>Bonus if time allows: AI, the reality check (talk 1/4)</span><span>Guillaume</span><span class="r1"></span></div>
+    <div class="bonus r" style="--i:8"><span>++</span><span>Bonus: AI, the reality check (if time)</span><span>Guillaume</span><span class="r1"></span></div>
+    <div class="r" style="--i:9"><span class="n">06</span><span>Ventilation session: open floor</span><span>Everyone</span><span class="r1"></span></div>
   </div>
-  <p class="code c r" style="--i:9">// 6 items · exit code 0</p>
+  <p class="code c r" style="--i:10">// 7 items · exit code 0</p>
 </section>
 
 <!-- 3. Energizer intro -->
@@ -292,7 +297,20 @@ a { color: var(--green); }
   <p class="code r" style="--i:5"><span class="p">});</span> <span class="c">// deck: <a href="../2026-10-13-devoxx-talk-1-ai-reality-check/deck.html">2026-10-13-devoxx-talk-1-ai-reality-check/deck.html</a></span></p>
 </section>
 
-<!-- 9. Next hosts -->
+<!-- 9. Ventilation -->
+<section class="slide" data-file="ventilation.log" data-ic="log" data-lang="Log">
+  <p class="term r" style="--i:0"><span class="ps">$</span> <span class="type" data-text="tail -f ventilation.log"></span><span class="caret"></span></p>
+  <h1 class="big r" style="--i:2">Ventilation<br><em>session</em></h1>
+  <div class="logs">
+    <p class="r" style="--i:3"><span class="lv err">ERROR</span>What slowed you down lately?</p>
+    <p class="r" style="--i:4"><span class="lv warn">WARN</span>What keeps annoying you?</p>
+    <p class="r" style="--i:5"><span class="lv info">INFO</span>What should we fix together?</p>
+  </div>
+  <div class="spacer"></div>
+  <p class="lead r" style="--i:6">Open floor, room and remote. We listen and note it down, no judgement.</p>
+</section>
+
+<!-- 10. Next hosts -->
 <section class="slide" data-file="next-cop.yml" data-ic="yml" data-lang="YAML">
   <p class="code c r" style="--i:0"># next CoP · volunteers wanted</p>
   <h2 class="h2 r" style="--i:1">Who takes over next time?</h2>
@@ -304,7 +322,7 @@ a { color: var(--green); }
   <p class="code r" style="--i:4"><span class="k">$</span> git commit -m <span class="s">"feat: next hosts assigned"</span> <span class="caret"></span></p>
 </section>
 
-<!-- 10. Close -->
+<!-- 11. Close -->
 <section class="slide" data-file="exit.log" data-ic="log" data-lang="Log">
   <p class="term r" style="--i:0"><span class="ps">~/cop $</span> <span class="type" data-text="exit 0"></span><span class="caret"></span></p>
   <div class="spacer"></div>
@@ -320,7 +338,7 @@ a { color: var(--green); }
 <div class="status">
   <span>⎇ main</span><span>✓ 0 problems</span><span class="live">● live</span>
   <span class="sp"></span>
-  <span id="stPos">Ln 1, Col 1</span><span>UTF-8</span><span id="stLang">Markdown</span><span id="stSlide">1 / 10</span>
+  <span id="stPos">Ln 1, Col 1</span><span>UTF-8</span><span id="stLang">Markdown</span><span id="stSlide">1 / 11</span>
 </div>
 </div>
 
