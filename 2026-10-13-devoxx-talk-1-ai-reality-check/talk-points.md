@@ -105,11 +105,11 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - **246** real tasks, own repos, ~10 years old, **1.1 M+ lines**
 - **Early-2025 tools**, mostly Cursor + Claude 3.5/3.7 Sonnet, **no agentic harness**
 
-> To be fair to the study: **16 experienced open-source developers**, about five years on the project they changed, **246 real tasks** in their own repositories. Mature code: about ten years old, over **1.1 million lines**.
+> Before drawing conclusions, let's be fair and look at **who was tested**. **16 experienced developers**, each working on a project they had known for about **five years**. They did **246 real tasks** from their normal work, in **their own projects**: big, old codebases, around **ten years old** and over **a million lines** of code.
 >
-> Tools from **early 2025**, mostly Cursor with Claude 3.5 and 3.7 Sonnet, and **no agentic harness** around them. Small sample.
+> The AI tools were the ones from **early 2025**: mostly Cursor with Claude Sonnet. Just the tool in the editor, with **no harness around it**: no rules or automatic checks built around the agent. That harness is exactly what talk two is about.
 >
-> So it's not automatically our team or our stack. But it's a randomised trial on real work: **a strong signal, not a universal law**.
+> So **this is not our team**, and 16 people is **a small sample**. But it's a **real experiment on real work**, timed with a stopwatch, not an opinion poll. Take it as **a strong signal, not a universal law**.
 >
 
 *Short route:* One sentence: experienced devs, mature code, early-2025 tools with no harness, so a strong signal, not a law.
