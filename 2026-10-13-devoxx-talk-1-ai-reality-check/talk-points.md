@@ -140,11 +140,11 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **▶ We use it more and trust it less.**
 
-- **84 %** use AI tools · **29 %** trust the accuracy (down from **40 %**)
+- **84 %** use AI tools · **29 %** trust the accuracy (was **40 %** in earlier surveys)
 - **66 %** regularly get **"almost right, but not quite"**
 - A **survey**, not a trial: different method, **same shape** as METR
 
-> A completely different source: the **Stack Overflow 2025 survey**. **84 %** of developers use AI tools. Only **29 %** trust the accuracy of what they get, **down from 40 %**.
+> A completely different source: the **Stack Overflow 2025 survey**. **84 %** of developers use AI tools. Only **29 %** trust the accuracy of what they get. In the **earlier editions** of the same survey, that was **40 %**. So **more people use it, and fewer trust it**.
 >
 > And **66 %** regularly hit answers that are **almost right, but not quite**.
 >
