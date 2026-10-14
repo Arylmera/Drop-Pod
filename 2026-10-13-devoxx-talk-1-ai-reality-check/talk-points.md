@@ -261,11 +261,9 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - Name **lead time** and **change failure rate** first
 - Already exists: **no new metric** for AI
 
-> So what do we measure instead of feelings? We already have it: the **DORA metrics**. **DORA** is a research programme, now part of Google Cloud, that has surveyed **tens of thousands of developers every year since 2014**. It found a handful of numbers that predict **how well a team delivers**: **how often we deploy**, **how long a change takes from commit to production**, **how often a deployment fails**, and **how fast we recover** when it does.
+> So what do we measure instead of feelings? We already have it: the **DORA metrics**. **How often we deploy**, **how fast a change reaches production**, **how often it breaks**, **how fast we recover**.
 >
-> These are **team outcomes at the end of the delivery chain**, not a feeling at the keyboard. If AI really makes us faster, **it has to show up there**.
->
-> The two I'd look at first: **lead time** and **change failure rate**. DORA now also tracks **rework rate**, the share of deployments forced by an incident, and that's exactly where AI churn would show.
+> That's **the team's delivery**, not a feeling at the keyboard. If AI really makes us faster, **it has to show up there**, first in **lead time** and **change failure rate**.
 >
 > 💬 *If asked "what did DORA find about AI?": **2024**: more AI adoption went with slightly **lower** throughput and stability. **2025**: throughput now **rises** with AI, but instability stays, and DORA calls AI an **amplifier** of what a team already does well or badly. (I read the summaries, not the full reports.) The current list has **five** metrics: deployment frequency, change lead time, failed deployment recovery time, change fail rate, deployment rework rate.*
 >
