@@ -1,14 +1,14 @@
 # CoP Front-end session — 2026-10-15
 
 ## Context
-Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, then managed pipeline status, SPA base image and the accessibility guideline; bonus talk 5 if time allows.
+Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, then managed pipeline status, SPA base image, the accessibility guideline, Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes"; bonus talk 5 if time allows.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
-- One self-contained HTML deck (10 slides), English, dark green theme; Google Fonts load when online, system fonts otherwise.
+- One self-contained HTML deck (12 slides), English, dark green theme; Google Fonts load when online, system fonts otherwise.
 - The energizer game is built into the deck as slide 5: 24 emoji riddles in 3 rounds, reveal on demand, 45 s timer. No teams, no scoring.
 - Content the author did not have yet stays as bracketed placeholders in sand color (durations, owners, team statuses, SPA image details, next CoP date).
-- No speaker names besides Guillaume. The bonus slide links to the existing pod `2026-10-13-devoxx-talk-5-bonus-java-craft`.
+- Speakers by first name only: Guillaume (intro, energizer, bonus), Naveen, Samar and Laurent; the SPA topic has no named speaker. The bonus slide links to the existing pod `2026-10-13-devoxx-talk-5-bonus-java-craft`.
 
 ## Apply
 1. Open `deck.html` in a browser from the Drop-Pod clone (double-click). F = fullscreen, → / Space / clicker = next, ← = previous.
@@ -17,4 +17,4 @@ Target: no code project — presentation material to open and present from the w
 4. Share the browser window in the call so remote people see the same screen as the room.
 
 ## Files
-- deck.html — the session deck (10 slides) with the energizer game built in, self-contained
+- deck.html — the session deck (12 slides) with the energizer game built in, self-contained

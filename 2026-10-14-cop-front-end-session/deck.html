@@ -58,6 +58,11 @@ table { width: 100%; border-collapse: collapse; font-size: 26px; }
 th { text-align: left; font-family: var(--mono); font-weight: 600; font-size: 18px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 0 16px 14px; border-bottom: 1px solid var(--line); }
 td { padding: 16px; border-bottom: 1px solid var(--line); color: var(--ink); }
 td.r, th.r { text-align: right; }
+table.compact { font-size: 24px; }
+table.compact td { padding: 10px 16px; }
+.who { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.who .pill { font-size: 20px; padding: 6px 16px; }
+.pill.ph { color: var(--sand); border-color: var(--sand); }
 tr.bonus td { background: rgba(95, 211, 141, 0.08); color: var(--mint); }
 .pill { display: inline-block; font-family: var(--mono); font-size: 16px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); }
 .pill.done { border-color: var(--green); color: var(--green); }
@@ -117,19 +122,21 @@ a { color: var(--green); }
   <h1>Community of Practice<br><span style="color:var(--green)">Front-end</span></h1>
   <p class="lead">October 15, 2026 · on site and remote</p>
   <div class="spacer"></div>
-  <p style="font-family:var(--mono);font-size:20px;color:var(--muted)">intro · energizer · managed pipeline · SPA base image · accessibility</p>
+  <p style="font-family:var(--mono);font-size:20px;color:var(--muted)">intro · energizer · managed pipeline · SPA base image · accessibility · team board · harnessing heroes</p>
 </section>
 
 <!-- 2. Agenda -->
 <section class="slide">
   <div class="head"><span class="eyebrow">Agenda</span><h2>Today</h2></div>
-  <table>
+  <table class="compact">
     <tr><th style="width:8%">#</th><th>Topic</th><th style="width:22%">Who</th><th class="r" style="width:14%">Time</th></tr>
     <tr><td>01</td><td>Intro</td><td>Guillaume</td><td class="r ph">[__ min]</td></tr>
     <tr><td>02</td><td>Energizer: guess the tech from emojis</td><td>Guillaume</td><td class="r">10 min</td></tr>
     <tr><td>03</td><td>Managed pipeline: who is where</td><td class="ph">[Who]</td><td class="r ph">[__ min]</td></tr>
     <tr><td>04</td><td>SPA base image</td><td class="ph">[Who]</td><td class="r ph">[__ min]</td></tr>
     <tr><td>05</td><td>Accessibility guideline</td><td class="ph">[Who]</td><td class="r ph">[__ min]</td></tr>
+    <tr><td>06</td><td>Team board and GitLab bridge, built with Bob</td><td>Naveen</td><td class="r">20 min</td></tr>
+    <tr><td>07</td><td>Harnessing heroes</td><td>Samar &amp; Laurent</td><td class="r ph">[__ min]</td></tr>
     <tr class="bonus"><td>++</td><td>Bonus if time allows: Java craft (talk 5 of 5)</td><td>Guillaume</td><td class="r">[__ min]</td></tr>
   </table>
 </section>
@@ -218,7 +225,28 @@ a { color: var(--green); }
   </div>
 </section>
 
-<!-- 9. Bonus -->
+<!-- 9. Team board & GitLab bridge -->
+<section class="slide glow">
+  <span class="eyebrow">06 · Demo · 20 min</span>
+  <div class="spacer"></div>
+  <h1>Team board and<br><span style="color:var(--green)">GitLab bridge</span></h1>
+  <p class="lead">Built with Bob</p>
+  <div class="who"><span class="pill done">Naveen</span><span class="pill">20 min</span></div>
+  <div class="spacer"></div>
+  <p style="font-size:22px" class="ph">[One line: what the board shows and what the bridge syncs with GitLab]</p>
+</section>
+
+<!-- 10. Harnessing heroes -->
+<section class="slide glow">
+  <span class="eyebrow">07 · Talk</span>
+  <div class="spacer"></div>
+  <h1>Harnessing<br><span style="color:var(--green)">heroes</span></h1>
+  <div class="who"><span class="pill done">Samar</span><span class="pill done">Laurent</span><span class="pill ph">[__ min]</span></div>
+  <div class="spacer"></div>
+  <p style="font-size:22px" class="ph">[One line: what the talk is about]</p>
+</section>
+
+<!-- 11. Bonus -->
 <section class="slide glow">
   <span class="eyebrow">Bonus · if time allows</span>
   <div class="spacer"></div>
@@ -228,7 +256,7 @@ a { color: var(--green); }
   <p style="font-size:22px;color:var(--muted)">Open the deck: <a href="../2026-10-13-devoxx-talk-5-bonus-java-craft/deck.html">2026-10-13-devoxx-talk-5-bonus-java-craft/deck.html</a></p>
 </section>
 
-<!-- 10. Close -->
+<!-- 12. Close -->
 <section class="slide glow">
   <p class="prompt">~/cop $ <b>exit 0</b></p>
   <div class="spacer"></div>
@@ -238,7 +266,7 @@ a { color: var(--green); }
   <p style="font-size:22px;color:var(--muted)">Topic idea for next time? <span class="ph">[channel or contact]</span></p>
 </section>
 
-<div class="foot"><span>CoP Front-end · 2026-10-15</span><span id="pageno">1 / 10</span></div>
+<div class="foot"><span>CoP Front-end · 2026-10-15</span><span id="pageno">1 / 12</span></div>
 <div id="progress"></div>
 </div>
 
