@@ -116,48 +116,30 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 *Short route:* One sentence: experienced devs, mature code, early-2025 tools with no harness. Yes, tools changed since: the number is about the bare tool.
 
-**→** Now, does going faster at the keyboard mean the team ships faster?
+**→** Is it just one study? Two other sources.
 
-## Slide 7 — More output, more breakage  ·  IF TIME (full ~1.5 min, short skip)
+## Slide 7 — Two other sources, same shape  ·  IF TIME (full ~1.5 min, short ~0.3 min)
 
-**▶ Local speed moves the cost downstream, it doesn't remove it.**
+**▶ Two other sources, same shape: more use, not more delivery or trust.**
 
-- Up: epics **+66 %**, throughput **+33.7 %**
-- Down the line: incidents per PR **+243 %**, review time **~5×**
-- **Vendor report**: order of magnitude, not exact decimals
+- Faros (vendor report): review time **~5×**
+- Stack Overflow 2025 (survey): **29 %** trust, was **40 %**
 
-> Does faster at the keyboard mean the team ships faster? **Faros AI** looked at telemetry from about **22,000 developers over two years**.
+> Is it just one study? No. Two other sources, two very different methods.
 >
-> Output goes up: **66 % more epics**, about **a third more task throughput**. But downstream, **incidents per pull request rise by 243 %**, and **time in review is about five times** longer.
+> **Faros AI**, a vendor that sells engineering metrics, looked at telemetry from about **22,000 developers**: teams produce more, but **time in review is about five times longer**. It's a vendor report, so read it as an order of magnitude.
 >
-> Faros sells engineering-metrics tooling, so this is a **vendor report**: read it as an order of magnitude. But the shape is clear: **the cost moves downstream**.
+> And the **Stack Overflow 2025 survey**: only **29 %** of developers trust the accuracy of what AI gives them. In earlier editions, it was **40 %**.
 >
-> *+ if time: Example: a team's PR queue backs up until reviewers start rubber-stamping.*
-
-*Short route:* Skip, or one line: a vendor report sees more output, but more incidents and much longer reviews.
-
-**→** One more data point, from a different population.
-
-## Slide 8 — A second data point: trust, not throughput  ·  IF TIME (full ~1 min, short skip)
-
-**▶ We use it more and trust it less.**
-
-- **84 %** use AI tools · **29 %** trust the accuracy (was **40 %** in earlier surveys)
-- **66 %** regularly get **"almost right, but not quite"**
-- A **survey**, not a trial: different method, **same shape** as METR
-
-> A completely different source: the **Stack Overflow 2025 survey**. **84 %** of developers use AI tools. Only **29 %** trust the accuracy of what they get. In the **earlier editions** of the same survey, that was **40 %**. So **more people use it, and fewer trust it**.
+> Different methods, **same shape** as METR: **more use, but not more delivery, and not more trust**.
 >
-> And **66 %** regularly hit answers that are **almost right, but not quite**.
->
-> It's a survey, not a controlled trial, a different population and method, and it shows **the same shape as the METR gap**.
->
+> 💬 *If asked: Faros also reports **+66 %** epics and **+33.7 %** task throughput per developer, and **+243 %** incidents per pull request. Stack Overflow: **84 %** use AI tools, **66 %** regularly get answers that are almost right, but not quite.*
 
-*Short route:* Skip.
+*Short route:* One line: a vendor report and the Stack Overflow survey show the same shape, more use, not more delivery or trust.
 
 **→** So what does the speaker himself conclude from all this?
 
-## Slide 9 — Only when you do it wrong.  ·  CORE (full ~0.5 min, short ~0.5 min)
+## Slide 8 — Only when you do it wrong.  ·  CORE (full ~0.5 min, short ~0.5 min)
 
 **▶ The numbers describe unstructured use, not AI itself.**
 
@@ -174,7 +156,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** He put a number on what "doing it right" multiplies.
 
-## Slide 10 — formula  ·  CORE (full ~1.5 min, short ~1 min)
+## Slide 9 — formula  ·  CORE (full ~1.5 min, short ~1 min)
 
 **▶ AI multiplies what's already in the bracket, good or bad.**
 
@@ -192,7 +174,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** So the practical question: how much do we let the agent do on its own?
 
-## Slide 11 — Trust is built in stages  ·  CORE (full ~0.3 min, short ~0.2 min)
+## Slide 10 — Trust is built in stages  ·  CORE (full ~0.3 min, short ~0.2 min)
 
 **▶ Trust in an agent isn't an on/off switch, it's a ladder.**
 
@@ -204,7 +186,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Here is that ladder.
 
-## Slide 12 — A trust ladder in seven stages  ·  CORE (full ~2.5 min, short ~1.5 min)
+## Slide 11 — A trust ladder in seven stages  ·  CORE (full ~2.5 min, short ~1.5 min)
 
 **▶ Trust is transferred to a mechanism (a test, a build, CI), never decreed.**
 
@@ -231,7 +213,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** An example of how the right stage depends on the risk.
 
-## Slide 13 — The right stage depends on the risk  ·  IF TIME (full ~1.5 min, short ~0.3 min)
+## Slide 12 — The right stage depends on the risk  ·  IF TIME (full ~1.5 min, short ~0.3 min)
 
 **▶ Same team, same agent: the risk of the task picks the stage.**
 
@@ -255,7 +237,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Before we leave the numbers: what replaces "it feels fast"?
 
-## Slide 14 — What do we measure instead of feeling?  ·  IF TIME (full ~1 min, short ~0.3 min)
+## Slide 13 — What do we measure instead of feeling?  ·  IF TIME (full ~1 min, short ~0.3 min)
 
 **▶ Measure team outcomes, not feelings at the keyboard.**
 
@@ -274,7 +256,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** One ceiling no stage of the ladder removes: the human side.
 
-## Slide 15 — What the ladder doesn't climb  ·  CORE (full ~0.3 min, short ~0.2 min)
+## Slide 14 — What the ladder doesn't climb  ·  CORE (full ~0.3 min, short ~0.2 min)
 
 **▶ Climbing changes what you do, not what you're responsible for.**
 
@@ -286,7 +268,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Here's what that means.
 
-## Slide 16 — The brain is the bottleneck  ·  CORE (full ~2 min, short ~0.5 min)
+## Slide 15 — The brain is the bottleneck  ·  CORE (full ~2 min, short ~0.5 min)
 
 **▶ Higher stages free your hands, then spend your judgment.**
 
@@ -307,7 +289,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Which brings us back to the hand you raised.
 
-## Slide 17 — The problem isn't the model, it's what we put around it.  ·  CORE (full ~0.5 min, short ~0.5 min)
+## Slide 16 — The problem isn't the model, it's what we put around it.  ·  CORE (full ~0.5 min, short ~0.5 min)
 
 **▶ The problem isn't the model, it's what we put around it.**
 
@@ -321,7 +303,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Three things to keep.
 
-## Slide 18 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
+## Slide 17 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
 
 **▶ Three sentences to carry out of the room.**
 
@@ -338,7 +320,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** So where does that trust get transferred to?
 
-## Slide 19 — So what do we put around it?  ·  CORE (full ~0.3 min, short ~0.2 min)
+## Slide 18 — So what do we put around it?  ·  CORE (full ~0.3 min, short ~0.2 min)
 
 **▶ The open question, on purpose: so what do we put around it?**
 
@@ -349,7 +331,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** Sources, if you want to check any of this yourself.
 
-## Slide 20 — sources  ·  CORE (full ~0.3 min, short ~0.2 min)
+## Slide 19 — sources  ·  CORE (full ~0.3 min, short ~0.2 min)
 
 **▶ Everything is checkable: go read the sources.**
 

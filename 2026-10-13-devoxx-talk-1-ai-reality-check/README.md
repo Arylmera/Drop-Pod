@@ -1,7 +1,7 @@
 # AI, the reality check — Talk 1 of 4
 
 ## Context
-Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 1 of 4 (20 slides), first of a 4-talk series. Flexible length, 10 to 20 minutes (also played as the CoP Developers bonus, follows 2026-10-14-cop-front-end-session).
+Back-from-Devoxx-Belgium-2026 series "From chat to agents we can trust", presented every two weeks at the community of practice; this is talk 1 of 4 (19 slides), first of a 4-talk series. Flexible length, 10 to 20 minutes (also played as a CoP Developers slot, follows 2026-10-14-cop-front-end-session).
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
@@ -17,6 +17,6 @@ Target: no code project — presentation material to open and present from the w
 4. Ctrl+P exports the deck to PDF, one slide per page, if a PDF is needed.
 
 ## Files
-- deck.html — the slide deck (20 slides), self-contained
+- deck.html — the slide deck (19 slides), self-contained
 - talk-points.md — the same speaker text as the presenter window, one card per slide (fallback for the second screen)
 - notes.md — preparation notes: goal, thesis, timing, facts with sources, Q&A, council debate
