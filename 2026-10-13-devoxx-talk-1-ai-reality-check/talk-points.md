@@ -26,7 +26,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 >
 > What follows is **my take**: my reading of what I saw, not the final word. I'm sharing it to **hear yours**, so if you see it differently, **say so**, during the talk or after.
 >
-> I lean on three sources: a **controlled study by METR**, a Devoxx talk by **Jonathan Vila Lopez** on how far to trust an agent, and a keynote by **Victor Rentea** on how our job is changing.
+> I lean on three sources: a **controlled study by METR**, a **Devoxx talk** on how far to trust an agent, and a **keynote** on how our job is changing.
 >
 
 **→** First, where this sits in the series.
@@ -163,9 +163,11 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - A **position from the stage**, not a proof that cancels the 19 %
 - Every talk that week pointed at **the harness around the agent**
 
-> **Jonathan Vila Lopez** showed this kind of number at Devoxx: slower, lower DORA results, less than half the code kept. And his answer to his own numbers was: **"Only when you do it wrong."**
+> **One of the Devoxx speakers** showed this kind of number on stage: slower delivery, worse **DORA** results, less than half of the AI code kept. And his answer to his own numbers was: **"Only when you do it wrong."**
 >
 > That's **his position from the stage**, not a proof that cancels the 19 %. But every talk I saw that week pointed the same way: the difference is **the harness around the agent**.
+>
+> 💬 *If asked "what is DORA?": **DORA** (DevOps Research and Assessment) is a research programme, now part of **Google Cloud**, that has surveyed **tens of thousands of software professionals every year since 2014**. It measures **how well a team delivers**: how often we ship, how fast a change reaches production, how often a change breaks, how fast we recover. More on it in a few slides.*
 >
 
 **→** He put a number on what "doing it right" multiplies.
@@ -248,11 +250,13 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - Name **lead time** and **change failure rate** first
 - Already exists: **no new metric** for AI
 
-> So what do we measure instead of feelings? We already have it: the **DORA metrics**. **Deployment frequency, lead time for changes, change failure rate, time to restore.**
+> So what do we measure instead of feelings? We already have it: the **DORA metrics**. **DORA** is a research programme, now part of Google Cloud, that has surveyed **tens of thousands of developers every year since 2014**. It found a handful of numbers that predict **how well a team delivers**: **how often we deploy**, **how long a change takes from commit to production**, **how often a deployment fails**, and **how fast we recover** when it does.
 >
 > These are **team outcomes at the end of the delivery chain**, not a feeling at the keyboard. If AI really makes us faster, **it has to show up there**.
 >
 > The two I'd look at first: **lead time** and **change failure rate**. DORA now also tracks **rework rate**, the share of deployments forced by an incident, and that's exactly where AI churn would show.
+>
+> 💬 *If asked "what did DORA find about AI?": **2024**: more AI adoption went with slightly **lower** throughput and stability. **2025**: throughput now **rises** with AI, but instability stays, and DORA calls AI an **amplifier** of what a team already does well or badly. (I read the summaries, not the full reports.) The current list has **five** metrics: deployment frequency, change lead time, failed deployment recovery time, change fail rate, deployment rework rate.*
 >
 
 *Short route:* One line: the DORA metrics, lead time and change failure rate first; no new metric needed.
@@ -263,7 +267,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **▶ Climbing changes what you do, not what you're responsible for.**
 
-- Rentea's **reconversion keynote**: the human side
+- A **reconversion keynote**: the human side
 - Not a seatbelt, **a warning about the driver**
 
 > Chapter three, the part that isn't a number. Climbing the ladder changes **what you do**, not **what you're responsible for**. Not a seatbelt: **a warning about the driver**.
@@ -280,7 +284,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - Real risk: **burnout and loss of agency**
 - **System design stays human**: "you can't vibe your infrastructure"
 
-> **Victor Rentea**'s keynote was about how our job changes. His line: **the brain is the bottleneck**. Decisions that used to take **three days now take two hours**.
+> **One keynote** was about how our job changes. The speaker's line: **the brain is the bottleneck**. Decisions that used to take **three days now take two hours**.
 >
 > His danger zone: **three or four agent terminals in parallel**, and your only input is **"OK"**. The risk of climbing fast isn't one bad commit, it's **burnout and loss of agency**.
 >
@@ -339,9 +343,9 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 **▶ Everything is checkable: go read the sources.**
 
 - **METR paper** is open access: start with the introduction
-- Rentea's keynote is on YouTube
+- The keynote is on YouTube
 
-> All the sources are on this slide. The **METR paper is open access**: start with its introduction. Rentea's keynote is on YouTube.
+> All the sources are on this slide. The **METR paper is open access**: start with its introduction. The keynote is on YouTube.
 >
 > **Thank you. Questions?**
 >
