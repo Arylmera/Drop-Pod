@@ -212,7 +212,7 @@ pre {
 #progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
 #notes-drawer {
   position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
-  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55; white-space: pre-wrap;
+  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55;
 }
 body.notes #notes-drawer { display: block; }
 body.overview { overflow: auto; background: #0b0c0e; }
@@ -226,7 +226,18 @@ body.presenter #deck, body.presenter #progress { display: none; }
 #presenter { display: grid; grid-template-columns: 1fr 380px; gap: 28px; padding: 28px 34px; min-height: 100vh; }
 #presenter .now { font-size: 15px; color: #a9b0c7; text-transform: uppercase; letter-spacing: 0.08em; }
 #presenter h4 { font-size: 30px; margin: 6px 0 20px; }
-#presenter .script { font-size: 23px; line-height: 1.6; white-space: pre-wrap; max-width: 75ch; }
+#presenter .script { font-size: 23px; line-height: 1.6; max-width: 80ch; }
+#presenter .script b, #notes-drawer b { color: #ffd23f; font-weight: 700; }
+.meta { display: flex; gap: 16px; align-items: center; font-size: 15px; color: #8a91a8; margin-bottom: 14px; }
+.tag { font-size: 14px; font-weight: 800; letter-spacing: .08em; padding: 3px 10px; border-radius: 6px; }
+.tag.core { background: #1f4d33; color: #8ff0b5; } .tag.opt { background: #4d3a12; color: #ffc861; }
+.red { font-size: 30px; line-height: 1.35; font-weight: 700; color: #fff; margin: 0 0 14px; }
+#presenter .script ul { margin: 0 0 20px 1.1em; color: #a9b0c7; font-size: 20px; }
+.say { border-left: 4px solid var(--accent); padding-left: 20px; }
+.say p { margin: 0 0 14px; }
+.say .more { color: #a9b0c7; font-size: 20px; font-style: italic; }
+.short { margin: 16px 0 0; padding: 10px 14px; border-radius: 10px; background: #2a2214; color: #ffc861; font-size: 20px; }
+.tr { margin: 16px 0 0; color: #8ff0b5; font-size: 20px; }
 #presenter .side { display: flex; flex-direction: column; gap: 22px; }
 #presenter .box { background: #1e1f22; border-radius: 16px; padding: 18px 20px; }
 #presenter .clock { font-size: 54px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -419,11 +430,7 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     <p class="lead r" style="--i:2">What Devoxx Belgium 2026 actually showed about AI and delivery</p>
     <div class="brand r" style="--i:3">Back from Devoxx Belgium 2026</div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.0000;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 1, Col 1 &middot; 1 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">- Thirty minutes: about twenty-five of talk, five of questions
-- Two sources: a METR controlled study and a Devoxx trust-ladder talk, plus a reconversion keynote
-- Talk 1 of 4: from chat to agents we can trust
-Transition: First, where this talk sits in the series.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.5 min · short ~0.5 min</span></div><p class="red">One question: does AI make us <b>better at delivering</b>, or does it only <b>feel</b> that way?</p><ul><li>Back from <b>Devoxx Belgium 2026</b>, talk 1 of 4: from chat to agents we can trust</li><li>Three sources: a <b>METR controlled study</b>, a Devoxx talk on <b>trusting agents step by step</b>, a <b>reconversion keynote</b></li></ul><div class="say"><p>Hi everyone. I spent a week at <b>Devoxx Belgium</b>, and AI was in almost every talk. This is the first of four short talks where I bring back what I saw there.</p><p>Today is the <b>reality check</b>: not what AI promises, but what the evidence says it <b>actually delivers</b>.</p><p>I lean on three sources: a <b>controlled study by METR</b>, a Devoxx talk by <b>Jonathan Vila Lopez</b> on how far to trust an agent, and a keynote by <b>Victor Rentea</b> on how our job is changing.</p></div><p class="tr">→ First, where this sits in the series.</p></template>
 </section>
 <section class="slide t-map" data-title="map">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">02-map.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>02-map.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -433,12 +440,7 @@ Transition: First, where this talk sits in the series.
     <div class="map"><div class="stop now r" style="--i:1"><span class="stop-n">01</span><b>AI, the reality check</b><span class="stop-sub">What AI really delivers, and how far to trust it</span></div><div class="stop next r" style="--i:2"><span class="stop-n">02</span><b>The harness around the agent</b><span class="stop-sub">Rules in the build, bounded loops, honest checks</span></div><div class="stop next r" style="--i:3"><span class="stop-n">03</span><b>Context is the product</b><span class="stop-sub">Specs, docs and rules: what the agent reads</span></div><div class="stop next r" style="--i:4"><span class="stop-n">04</span><b>Trust at scale</b><span class="stop-sub">Sandboxes, permissions, review, dimming the lights</span></div></div>
     </div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.0526;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 2, Col 1 &middot; 2 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: This is talk 1 of a 4-talk series on AI and delivery.
-- Talk 1 of 4: AI, the reality check
-- Next: the harness, context, then trust at scale
-- Each talk stands alone; miss one, still follow the next
-Transition: Let's start with a show of hands.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~0.5 min · short ~0.1 min</span></div><p class="red">Four talks, one spine. <b>Each one stands alone.</b></p><ul><li>01 <b>reality check</b> (today) · 02 <b>the harness</b> · 03 <b>context</b> · 04 <b>trust at scale</b></li></ul><div class="say"><p>Quick map. Today: the <b>reality check</b>. Next: <b>the harness around the agent</b>, the rules and checks we put in the build. Then <b>context</b>, what the agent actually reads. Then <b>trust at scale</b>: sandboxes, permissions, review.</p><p>Each talk stands on its own: miss one, you can still follow the next.</p></div><p class="short">Short route: First of four; each one stands alone. Click on.</p><p class="tr">→ Let's start with a show of hands.</p></template>
 </section>
 <section class="slide t-statement" data-title="They felt 20 % faster. The stopwatch said 19 % slower.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">03-they-felt-20-faster-the-stopwatch.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>03-they-felt-20-faster-the-stopwatch.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -448,13 +450,7 @@ Transition: Let's start with a show of hands.
     <p class="statement r" style="--i:1">They felt 20 % faster. The stopwatch said 19 % slower.</p>
     <p class="lead r" style="--i:2">Experienced developers, on their own projects — METR study, 2025</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.1053;--p0:0.0526"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: A feeling of speed is not proof of speed.
-- Show of hands: who feels faster coding with AI? Keep that hand in mind
-- The question this talk answers: does AI make us better at delivering, and how much do we hand an agent?
-- Same developers, same tasks: forecast faster, felt faster, measured slower
-- Example: A Spring Boot team shipping a feature &quot;in half the time&quot; with nothing to show the clock agrees
-Transition: Chapter one: what the numbers actually say.
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~1.5 min</span></div><p class="red">A <b>feeling of speed</b> is not <b>proof of speed</b>.</p><ul><li>Show of hands (remote: <b>reaction or chat</b>): who feels faster with AI?</li><li>Same developers, same tasks: <b>forecast faster, felt faster, measured slower</b></li></ul><div class="say"><p>Let's start with a show of hands. <b>Who feels faster when coding with AI?</b> In the room, raise your hand; remote, use a reaction or the chat. ... Keep that hand in mind.</p><p>In 2025, <b>METR</b> ran a study with <b>experienced developers, on their own projects</b>. Afterwards they <b>felt about 20 % faster</b>. The <b>stopwatch said 19 % slower</b>. Same people, same tasks.</p><p>So the question for today: <b>does AI make us better at delivering software</b>, and <b>how much should we hand over to an agent</b>?</p><p class="more">+ if time: Example: a Spring Boot team says it shipped a feature "in half the time", and nothing on the clock agrees.</p></div><p class="tr">→ Chapter one: what the numbers actually say.</p></template>
 </section>
 <section class="slide t-section dark" data-title="A feeling is not a measurement">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">04-a-feeling-is-not-a-measurement.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>04-a-feeling-is-not-a-measurement.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -465,11 +461,7 @@ Transition: Chapter one: what the numbers actually say.
       <div><h2 class="r" style="--i:1">A feeling is not a measurement</h2><p class="lead r" style="--i:2">What the numbers really say</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.1579;--p0:0.1053"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 4, Col 1 &middot; 4 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: When a number travels this far, go read where it came from.
-- A randomised controlled trial, not a survey
-- Real tasks, real developers, a stopwatch
-Transition: Here is what the study actually measured.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">When a number travels this far, <b>go read where it came from</b>.</p><ul><li>A <b>randomised controlled trial</b>, not a survey</li><li>Real tasks, real developers, <b>a stopwatch</b></li></ul><div class="say"><p>Chapter one. This isn't a survey or a vendor blog: it's a <b>randomised controlled trial</b>, real tasks, real developers, and a <b>stopwatch</b>.</p></div><p class="tr">→ Here is what the study measured.</p></template>
 </section>
 <section class="slide t-stats" data-title="Forecast, felt, measured">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">05-forecast-felt-measured.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>05-forecast-felt-measured.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -484,13 +476,7 @@ Transition: Here is what the study actually measured.
     </div>
     <p class="source r" style="--i:5">METR - Becker, Rush, Barnes, Rein - arXiv 2507.09089 (2025)</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.2105;--p0:0.1579"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 5, Col 1 &middot; 5 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The gap that matters is not the 19 %, it's felt versus measured.
-- Forecast minus 24 %, felt minus 20 %, measured plus 19 % slower
-- Economists and ML experts forecast minus 38-39 %, further off still
-- Under 44 % of AI generations were kept; most needed real clean-up
-- Example: A dev merges a generated Spring repository method, then spends longer fixing the N+1 query it hid
-Transition: To be fair, here's the setting this was measured in.
-~2.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~2 min · short ~1.5 min</span></div><p class="red">The gap that matters is <b>felt versus measured</b>, not the 19 %.</p><ul><li>Forecast <b>−24 %</b> · felt <b>−20 %</b> · measured <b>+19 % slower</b></li><li>Experts forecast <b>−38 to −39 %</b>, even further off</li><li><b>&lt; 44 %</b> of AI generations kept, most needed clean-up</li></ul><div class="say"><p>Three numbers. Before starting, developers <b>forecast</b> that AI would cut their time by <b>24 %</b>. After finishing, they <b>felt</b> it had cut it by <b>20 %</b>. <b>Measured</b>: the tasks with AI took <b>19 % longer</b>.</p><p>Economists and machine-learning experts asked to predict it were even more optimistic: around <b>38 to 39 % faster</b>.</p><p>And a fourth number: <b>fewer than 44 %</b> of the AI generations were kept; most of them needed real clean-up.</p><p>The point isn't "AI makes you slower". The point is that our <b>feeling about speed</b> was off by almost <b>forty points</b>, in the wrong direction.</p><p class="more">+ if time: Example: a dev merges a generated Spring repository method, then spends longer fixing the N+1 query it hid than the time it felt like it saved.</p></div><p class="tr">→ To be fair, here's the setting this was measured in.</p></template>
 </section>
 <section class="slide t-cards" data-title="The study setting, to be fair">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">06-the-study-setting-to-be-fair.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>06-the-study-setting-to-be-fair.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -503,12 +489,7 @@ Transition: To be fair, here's the setting this was measured in.
       <div class="card r" style="--i:4"><div class="card-head"><span class="badge">4</span><b>Early-2025 tools</b></div><p>Mostly Cursor Pro with Claude 3.5/3.7 Sonnet, no agentic harness.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.2632;--p0:0.2105"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 6, Col 1 &middot; 6 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: This is not automatically our team or our stack.
-- Experienced people, on code they already know by heart
-- No agentic harness around the tools they used
-- Small sample, but a randomised trial on real work: a strong signal, not a universal law
-Transition: Now, does going faster at the keyboard mean the team ships faster?
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.5 min · short ~0.3 min</span></div><p class="red">Not automatically <b>our team or our stack</b>: a <b>strong signal, not a universal law</b>.</p><ul><li><b>16</b> experienced devs, ~5 years on their project</li><li><b>246</b> real tasks, own repos, ~10 years old, <b>1.1 M+ lines</b></li><li><b>Early-2025 tools</b>, mostly Cursor + Claude 3.5/3.7 Sonnet, <b>no agentic harness</b></li></ul><div class="say"><p>To be fair to the study: <b>16 experienced open-source developers</b>, about five years on the project they changed, <b>246 real tasks</b> in their own repositories. Mature code: about ten years old, over <b>1.1 million lines</b>.</p><p>Tools from <b>early 2025</b>, mostly Cursor with Claude 3.5 and 3.7 Sonnet, and <b>no agentic harness</b> around them. Small sample.</p><p>So it's not automatically our team or our stack. But it's a randomised trial on real work: <b>a strong signal, not a universal law</b>.</p></div><p class="short">Short route: One sentence: experienced devs, mature code, early-2025 tools with no harness, so a strong signal, not a law.</p><p class="tr">→ Now, does going faster at the keyboard mean the team ships faster?</p></template>
 </section>
 <section class="slide t-bars" data-title="More output, more breakage">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">07-more-output-more-breakage.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>07-more-output-more-breakage.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -532,13 +513,7 @@ Transition: Now, does going faster at the keyboard mean the team ships faster?
     </div>
     <p class="source r" style="--i:7">Faros AI, The Acceleration Whiplash - 22,000 developers, 2 years telemetry (vendor report)</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.3158;--p0:0.2632"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 7, Col 1 &middot; 7 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Local speed moves the cost downstream, it doesn't remove it.
-- Epics and throughput per developer genuinely rise
-- Incidents per pull request roughly triple, review time roughly five times
-- Vendor report, order of magnitude only, not an exact decimal
-- Example: A team's pull-request queue backs up until reviewers start rubber-stamping, which is its own number below
-Transition: One more data point, from a different population entirely.
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.5 min · short skip</span></div><p class="red">Local speed <b>moves the cost downstream</b>, it doesn't remove it.</p><ul><li>Up: epics <b>+66 %</b>, throughput <b>+33.7 %</b></li><li>Down the line: incidents per PR <b>+243 %</b>, review time <b>~5×</b></li><li><b>Vendor report</b>: order of magnitude, not exact decimals</li></ul><div class="say"><p>Does faster at the keyboard mean the team ships faster? <b>Faros AI</b> looked at telemetry from about <b>22,000 developers over two years</b>.</p><p>Output goes up: <b>66 % more epics</b>, about <b>a third more task throughput</b>. But downstream, <b>incidents per pull request rise by 243 %</b>, and <b>time in review is about five times</b> longer.</p><p>Faros sells engineering-metrics tooling, so this is a <b>vendor report</b>: read it as an order of magnitude. But the shape is clear: <b>the cost moves downstream</b>.</p><p class="more">+ if time: Example: a team's PR queue backs up until reviewers start rubber-stamping.</p></div><p class="short">Short route: Skip, or one line: a vendor report sees more output, but more incidents and much longer reviews.</p><p class="tr">→ One more data point, from a different population.</p></template>
 </section>
 <section class="slide t-stats" data-title="A second data point: trust, not throughput">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">08-a-second-data-point-trust-not-thro.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>08-a-second-data-point-trust-not-thro.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -552,12 +527,7 @@ Transition: One more data point, from a different population entirely.
     </div>
     <p class="source r" style="--i:4">Stack Overflow Developer Survey 2025 (AI section)</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.3684;--p0:0.3158"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 8, Col 1 &middot; 8 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: A survey of developers tells the same story as a controlled study.
-- Adoption keeps climbing even as trust in accuracy falls
-- Two-thirds regularly see output that is close but wrong
-- Different method, different population, same shape as the METR gap
-Transition: So what does the speaker himself conclude from all this?
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1 min · short skip</span></div><p class="red">We <b>use it more</b> and <b>trust it less</b>.</p><ul><li><b>84 %</b> use AI tools · <b>29 %</b> trust the accuracy (down from <b>40 %</b>)</li><li><b>66 %</b> regularly get <b>"almost right, but not quite"</b></li><li>A <b>survey</b>, not a trial: different method, <b>same shape</b> as METR</li></ul><div class="say"><p>A completely different source: the <b>Stack Overflow 2025 survey</b>. <b>84 %</b> of developers use AI tools. Only <b>29 %</b> trust the accuracy of what they get, <b>down from 40 %</b>.</p><p>And <b>66 %</b> regularly hit answers that are <b>almost right, but not quite</b>.</p><p>It's a survey, not a controlled trial, a different population and method, and it shows <b>the same shape as the METR gap</b>.</p></div><p class="short">Short route: Skip.</p><p class="tr">→ So what does the speaker himself conclude from all this?</p></template>
 </section>
 <section class="slide t-quote" data-title="Only when you do it wrong.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">09-only-when-you-do-it-wrong.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>09-only-when-you-do-it-wrong.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -567,12 +537,7 @@ Transition: So what does the speaker himself conclude from all this?
     <blockquote class="r" style="--i:1">Only when you do it wrong.</blockquote>
     <p class="cite r" style="--i:2">&mdash; Jonathan Vila Lopez, Devoxx Belgium 2026 - answering his own numbers</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.4211;--p0:0.3684"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 9, Col 1 &middot; 9 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The numbers describe unstructured use, not AI itself.
-- His answer to slower, lower-DORA, under-44 %-kept: only when you do it wrong
-- A position from the stage, not a proven reversal of the 19 %
-- Every Devoxx talk that week pointed the same way: the harness around the agent
-Transition: He put a number on what &quot;doing it right&quot; multiplies.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.5 min · short ~0.5 min</span></div><p class="red">The numbers describe <b>unstructured use</b>, not AI itself.</p><ul><li>His answer to his own numbers: <b>"Only when you do it wrong."</b></li><li>A <b>position from the stage</b>, not a proof that cancels the 19 %</li><li>Every talk that week pointed at <b>the harness around the agent</b></li></ul><div class="say"><p><b>Jonathan Vila Lopez</b> showed this kind of number at Devoxx: slower, lower DORA results, less than half the code kept. And his answer to his own numbers was: <b>"Only when you do it wrong."</b></p><p>That's <b>his position from the stage</b>, not a proof that cancels the 19 %. But every talk I saw that week pointed the same way: the difference is <b>the harness around the agent</b>.</p></div><p class="tr">→ He put a number on what "doing it right" multiplies.</p></template>
 </section>
 <section class="slide t-formula dark" data-title="formula">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">10-success.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>10-success.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -585,12 +550,7 @@ Transition: He put a number on what &quot;doing it right&quot; multiplies.
     </div>
     <p class="lead r" style="--i:4">&quot;Multiplied by AI, confident by humans&quot; - Jonathan Vila Lopez</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.4737;--p0:0.4211"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 10, Col 1 &middot; 10 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: AI multiplies whatever is already in the bracket, good or bad.
-- Success equals AI times you, practices, team knowledge, specs, deterministic tools
-- A weak bracket does not get fixed by a stronger model, it gets amplified
-- Asking the agent instead of a colleague quietly erodes the &quot;team knowledge&quot; term
-Transition: So the practical question becomes: how much do we let the agent do on its own?
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~1 min</span></div><p class="red">AI <b>multiplies</b> what's already in the bracket, <b>good or bad</b>.</p><ul><li>Success = AI × (<b>you</b>, <b>good practices</b>, <b>team knowledge</b>, <b>specs</b>, <b>deterministic tools</b>)</li><li>A weak bracket is <b>amplified</b>, not fixed, by a stronger model</li><li>Asking the agent instead of a colleague <b>erodes team knowledge</b></li></ul><div class="say"><p>He wrote it as a formula: <b>success equals AI times</b> you, good practices, team knowledge, specs and deterministic tools.</p><p>It's a <b>multiplication</b>. If the bracket is strong, AI amplifies it. If it's weak, a stronger model won't fix it: it <b>amplifies the weakness</b>.</p><p>And watch the <b>team knowledge</b> term: every time we ask the agent instead of a colleague, that term quietly gets smaller.</p><p class="more">+ if time: DORA's 2025 report frames AI the same way: an <b>amplifier</b> of an organisation's existing strengths and dysfunctions.</p></div><p class="tr">→ So the practical question: how much do we let the agent do on its own?</p></template>
 </section>
 <section class="slide t-section dark" data-title="Trust is built in stages">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">11-trust-is-built-in-stages.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>11-trust-is-built-in-stages.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -601,11 +561,7 @@ Transition: So the practical question becomes: how much do we let the agent do o
       <div><h2 class="r" style="--i:1">Trust is built in stages</h2><p class="lead r" style="--i:2">How much do we let the agent do?</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.5263;--p0:0.4737"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 11, Col 1 &middot; 11 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Trust in an agent isn't a single on/off switch, it's a ladder.
-- Seven stages, from copy-paste chat to systems of agents
-- Each step up means you personally watch less
-Transition: Here is that ladder.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">Trust in an agent isn't an on/off switch, it's <b>a ladder</b>.</p><ul><li>Seven stages, from <b>copy-paste chat</b> to <b>systems of agents</b></li><li>Each step up: <b>you personally watch less</b></li></ul><div class="say"><p>Chapter two. Trust in an agent isn't a single switch, it's <b>a ladder</b>: seven stages, and each step up means <b>you personally watch less</b>.</p></div><p class="tr">→ Here is that ladder.</p></template>
 </section>
 <section class="slide t-steps" data-title="A trust ladder in seven stages">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">12-a-trust-ladder-in-seven-stages.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>12-a-trust-ladder-in-seven-stages.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -625,13 +581,7 @@ Transition: Here is that ladder.
         <div class="step"><span class="badge lg">7</span><b>Architect</b><p>You design systems that design systems.</p></div>
       </div></div></div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.5789;--p0:0.5263"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 12, Col 1 &middot; 12 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Stages 1-5 raise permission on one agent; 6-7 change the shape of the work entirely.
-- Climbing from stage 2 to 4 is only reasonable if something else is watching instead of you
-- A test, a build, a CI pipeline: that's what trust actually transfers to
-- This grouping is my reading of the ladder, not a slide shown on stage
-- Example: A team stays at stage 2 for a database migration but runs stage 4 for routine unit tests
-Transition: One illustrative example of how the right stage depends on the risk of the task.
-~3 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~2.5 min · short ~1.5 min</span></div><p class="red">Trust is <b>transferred</b> to a mechanism (<b>a test, a build, CI</b>), never decreed.</p><ul><li>1 <b>chat</b> · 2 <b>approve every call</b> · 3 <b>collaborator</b> · 4 <b>director</b> · 5 <b>YOLO</b></li><li>6 <b>orchestrator</b> · 7 <b>architect</b>: the shape of the work changes</li><li>2 → 4 only if <b>something else watches instead of you</b></li><li>The permission / shape split is <b>my reading</b>, not the original slide</li></ul><div class="say"><p>Seven stages. <b>One</b>: browser chat, copy-paste both ways: low trust, total control. <b>Two</b>: a coding agent, but <b>you approve every tool call</b>. <b>Three</b>: collaborator: file edits go through, shell commands still need a yes. <b>Four</b>: director: <b>you judge the end result, not each step</b>. <b>Five</b>: YOLO mode, full trust.</p><p><b>Six and seven</b> change the shape of the work: you <b>orchestrate a fleet</b> of subagents, then you <b>design systems that design systems</b>. My reading, not the original slide: one to five raise permission on one agent; six and seven change who splits the work.</p><p>The key point: going from <b>two to four</b> is only reasonable if <b>something else is watching instead of you</b>: <b>a test, a build, a CI pipeline</b>. That's where trust actually goes.</p></div><p class="short">Short route: Name stages 1, 2 and 4 only, then the key point: 2 to 4 only when a test, a build or CI watches instead of you.</p><p class="tr">→ An example of how the right stage depends on the risk.</p></template>
 </section>
 <section class="slide t-cards" data-title="The right stage depends on the risk">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">13-the-right-stage-depends-on-the-ris.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>13-the-right-stage-depends-on-the-ris.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -643,12 +593,7 @@ Transition: One illustrative example of how the right stage depends on the risk 
       <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Shared library refactor</b></div><p>Stage 3: edits go through automatically, but any shell command still needs a yes.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.6316;--p0:0.5789"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 13, Col 1 &middot; 13 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Same team, same agent, three different stages, chosen by what's at risk.
-- A schema migration stays closely watched; a test suite doesn't need to be
-- No new mechanism here, just the ladder applied task by task
-- How each gate is actually built is next talk's subject, not today's
-Transition: Before we leave the numbers behind: what should replace &quot;it feels fast&quot;?
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.5 min · short ~0.3 min</span></div><p class="red">Same team, same agent: <b>the risk of the task picks the stage</b>.</p><ul><li><b>Flyway migration</b> → stage 2, every change approved</li><li><b>Unit tests behind a Maven gate</b> → stage 4, CI judges the result</li><li><b>Shared library refactor</b> → stage 3, shell still needs a yes</li><li>Illustrative; <b>how to build the gates is talk 2</b></li></ul><div class="say"><p>An illustrative example: same team, same agent, three stages.</p><p>A <b>Flyway migration</b> against a real schema: <b>stage two</b>, every change approved by hand. <b>Unit tests behind a required Maven gate</b>: <b>stage four</b>: the agent writes freely, <b>CI judges the result</b>. A <b>shared library refactor</b>: <b>stage three</b>: edits go through, any shell command still needs a yes.</p><p>Nothing new, just <b>the ladder applied by risk</b>. How to build those gates is the <b>next talk</b>.</p></div><p class="short">Short route: One line: a migration stays at stage 2, tests behind a CI gate can go to stage 4.</p><p class="tr">→ Before we leave the numbers: what replaces "it feels fast"?</p></template>
 </section>
 <section class="slide t-bullets" data-title="What do we measure instead of feeling?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">14-what-do-we-measure-instead-of-feel.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>14-what-do-we-measure-instead-of-feel.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -660,12 +605,7 @@ Transition: Before we leave the numbers behind: what should replace &quot;it fee
       <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>The DORA four. Not a new practice to adopt today, a yardstick that already exists.</p></aside>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.6842;--p0:0.6316"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 14, Col 1 &middot; 14 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: A one-line answer so this doesn't stay an open question through Q&amp;A.
-- Deployment frequency, lead time, change failure rate, time to restore
-- These already exist; AI doesn't need a new metric invented for it
-- How to wire that measurement in is left for a later talk
-Transition: One ceiling no stage of that ladder removes: the human side of the work.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1 min · short ~0.3 min</span></div><p class="red">Measure <b>team outcomes</b>, not <b>feelings at the keyboard</b>.</p><ul><li><b>Deployment frequency</b> · <b>lead time</b> · <b>change failure rate</b> · <b>time to restore</b></li><li>Name <b>lead time</b> and <b>change failure rate</b> first</li><li>Already exists: <b>no new metric</b> for AI</li></ul><div class="say"><p>So what do we measure instead of feelings? We already have it: the <b>DORA metrics</b>. <b>Deployment frequency, lead time for changes, change failure rate, time to restore.</b></p><p>These are <b>team outcomes at the end of the delivery chain</b>, not a feeling at the keyboard. If AI really makes us faster, <b>it has to show up there</b>.</p><p>The two I'd look at first: <b>lead time</b> and <b>change failure rate</b>. DORA now also tracks <b>rework rate</b>, the share of deployments forced by an incident, and that's exactly where AI churn would show.</p></div><p class="short">Short route: One line: the DORA metrics, lead time and change failure rate first; no new metric needed.</p><p class="tr">→ One ceiling no stage of the ladder removes: the human side.</p></template>
 </section>
 <section class="slide t-section dark" data-title="What the ladder doesn't climb">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">15-what-the-ladder-doesn-t-climb.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>15-what-the-ladder-doesn-t-climb.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -676,11 +616,7 @@ Transition: One ceiling no stage of that ladder removes: the human side of the w
       <div><h2 class="r" style="--i:1">What the ladder doesn't climb</h2><p class="lead r" style="--i:2">The human cost of climbing it carelessly</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.7368;--p0:0.6842"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 15, Col 1 &middot; 15 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Climbing the ladder changes what you do, not what you're responsible for.
-- A reconversion keynote from the same conference, on the human side of this shift
-- Not a seatbelt, a warning about the driver
-Transition: Here's the part that isn't a number.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">Climbing changes <b>what you do</b>, not <b>what you're responsible for</b>.</p><ul><li>Rentea's <b>reconversion keynote</b>: the human side</li><li>Not a seatbelt, <b>a warning about the driver</b></li></ul><div class="say"><p>Chapter three, the part that isn't a number. Climbing the ladder changes <b>what you do</b>, not <b>what you're responsible for</b>. Not a seatbelt: <b>a warning about the driver</b>.</p></div><p class="tr">→ Here's what that means.</p></template>
 </section>
 <section class="slide t-bullets" data-title="The brain is the bottleneck">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">16-the-brain-is-the-bottleneck.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>16-the-brain-is-the-bottleneck.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -692,13 +628,7 @@ Transition: Here's the part that isn't a number.
       <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>An agent traced 17 memory leaks from a heap dump in 30 minutes.</p></aside>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.7895;--p0:0.7368"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 16, Col 1 &middot; 16 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Higher stages free your hands, then quietly spend your judgment instead.
-- The bottleneck moves from typing to deciding, and deciding all day burns out
-- Architecture, trade-offs, availability and scalability stay a human call at every stage
-- A vivid, credible win for Java ops work, explicitly his anecdote, not a study
-Transition: Which brings us back to the hook we opened with.
-~2.5 min
-Cut if short: say only the last bullet, skip the anecdote.</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~2 min · short ~0.5 min</span></div><p class="red">Higher stages free your <b>hands</b>, then spend your <b>judgment</b>.</p><ul><li><b>3 days → 2 hours</b> per decision</li><li>Danger zone: <b>3–4 agent terminals</b>, your only input is <b>"OK"</b></li><li>Real risk: <b>burnout and loss of agency</b></li><li><b>System design stays human</b>: "you can't vibe your infrastructure"</li></ul><div class="say"><p><b>Victor Rentea</b>'s keynote was about how our job changes. His line: <b>the brain is the bottleneck</b>. Decisions that used to take <b>three days now take two hours</b>.</p><p>His danger zone: <b>three or four agent terminals in parallel</b>, and your only input is <b>"OK"</b>. The risk of climbing fast isn't one bad commit, it's <b>burnout and loss of agency</b>.</p><p>And at every stage, <b>system design stays human</b>: architecture, trade-offs, availability, scalability. In his words: <b>you can't vibe your infrastructure</b>.</p><p class="more">+ if time: His anecdote, not a benchmark: an agent traced <b>17 memory leaks</b> from a heap dump in <b>30 minutes</b>. The upside is real.</p></div><p class="short">Short route: Say only: system design, trade-offs, availability and scalability stay a human call at every stage.</p><p class="tr">→ Which brings us back to the hand you raised.</p></template>
 </section>
 <section class="slide t-statement dark" data-title="The problem isn't the model, it's what we put around it.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">17-the-problem-isn-t-the-model-it-s-w.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>17-the-problem-isn-t-the-model-it-s-w.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -708,12 +638,7 @@ Cut if short: say only the last bullet, skip the anecdote.</template>
     <p class="statement r" style="--i:1">The problem isn't the model, it's what we put around it.</p>
     <p class="lead r" style="--i:2">Feeling faster is not evidence; trust is transferred to mechanisms, not decreed</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.8421;--p0:0.7895"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 17, Col 1 &middot; 17 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: This is the one sentence that closes the loop the hook opened.
-- Feeling faster is not evidence, we opened on exactly that gap
-- Trust moves to mechanisms we build, never to the model by default
-- Everything in this talk points at the same gap, not at AI itself
-Transition: Three things to keep.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.5 min · short ~0.5 min</span></div><p class="red">The problem isn't <b>the model</b>, it's <b>what we put around it</b>.</p><ul><li>Feeling faster <b>is not evidence</b></li><li>Trust moves to <b>mechanisms we build</b>, never to the model by default</li></ul><div class="say"><p>So, back to the hand you raised at the start. <b>Feeling faster is not evidence.</b></p><p>Trust doesn't come from the model by default: it's <b>transferred to mechanisms we build</b>. Everything today points at the same gap: not at AI itself, but at <b>what we put around it</b>.</p></div><p class="tr">→ Three things to keep.</p></template>
 </section>
 <section class="slide t-takeaway dark" data-title="Key takeaways">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">18-key-takeaways.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>18-key-takeaways.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -722,12 +647,7 @@ Transition: Three things to keep.
     <h2 class="r" style="--i:0">Key takeaways</h2>
     <ol class="take"><li class="r" style="--i:1"><span class="badge lg">1</span><span>A feeling is not a measurement: judge AI by lead time, failure rate and rework, not by how fast it feels.</span></li><li class="r" style="--i:2"><span class="badge lg">2</span><span>Trust is transferred, not decreed: hand over control only where a test, a build or CI watches for you.</span></li><li class="r" style="--i:3"><span class="badge lg">3</span><span>The brain is the bottleneck, not the keyboard: climbing the ladder spends judgment, protect it.</span></li></ol></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.8947;--p0:0.8421"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 18, Col 1 &middot; 18 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Three sentences worth carrying out of the room.
-- A feeling is not a measurement
-- Trust is transferred, not decreed
-- The brain is the bottleneck, not the keyboard
-Transition: So where does that trust actually get transferred to?
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1 min · short ~0.7 min</span></div><p class="red">Three sentences to carry out of the room.</p><ul><li><b>A feeling is not a measurement</b></li><li><b>Trust is transferred, not decreed</b></li><li><b>The brain is the bottleneck, not the keyboard</b></li></ul><div class="say"><p>One: <b>a feeling is not a measurement</b>. Judge AI by <b>lead time, failure rate and rework</b>, not by how fast it feels.</p><p>Two: <b>trust is transferred, not decreed</b>. Hand over control only where <b>a test, a build or CI</b> watches for you.</p><p>Three: <b>the brain is the bottleneck, not the keyboard</b>. Climbing the ladder <b>spends judgment</b>: protect it.</p></div><p class="tr">→ So where does that trust get transferred to?</p></template>
 </section>
 <section class="slide t-next dark" data-title="So what do we put around it?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">19-so-what-do-we-put-around-it.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>19-so-what-do-we-put-around-it.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -737,11 +657,7 @@ Transition: So where does that trust actually get transferred to?
     <p class="statement r" style="--i:1">So what do we put around it?</p>
     <p class="lead r" style="--i:2">Talk 2: the harness around the agent</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.9474;--p0:0.8947"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 19, Col 1 &middot; 19 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The question this talk leaves open, on purpose, for next time.
-- Next time: what, concretely, makes an agent's output trustworthy
-- Rules the build enforces, checks the agent can't game
-Transition: Sources, if you want to check any of this yourself.
-~0.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">The open question, on purpose: <b>so what do we put around it?</b></p><ul><li>Next: <b>rules the build enforces</b>, <b>checks the agent can't game</b></li></ul><div class="say"><p>Which leaves the question for next time: <b>so what do we put around it?</b> Rules the build enforces, checks the agent can't game. That's talk two, <b>the harness around the agent</b>.</p></div><p class="tr">→ Sources, if you want to check any of this yourself.</p></template>
 </section>
 <section class="slide t-sources" data-title="sources">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">20-sources.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>20-sources.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -750,10 +666,7 @@ Transition: Sources, if you want to check any of this yourself.
     <h3 class="r" style="--i:0">Going further</h3>
     <ul class="src"><li class="r" style="--i:1">Jonathan Vila Lopez - Agents With Seatbelts, Devoxx BE 2026 - <a href="https://dvbe26.cfp.dev/api/public/talks/9032" target="_blank" rel="noopener">https://dvbe26.cfp.dev/api/public/talks/9032</a></li><li class="r" style="--i:2">METR - Early-2025 AI and experienced open-source developers - <a href="https://arxiv.org/abs/2507.09089" target="_blank" rel="noopener">https://arxiv.org/abs/2507.09089</a></li><li class="r" style="--i:3">DORA 2025 - State of AI-assisted Software Development - <a href="https://dora.dev/research/2025/" target="_blank" rel="noopener">https://dora.dev/research/2025/</a></li><li class="r" style="--i:4">Faros AI - The Acceleration Whiplash (vendor report) - <a href="https://faros.ai/research/ai-acceleration-whiplash" target="_blank" rel="noopener">https://faros.ai/research/ai-acceleration-whiplash</a></li><li class="r" style="--i:5">Stack Overflow Developer Survey 2025 (AI section) - <a href="https://survey.stackoverflow.co/2025/ai" target="_blank" rel="noopener">https://survey.stackoverflow.co/2025/ai</a></li><li class="r" style="--i:6">Victor Rentea - Agentic Engineering Reconversion (keynote) - <a href="https://www.youtube.com/watch?v=vAfQ4f8wIVI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vAfQ4f8wIVI</a></li></ul></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck end" style="--p:1.0000;--p0:0.9474"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 20, Col 1 &middot; 20 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">- No replay yet of the Devoxx BE 2026 talks themselves
-- METR paper is open access, start with its introduction
-Transition: Thank you, questions.
-~0.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">Everything is checkable: <b>go read the sources</b>.</p><ul><li><b>METR paper</b> is open access: start with the introduction</li><li>Rentea's keynote is on YouTube</li></ul><div class="say"><p>All the sources are on this slide. The <b>METR paper is open access</b>: start with its introduction. Rentea's keynote is on YouTube.</p><p><b>Thank you. Questions?</b></p></div><p class="tr">→ Questions.</p></template>
 </section>
 </main>
 <div id="progress"></div><div id="notes-drawer"></div>
@@ -761,7 +674,7 @@ Transition: Thank you, questions.
 (() => {
   const deck = document.getElementById("deck");
   const slides = [...document.querySelectorAll(".slide")];
-  const notes = slides.map((s) => s.querySelector("template.notes").content.textContent.trim());
+  const notes = slides.map((s) => s.querySelector("template.notes").innerHTML);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const chan = "BroadcastChannel" in window ? new BroadcastChannel("deck:" + document.title) : null;
   const presenter = location.hash === "#presenter";
@@ -809,7 +722,7 @@ Transition: Thank you, questions.
     s.classList.add("active");
     if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
     document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
-    document.getElementById("notes-drawer").textContent = notes[cur];
+    document.getElementById("notes-drawer").innerHTML = notes[cur];
     if (!presenter) history.replaceState(null, "", "#" + (cur + 1));
     if (chan && from !== "remote") chan.postMessage({ slide: cur });
     if (presenter) renderPresenter();
@@ -827,11 +740,12 @@ Transition: Thank you, questions.
     }
     const next = slides[cur + 1];
     p.innerHTML = `<div><div class="now">Slide ${cur + 1} / ${slides.length}</div><h4></h4><div class="script"></div></div>
-      <div class="side"><div class="box"><div class="now">Elapsed · target 25 min</div><div class="clock" id="clk">0:00</div></div>
+      <div class="side"><div class="box"><div class="now">Elapsed · 10–20 min</div><div class="clock" id="clk">0:00</div></div>
       <div class="box"><div class="now">Next</div><h4 style="font-size:22px"></h4></div>
-      <div class="hint">→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
+      <div class="hint">Short route (~10 min): CORE slides, and the \"Short route\" line on IF TIME slides. Full route ~20 min.<br><br>→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
     p.querySelector("h4").textContent = slides[cur].dataset.title;
-    p.querySelector(".script").textContent = notes[cur];
+    p.querySelector(".script").innerHTML = notes[cur];
+    scrollTo(0, 0);
     p.querySelectorAll("h4")[1].textContent = next ? next.dataset.title : "— end —";
     tickClock();
   }
@@ -840,7 +754,7 @@ Transition: Thank you, questions.
     if (!el || start === null) return;
     const s = Math.floor((Date.now() - start) / 1000);
     el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-    el.classList.toggle("over", s > 25 * 60);
+    el.classList.toggle("over", s > 20 * 60);
   }
 
   addEventListener("keydown", (e) => {

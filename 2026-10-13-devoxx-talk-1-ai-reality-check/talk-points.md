@@ -8,205 +8,338 @@ tags:
   - presentation
 ---
 
+# Arc 1 - AI Reality - Speaker text
 
-# Arc 1 - AI Reality - Talk Points
+One card per slide: **fil rouge** (bold line), outline, full text to say, transition. Same text as the presenter window (S).
+Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus only the *Short route* line on IF TIME slides. **Full route:** ~20 min.
 
-Improvisation-mode talking-points cards, one per slide. No script: idea, 2-4 points, an example, a transition, a duration.
+## Slide 1 — AI, the reality check  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-## Slide 1 — AI, the reality check
+**▶ One question: does AI make us better at delivering, or does it only feel that way?**
 
-- Thirty minutes: about twenty-five of talk, five of questions
-- Two sources: a METR controlled study and a Devoxx trust-ladder talk, plus a reconversion keynote
-- Talk 1 of 4: from chat to agents we can trust
-**Transition:** First, where this talk sits in the series.
+- Back from **Devoxx Belgium 2026**, talk 1 of 4: from chat to agents we can trust
+- Three sources: a **METR controlled study**, a Devoxx talk on **trusting agents step by step**, a **reconversion keynote**
 
-*~1 min*
+> Hi everyone. I spent a week at **Devoxx Belgium**, and AI was in almost every talk. This is the first of four short talks where I bring back what I saw there.
+>
+> Today is the **reality check**: not what AI promises, but what the evidence says it **actually delivers**.
+>
+> I lean on three sources: a **controlled study by METR**, a Devoxx talk by **Jonathan Vila Lopez** on how far to trust an agent, and a keynote by **Victor Rentea** on how our job is changing.
+>
 
-## Slide 2 — Map
+**→** First, where this sits in the series.
 
-**Idea:** This is talk 1 of a 4-talk series on AI and delivery.
-- Talk 1 of 4: AI, the reality check
-- Next: the harness, context, then trust at scale
-- Each talk stands alone; miss one, still follow the next
-**Transition:** Let's start with a show of hands.
+## Slide 2 — map  ·  IF TIME (full ~0.5 min, short ~0.1 min)
 
-*~1 min*
+**▶ Four talks, one spine. Each one stands alone.**
 
-## Slide 3 — They felt 20 % faster. The stopwatch said 19 % slower.
+- 01 **reality check** (today) · 02 **the harness** · 03 **context** · 04 **trust at scale**
 
-**Idea:** A feeling of speed is not proof of speed.
-- Show of hands: who feels faster coding with AI? Keep that hand in mind
-- The question this talk answers: does AI make us better at delivering, and how much do we hand an agent?
-- Same developers, same tasks: forecast faster, felt faster, measured slower
-- **Example:** A Spring Boot team shipping a feature "in half the time" with nothing to show the clock agrees
-**Transition:** Chapter one: what the numbers actually say.
+> Quick map. Today: the **reality check**. Next: **the harness around the agent**, the rules and checks we put in the build. Then **context**, what the agent actually reads. Then **trust at scale**: sandboxes, permissions, review.
+>
+> Each talk stands on its own: miss one, you can still follow the next.
+>
 
-*~2 min*
+*Short route:* First of four; each one stands alone. Click on.
 
-## Slide 4 — A feeling is not a measurement
+**→** Let's start with a show of hands.
 
-**Idea:** When a number travels this far, go read where it came from.
-- A randomised controlled trial, not a survey
-- Real tasks, real developers, a stopwatch
-**Transition:** Here is what the study actually measured.
+## Slide 3 — They felt 20 % faster. The stopwatch said 19 % slower.  ·  CORE (full ~1.5 min, short ~1.5 min)
 
-*~1 min*
+**▶ A feeling of speed is not proof of speed.**
 
-## Slide 5 — Forecast, felt, measured
+- Show of hands (remote: **reaction or chat**): who feels faster with AI?
+- Same developers, same tasks: **forecast faster, felt faster, measured slower**
 
-**Idea:** The gap that matters is not the 19 %, it's felt versus measured.
-- Forecast minus 24 %, felt minus 20 %, measured plus 19 % slower
-- Economists and ML experts forecast minus 38-39 %, further off still
-- Under 44 % of AI generations were kept; most needed real clean-up
-- **Example:** A dev merges a generated Spring repository method, then spends longer fixing the N+1 query it hid
-**Transition:** To be fair, here's the setting this was measured in.
+> Let's start with a show of hands. **Who feels faster when coding with AI?** In the room, raise your hand; remote, use a reaction or the chat. ... Keep that hand in mind.
+>
+> In 2025, **METR** ran a study with **experienced developers, on their own projects**. Afterwards they **felt about 20 % faster**. The **stopwatch said 19 % slower**. Same people, same tasks.
+>
+> So the question for today: **does AI make us better at delivering software**, and **how much should we hand over to an agent**?
+>
+> *+ if time: Example: a Spring Boot team says it shipped a feature "in half the time", and nothing on the clock agrees.*
 
-*~2.5 min*
+**→** Chapter one: what the numbers actually say.
 
-## Slide 6 — The study setting, to be fair
+## Slide 4 — A feeling is not a measurement  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-**Idea:** This is not automatically our team or our stack.
-- Experienced people, on code they already know by heart
-- No agentic harness around the tools they used
-- Small sample, but a randomised trial on real work: a strong signal, not a universal law
-**Transition:** Now, does going faster at the keyboard mean the team ships faster?
+**▶ When a number travels this far, go read where it came from.**
 
-*~2 min*
+- A **randomised controlled trial**, not a survey
+- Real tasks, real developers, **a stopwatch**
 
-## Slide 7 — More output, more breakage
+> Chapter one. This isn't a survey or a vendor blog: it's a **randomised controlled trial**, real tasks, real developers, and a **stopwatch**.
+>
 
-**Idea:** Local speed moves the cost downstream, it doesn't remove it.
-- Epics and throughput per developer genuinely rise
-- Incidents per pull request roughly triple, review time roughly five times
-- Vendor report, order of magnitude only, not an exact decimal
-- **Example:** A team's pull-request queue backs up until reviewers start rubber-stamping, which is its own number below
-**Transition:** One more data point, from a different population entirely.
+**→** Here is what the study measured.
 
-*~2 min*
+## Slide 5 — Forecast, felt, measured  ·  CORE (full ~2 min, short ~1.5 min)
 
-## Slide 8 — A second data point: trust, not throughput
+**▶ The gap that matters is felt versus measured, not the 19 %.**
 
-**Idea:** A survey of developers tells the same story as a controlled study.
-- Adoption keeps climbing even as trust in accuracy falls
-- Two-thirds regularly see output that is close but wrong
-- Different method, different population, same shape as the METR gap
-**Transition:** So what does the speaker himself conclude from all this?
+- Forecast **−24 %** · felt **−20 %** · measured **+19 % slower**
+- Experts forecast **−38 to −39 %**, even further off
+- **< 44 %** of AI generations kept, most needed clean-up
 
-*~1.5 min*
+> Three numbers. Before starting, developers **forecast** that AI would cut their time by **24 %**. After finishing, they **felt** it had cut it by **20 %**. **Measured**: the tasks with AI took **19 % longer**.
+>
+> Economists and machine-learning experts asked to predict it were even more optimistic: around **38 to 39 % faster**.
+>
+> And a fourth number: **fewer than 44 %** of the AI generations were kept; most of them needed real clean-up.
+>
+> The point isn't "AI makes you slower". The point is that our **feeling about speed** was off by almost **forty points**, in the wrong direction.
+>
+> *+ if time: Example: a dev merges a generated Spring repository method, then spends longer fixing the N+1 query it hid than the time it felt like it saved.*
 
-## Slide 9 — Only when you do it wrong.
+**→** To be fair, here's the setting this was measured in.
 
-**Idea:** The numbers describe unstructured use, not AI itself.
-- His answer to slower, lower-DORA, under-44 %-kept: only when you do it wrong
-- A position from the stage, not a proven reversal of the 19 %
-- Every Devoxx talk that week pointed the same way: the harness around the agent
-**Transition:** He put a number on what "doing it right" multiplies.
+## Slide 6 — The study setting, to be fair  ·  IF TIME (full ~1.5 min, short ~0.3 min)
 
-*~1 min*
+**▶ Not automatically our team or our stack: a strong signal, not a universal law.**
 
-## Slide 10 — Formula
+- **16** experienced devs, ~5 years on their project
+- **246** real tasks, own repos, ~10 years old, **1.1 M+ lines**
+- **Early-2025 tools**, mostly Cursor + Claude 3.5/3.7 Sonnet, **no agentic harness**
 
-**Idea:** AI multiplies whatever is already in the bracket, good or bad.
-- Success equals AI times you, practices, team knowledge, specs, deterministic tools
-- A weak bracket does not get fixed by a stronger model, it gets amplified
-- Asking the agent instead of a colleague quietly erodes the "team knowledge" term
-**Transition:** So the practical question becomes: how much do we let the agent do on its own?
+> To be fair to the study: **16 experienced open-source developers**, about five years on the project they changed, **246 real tasks** in their own repositories. Mature code: about ten years old, over **1.1 million lines**.
+>
+> Tools from **early 2025**, mostly Cursor with Claude 3.5 and 3.7 Sonnet, and **no agentic harness** around them. Small sample.
+>
+> So it's not automatically our team or our stack. But it's a randomised trial on real work: **a strong signal, not a universal law**.
+>
 
-*~1.5 min*
+*Short route:* One sentence: experienced devs, mature code, early-2025 tools with no harness, so a strong signal, not a law.
 
-## Slide 11 — Trust is built in stages
+**→** Now, does going faster at the keyboard mean the team ships faster?
 
-**Idea:** Trust in an agent isn't a single on/off switch, it's a ladder.
-- Seven stages, from copy-paste chat to systems of agents
-- Each step up means you personally watch less
-**Transition:** Here is that ladder.
+## Slide 7 — More output, more breakage  ·  IF TIME (full ~1.5 min, short skip)
 
-*~1 min*
+**▶ Local speed moves the cost downstream, it doesn't remove it.**
 
-## Slide 12 — A trust ladder in seven stages
+- Up: epics **+66 %**, throughput **+33.7 %**
+- Down the line: incidents per PR **+243 %**, review time **~5×**
+- **Vendor report**: order of magnitude, not exact decimals
 
-**Idea:** Stages 1-5 raise permission on one agent; 6-7 change the shape of the work entirely.
-- Climbing from stage 2 to 4 is only reasonable if something else is watching instead of you
-- A test, a build, a CI pipeline: that's what trust actually transfers to
-- This grouping is my reading of the ladder, not a slide shown on stage
-- **Example:** A team stays at stage 2 for a database migration but runs stage 4 for routine unit tests
-**Transition:** One illustrative example of how the right stage depends on the risk of the task.
+> Does faster at the keyboard mean the team ships faster? **Faros AI** looked at telemetry from about **22,000 developers over two years**.
+>
+> Output goes up: **66 % more epics**, about **a third more task throughput**. But downstream, **incidents per pull request rise by 243 %**, and **time in review is about five times** longer.
+>
+> Faros sells engineering-metrics tooling, so this is a **vendor report**: read it as an order of magnitude. But the shape is clear: **the cost moves downstream**.
+>
+> *+ if time: Example: a team's PR queue backs up until reviewers start rubber-stamping.*
 
-*~3 min*
+*Short route:* Skip, or one line: a vendor report sees more output, but more incidents and much longer reviews.
 
-## Slide 13 — The right stage depends on the risk
+**→** One more data point, from a different population.
 
-**Idea:** Same team, same agent, three different stages, chosen by what's at risk.
-- A schema migration stays closely watched; a test suite doesn't need to be
-- No new mechanism here, just the ladder applied task by task
-- How each gate is actually built is next talk's subject, not today's
-**Transition:** Before we leave the numbers behind: what should replace "it feels fast"?
+## Slide 8 — A second data point: trust, not throughput  ·  IF TIME (full ~1 min, short skip)
 
-*~2 min*
+**▶ We use it more and trust it less.**
 
-## Slide 14 — What do we measure instead of feeling?
+- **84 %** use AI tools · **29 %** trust the accuracy (down from **40 %**)
+- **66 %** regularly get **"almost right, but not quite"**
+- A **survey**, not a trial: different method, **same shape** as METR
 
-**Idea:** A one-line answer so this doesn't stay an open question through Q&A.
-- Deployment frequency, lead time, change failure rate, time to restore
-- These already exist; AI doesn't need a new metric invented for it
-- How to wire that measurement in is left for a later talk
-**Transition:** One ceiling no stage of that ladder removes: the human side of the work.
+> A completely different source: the **Stack Overflow 2025 survey**. **84 %** of developers use AI tools. Only **29 %** trust the accuracy of what they get, **down from 40 %**.
+>
+> And **66 %** regularly hit answers that are **almost right, but not quite**.
+>
+> It's a survey, not a controlled trial, a different population and method, and it shows **the same shape as the METR gap**.
+>
 
-*~1.5 min*
+*Short route:* Skip.
 
-## Slide 15 — What the ladder doesn't climb
+**→** So what does the speaker himself conclude from all this?
 
-**Idea:** Climbing the ladder changes what you do, not what you're responsible for.
-- A reconversion keynote from the same conference, on the human side of this shift
-- Not a seatbelt, a warning about the driver
-**Transition:** Here's the part that isn't a number.
+## Slide 9 — Only when you do it wrong.  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-*~1 min*
+**▶ The numbers describe unstructured use, not AI itself.**
 
-## Slide 16 — The brain is the bottleneck
+- His answer to his own numbers: **"Only when you do it wrong."**
+- A **position from the stage**, not a proof that cancels the 19 %
+- Every talk that week pointed at **the harness around the agent**
 
-**Idea:** Higher stages free your hands, then quietly spend your judgment instead.
-- The bottleneck moves from typing to deciding, and deciding all day burns out
-- Architecture, trade-offs, availability and scalability stay a human call at every stage
-- A vivid, credible win for Java ops work, explicitly his anecdote, not a study
-**Transition:** Which brings us back to the hook we opened with.
+> **Jonathan Vila Lopez** showed this kind of number at Devoxx: slower, lower DORA results, less than half the code kept. And his answer to his own numbers was: **"Only when you do it wrong."**
+>
+> That's **his position from the stage**, not a proof that cancels the 19 %. But every talk I saw that week pointed the same way: the difference is **the harness around the agent**.
+>
 
-*~2.5 min*
-Cut if short: say only the last bullet, skip the anecdote.
+**→** He put a number on what "doing it right" multiplies.
 
-## Slide 17 — The problem isn't the model, it's what we put around it.
+## Slide 10 — formula  ·  CORE (full ~1.5 min, short ~1 min)
 
-**Idea:** This is the one sentence that closes the loop the hook opened.
-- Feeling faster is not evidence, we opened on exactly that gap
-- Trust moves to mechanisms we build, never to the model by default
-- Everything in this talk points at the same gap, not at AI itself
-**Transition:** Three things to keep.
+**▶ AI multiplies what's already in the bracket, good or bad.**
 
-*~1 min*
+- Success = AI × (**you**, **good practices**, **team knowledge**, **specs**, **deterministic tools**)
+- A weak bracket is **amplified**, not fixed, by a stronger model
+- Asking the agent instead of a colleague **erodes team knowledge**
 
-## Slide 18 — Key takeaways
+> He wrote it as a formula: **success equals AI times** you, good practices, team knowledge, specs and deterministic tools.
+>
+> It's a **multiplication**. If the bracket is strong, AI amplifies it. If it's weak, a stronger model won't fix it: it **amplifies the weakness**.
+>
+> And watch the **team knowledge** term: every time we ask the agent instead of a colleague, that term quietly gets smaller.
+>
+> *+ if time: DORA's 2025 report frames AI the same way: an **amplifier** of an organisation's existing strengths and dysfunctions.*
 
-**Idea:** Three sentences worth carrying out of the room.
-- A feeling is not a measurement
-- Trust is transferred, not decreed
-- The brain is the bottleneck, not the keyboard
-**Transition:** So where does that trust actually get transferred to?
+**→** So the practical question: how much do we let the agent do on its own?
 
-*~1.5 min*
+## Slide 11 — Trust is built in stages  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-## Slide 19 — So what do we put around it?
+**▶ Trust in an agent isn't an on/off switch, it's a ladder.**
 
-**Idea:** The question this talk leaves open, on purpose, for next time.
-- Next time: what, concretely, makes an agent's output trustworthy
-- Rules the build enforces, checks the agent can't game
-**Transition:** Sources, if you want to check any of this yourself.
+- Seven stages, from **copy-paste chat** to **systems of agents**
+- Each step up: **you personally watch less**
 
-*~0.5 min*
+> Chapter two. Trust in an agent isn't a single switch, it's **a ladder**: seven stages, and each step up means **you personally watch less**.
+>
 
-## Slide 20 — Sources
+**→** Here is that ladder.
 
-- No replay yet of the Devoxx BE 2026 talks themselves
-- METR paper is open access, start with its introduction
-**Transition:** Thank you, questions.
+## Slide 12 — A trust ladder in seven stages  ·  CORE (full ~2.5 min, short ~1.5 min)
 
-*~0.5 min*
+**▶ Trust is transferred to a mechanism (a test, a build, CI), never decreed.**
+
+- 1 **chat** · 2 **approve every call** · 3 **collaborator** · 4 **director** · 5 **YOLO**
+- 6 **orchestrator** · 7 **architect**: the shape of the work changes
+- 2 → 4 only if **something else watches instead of you**
+- The permission / shape split is **my reading**, not the original slide
+
+> Seven stages. **One**: browser chat, copy-paste both ways: low trust, total control. **Two**: a coding agent, but **you approve every tool call**. **Three**: collaborator: file edits go through, shell commands still need a yes. **Four**: director: **you judge the end result, not each step**. **Five**: YOLO mode, full trust.
+>
+> **Six and seven** change the shape of the work: you **orchestrate a fleet** of subagents, then you **design systems that design systems**. My reading, not the original slide: one to five raise permission on one agent; six and seven change who splits the work.
+>
+> The key point: going from **two to four** is only reasonable if **something else is watching instead of you**: **a test, a build, a CI pipeline**. That's where trust actually goes.
+>
+
+*Short route:* Name stages 1, 2 and 4 only, then the key point: 2 to 4 only when a test, a build or CI watches instead of you.
+
+**→** An example of how the right stage depends on the risk.
+
+## Slide 13 — The right stage depends on the risk  ·  IF TIME (full ~1.5 min, short ~0.3 min)
+
+**▶ Same team, same agent: the risk of the task picks the stage.**
+
+- **Flyway migration** → stage 2, every change approved
+- **Unit tests behind a Maven gate** → stage 4, CI judges the result
+- **Shared library refactor** → stage 3, shell still needs a yes
+- Illustrative; **how to build the gates is talk 2**
+
+> An illustrative example: same team, same agent, three stages.
+>
+> A **Flyway migration** against a real schema: **stage two**, every change approved by hand. **Unit tests behind a required Maven gate**: **stage four**: the agent writes freely, **CI judges the result**. A **shared library refactor**: **stage three**: edits go through, any shell command still needs a yes.
+>
+> Nothing new, just **the ladder applied by risk**. How to build those gates is the **next talk**.
+>
+
+*Short route:* One line: a migration stays at stage 2, tests behind a CI gate can go to stage 4.
+
+**→** Before we leave the numbers: what replaces "it feels fast"?
+
+## Slide 14 — What do we measure instead of feeling?  ·  IF TIME (full ~1 min, short ~0.3 min)
+
+**▶ Measure team outcomes, not feelings at the keyboard.**
+
+- **Deployment frequency** · **lead time** · **change failure rate** · **time to restore**
+- Name **lead time** and **change failure rate** first
+- Already exists: **no new metric** for AI
+
+> So what do we measure instead of feelings? We already have it: the **DORA metrics**. **Deployment frequency, lead time for changes, change failure rate, time to restore.**
+>
+> These are **team outcomes at the end of the delivery chain**, not a feeling at the keyboard. If AI really makes us faster, **it has to show up there**.
+>
+> The two I'd look at first: **lead time** and **change failure rate**. DORA now also tracks **rework rate**, the share of deployments forced by an incident, and that's exactly where AI churn would show.
+>
+
+*Short route:* One line: the DORA metrics, lead time and change failure rate first; no new metric needed.
+
+**→** One ceiling no stage of the ladder removes: the human side.
+
+## Slide 15 — What the ladder doesn't climb  ·  CORE (full ~0.3 min, short ~0.2 min)
+
+**▶ Climbing changes what you do, not what you're responsible for.**
+
+- Rentea's **reconversion keynote**: the human side
+- Not a seatbelt, **a warning about the driver**
+
+> Chapter three, the part that isn't a number. Climbing the ladder changes **what you do**, not **what you're responsible for**. Not a seatbelt: **a warning about the driver**.
+>
+
+**→** Here's what that means.
+
+## Slide 16 — The brain is the bottleneck  ·  CORE (full ~2 min, short ~0.5 min)
+
+**▶ Higher stages free your hands, then spend your judgment.**
+
+- **3 days → 2 hours** per decision
+- Danger zone: **3–4 agent terminals**, your only input is **"OK"**
+- Real risk: **burnout and loss of agency**
+- **System design stays human**: "you can't vibe your infrastructure"
+
+> **Victor Rentea**'s keynote was about how our job changes. His line: **the brain is the bottleneck**. Decisions that used to take **three days now take two hours**.
+>
+> His danger zone: **three or four agent terminals in parallel**, and your only input is **"OK"**. The risk of climbing fast isn't one bad commit, it's **burnout and loss of agency**.
+>
+> And at every stage, **system design stays human**: architecture, trade-offs, availability, scalability. In his words: **you can't vibe your infrastructure**.
+>
+> *+ if time: His anecdote, not a benchmark: an agent traced **17 memory leaks** from a heap dump in **30 minutes**. The upside is real.*
+
+*Short route:* Say only: system design, trade-offs, availability and scalability stay a human call at every stage.
+
+**→** Which brings us back to the hand you raised.
+
+## Slide 17 — The problem isn't the model, it's what we put around it.  ·  CORE (full ~0.5 min, short ~0.5 min)
+
+**▶ The problem isn't the model, it's what we put around it.**
+
+- Feeling faster **is not evidence**
+- Trust moves to **mechanisms we build**, never to the model by default
+
+> So, back to the hand you raised at the start. **Feeling faster is not evidence.**
+>
+> Trust doesn't come from the model by default: it's **transferred to mechanisms we build**. Everything today points at the same gap: not at AI itself, but at **what we put around it**.
+>
+
+**→** Three things to keep.
+
+## Slide 18 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
+
+**▶ Three sentences to carry out of the room.**
+
+- **A feeling is not a measurement**
+- **Trust is transferred, not decreed**
+- **The brain is the bottleneck, not the keyboard**
+
+> One: **a feeling is not a measurement**. Judge AI by **lead time, failure rate and rework**, not by how fast it feels.
+>
+> Two: **trust is transferred, not decreed**. Hand over control only where **a test, a build or CI** watches for you.
+>
+> Three: **the brain is the bottleneck, not the keyboard**. Climbing the ladder **spends judgment**: protect it.
+>
+
+**→** So where does that trust get transferred to?
+
+## Slide 19 — So what do we put around it?  ·  CORE (full ~0.3 min, short ~0.2 min)
+
+**▶ The open question, on purpose: so what do we put around it?**
+
+- Next: **rules the build enforces**, **checks the agent can't game**
+
+> Which leaves the question for next time: **so what do we put around it?** Rules the build enforces, checks the agent can't game. That's talk two, **the harness around the agent**.
+>
+
+**→** Sources, if you want to check any of this yourself.
+
+## Slide 20 — sources  ·  CORE (full ~0.3 min, short ~0.2 min)
+
+**▶ Everything is checkable: go read the sources.**
+
+- **METR paper** is open access: start with the introduction
+- Rentea's keynote is on YouTube
+
+> All the sources are on this slide. The **METR paper is open access**: start with its introduction. Rentea's keynote is on YouTube.
+>
+> **Thank you. Questions?**
+>
+
+**→** Questions.
