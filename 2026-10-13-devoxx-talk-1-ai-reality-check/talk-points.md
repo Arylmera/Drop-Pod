@@ -109,10 +109,12 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 >
 > The AI tools were the ones from **early 2025**: mostly Cursor with Claude Sonnet. Just the tool in the editor, with **no harness around it**: no rules or automatic checks built around the agent. That harness is exactly what talk two is about.
 >
+> Yes, the tools have changed since. And that's exactly the point: **this number is about the bare tool**, with nothing around it.
+>
 > So **this is not our team**, and 16 people is **a small sample**. But it's a **real experiment on real work**, timed with a stopwatch, not an opinion poll. Take it as **a strong signal, not a universal law**.
 >
 
-*Short route:* One sentence: experienced devs, mature code, early-2025 tools with no harness, so a strong signal, not a law.
+*Short route:* One sentence: experienced devs, mature code, early-2025 tools with no harness. Yes, tools changed since: the number is about the bare tool.
 
 **→** Now, does going faster at the keyboard mean the team ships faster?
 

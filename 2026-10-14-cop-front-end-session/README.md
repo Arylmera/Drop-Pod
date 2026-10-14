@@ -1,14 +1,14 @@
 # CoP Developers session — 2026-10-15
 
 ## Context
-Developers community of practice session, hybrid (on site and remote): intro, an emoji energizer, cascading info from the chapter lead, then Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes" (15 min); bonus talk 1 ("AI, the reality check") if time allows; asks who facilitates and who brings the energizer next time, then ends with a ventilation session (open floor).
+Developers community of practice session, hybrid (on site and remote): intro, an emoji energizer, cascading info from the chapter lead, then Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes" (15 min), then talk 1 "AI, the reality check" (10-20 min); asks who facilitates and who brings the energizer next time, then ends with a ventilation session (open floor).
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
 - One self-contained HTML deck (11 slides), English, dark green IDE look: file explorer (clickable, one file per slide), tab, breadcrumb, line gutter, status bar; slide content written as code, YAML, Markdown or terminal output. Staggered entrance and typing animations, off under reduced motion. Google Fonts load when online, system fonts otherwise.
 - The energizer game is built into the deck as slide 4: 24 emoji riddles in 3 rounds, reveal on demand, 45 s timer that starts on its own when the game slide opens and restarts on every riddle (revealing pauses it). No teams, no scoring.
 - No placeholders: anything the author did not have (chapter news, talk summaries, durations) is left out rather than bracketed.
-- Speakers by first name only: Guillaume (intro, energizer, bonus), Naveen, Samar and Laurent; the chapter lead is not named. The bonus slide links to the existing pod `2026-10-13-devoxx-talk-1-ai-reality-check`.
+- Speakers by first name only: Guillaume (intro, energizer, talk 1), Naveen, Samar and Laurent; the chapter lead is not named. The talk 1 slide links to the existing pod `2026-10-13-devoxx-talk-1-ai-reality-check`.
 
 ## Apply
 1. Open `deck.html` in a browser from the Drop-Pod clone (double-click). F = fullscreen, → / Space / clicker = next, ← = previous.
