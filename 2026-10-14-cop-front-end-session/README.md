@@ -7,7 +7,7 @@ Target: no code project — presentation material to open and present from the w
 ## Decisions
 - One self-contained HTML deck (12 slides), English, dark green theme; Google Fonts load when online, system fonts otherwise.
 - The energizer game is built into the deck as slide 5: 24 emoji riddles in 3 rounds, reveal on demand, 45 s timer. No teams, no scoring.
-- Content the author did not have yet stays as bracketed placeholders in sand color (durations, owners, team statuses, SPA image details, next CoP date).
+- Content the author did not have yet stays as bracketed placeholders in sand color (owners, team statuses, SPA image details, next CoP date); unknown durations are left empty.
 - Speakers by first name only: Guillaume (intro, energizer, bonus), Naveen, Samar and Laurent; the SPA topic has no named speaker. The bonus slide links to the existing pod `2026-10-13-devoxx-talk-5-bonus-java-craft`.
 
 ## Apply
