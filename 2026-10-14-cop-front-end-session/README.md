@@ -1,7 +1,7 @@
 # CoP Front-end session — 2026-10-15
 
 ## Context
-Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, then managed pipeline status, SPA base image, the accessibility guideline, Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes"; bonus talk 5 if time allows.
+Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, then managed pipeline status, SPA base image, the accessibility guideline, Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes" (15 min); bonus talk 5 if time allows.
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
