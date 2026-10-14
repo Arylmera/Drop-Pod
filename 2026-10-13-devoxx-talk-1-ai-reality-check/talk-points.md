@@ -55,6 +55,8 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 > Let's start with a show of hands. **Who feels faster when coding with AI?** In the room, raise your hand; remote, use a reaction or the chat. ... Keep that hand in mind.
 >
+> ▶ *Click: "The stopwatch said 19 % slower." appears*
+>
 > In 2025, **METR** ran a study with **experienced developers, on their own projects**. Afterwards they **felt about 20 % faster**. The **stopwatch said 19 % slower**. Same people, same tasks.
 >
 > So the question for today: **does AI make us better at delivering software**, and **how much should we hand over to an agent**?

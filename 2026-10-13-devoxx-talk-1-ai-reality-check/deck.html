@@ -209,6 +209,7 @@ pre {
 .sg .step p { font-size: 20px; }
 
 /* ---------- Chrome: progress, notes drawer, overview, presenter ---------- */
+.frag { opacity: 0; transition: opacity 500ms ease; } .frag.on, body.overview .frag { opacity: 1; }
 #progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
 #notes-drawer {
   position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
@@ -235,6 +236,7 @@ body.presenter #deck, body.presenter #progress { display: none; }
 #presenter .script ul { margin: 0 0 20px 1.1em; color: #a9b0c7; font-size: 20px; }
 .say { border-left: 4px solid var(--accent); padding-left: 20px; }
 .say p { margin: 0 0 14px; }
+.say .cue { color: #8ff0b5; font-size: 20px; }
 .say .more { color: #a9b0c7; font-size: 20px; font-style: italic; }
 .short { margin: 16px 0 0; padding: 10px 14px; border-radius: 10px; background: #2a2214; color: #ffc861; font-size: 20px; }
 .tr { margin: 16px 0 0; color: #8ff0b5; font-size: 20px; }
@@ -257,6 +259,7 @@ body.presenter #deck, body.presenter #progress { display: none; }
   .slide { position: relative; visibility: visible; opacity: 1; width: 1600px; height: 900px; break-after: page; transition: none; }
   .slide .r, .rail, .bar, .f-cell { animation: none !important; opacity: 1 !important; transform: none !important; }
   #progress, #notes-drawer { display: none; }
+  .frag { opacity: 1 !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
@@ -447,10 +450,10 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
   <div class="gutter"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
   <div class="inner">
     <span class="dot r" style="--i:0"></span>
-    <p class="statement r" style="--i:1">They felt 20 % faster. The stopwatch said 19 % slower.</p>
+    <p class="statement r" style="--i:1">They felt 20 % faster. <span class="frag">The stopwatch said 19 % slower.</span></p>
     <p class="lead r" style="--i:2">Experienced developers, on their own projects — METR study, 2025</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>AI, the reality check</span><span class="duck-track"><span class="duck" style="--p:0.1053;--p0:0.0526"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 20 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~1.5 min</span></div><p class="red">A <b>feeling of speed</b> is not <b>proof of speed</b>.</p><ul><li>Show of hands (remote: <b>reaction or chat</b>): who feels faster with AI?</li><li>Same developers, same tasks: <b>forecast faster, felt faster, measured slower</b></li></ul><div class="say"><p>Let's start with a show of hands. <b>Who feels faster when coding with AI?</b> In the room, raise your hand; remote, use a reaction or the chat. ... Keep that hand in mind.</p><p>In 2025, <b>METR</b> ran a study with <b>experienced developers, on their own projects</b>. Afterwards they <b>felt about 20 % faster</b>. The <b>stopwatch said 19 % slower</b>. Same people, same tasks.</p><p>So the question for today: <b>does AI make us better at delivering software</b>, and <b>how much should we hand over to an agent</b>?</p><p class="more">+ if time: Example: a Spring Boot team says it shipped a feature "in half the time", and nothing on the clock agrees.</p></div><p class="tr">→ Chapter one: what the numbers actually say.</p></template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~1.5 min</span></div><p class="red">A <b>feeling of speed</b> is not <b>proof of speed</b>.</p><ul><li>Show of hands (remote: <b>reaction or chat</b>): who feels faster with AI?</li><li>Same developers, same tasks: <b>forecast faster, felt faster, measured slower</b></li></ul><div class="say"><p>Let's start with a show of hands. <b>Who feels faster when coding with AI?</b> In the room, raise your hand; remote, use a reaction or the chat. ... Keep that hand in mind.</p><p class="cue">▶ Click: <b>"The stopwatch said 19 % slower."</b> appears</p><p>In 2025, <b>METR</b> ran a study with <b>experienced developers, on their own projects</b>. Afterwards they <b>felt about 20 % faster</b>. The <b>stopwatch said 19 % slower</b>. Same people, same tasks.</p><p>So the question for today: <b>does AI make us better at delivering software</b>, and <b>how much should we hand over to an agent</b>?</p><p class="more">+ if time: Example: a Spring Boot team says it shipped a feature "in half the time", and nothing on the clock agrees.</p></div><p class="tr">→ Chapter one: what the numbers actually say.</p></template>
 </section>
 <section class="slide t-section dark" data-title="A feeling is not a measurement">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-1-ai-reality</span><span class="tab active">04-a-feeling-is-not-a-measurement.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-1-ai-reality <em>/</em> <strong>04-a-feeling-is-not-a-measurement.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -712,14 +715,28 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     setTimeout(() => requestAnimationFrame(tick), 250);
   }
 
+  const frags = () => [...slides[cur].querySelectorAll(".frag")];
+  const shown = () => frags().filter((f) => f.classList.contains("on")).length;
+  function setFrag(k, from) {
+    frags().forEach((f, i) => f.classList.toggle("on", i < k));
+    if (chan && from !== "remote") chan.postMessage({ slide: cur, frag: k });
+  }
+  function step(d) {
+    const k = shown(), all = frags().length;
+    if (d > 0 && k < all) return setFrag(k + 1);
+    if (d < 0 && k > 0) return setFrag(k - 1);
+    go(cur + d);
+  }
   function go(n, from) {
     n = Math.max(0, Math.min(slides.length - 1, n));
     if (n === cur) return;
+    const back = n < cur;
     if (cur >= 0) slides[cur].classList.remove("active");
     cur = n;
     const s = slides[cur];
     void s.offsetWidth; // restart the reveal animations
     s.classList.add("active");
+    s.querySelectorAll(".frag").forEach((f) => f.classList.toggle("on", back));
     if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
     document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
     document.getElementById("notes-drawer").innerHTML = notes[cur];
@@ -760,8 +777,8 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
   addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key;
-    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
-    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); step(1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); step(-1); }
     else if (k === "Home") go(0);
     else if (k === "End") go(slides.length - 1);
     else if (k === "n" || k === "N") document.body.classList.toggle("notes");
@@ -782,7 +799,7 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
       go(slides.indexOf(s));
     }
   });
-  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); };
+  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); if (typeof e.data.frag === "number") setFrag(e.data.frag, "remote"); };
   addEventListener("resize", fit);
 
   fit();
