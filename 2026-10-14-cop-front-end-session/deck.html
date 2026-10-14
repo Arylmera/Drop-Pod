@@ -122,7 +122,7 @@ a { color: var(--green); }
   <h1>Community of Practice<br><span style="color:var(--green)">Front-end</span></h1>
   <p class="lead">October 15, 2026 · on site and remote</p>
   <div class="spacer"></div>
-  <p style="font-family:var(--mono);font-size:20px;color:var(--muted)">intro · energizer · cascading info · managed pipeline · SPA base image · accessibility · team board · harnessing heroes</p>
+  <p style="font-family:var(--mono);font-size:20px;color:var(--muted)">intro · energizer · cascading info · team board · harnessing heroes</p>
 </section>
 
 <!-- 2. Agenda -->
@@ -133,11 +133,8 @@ a { color: var(--green); }
     <tr><td>01</td><td>Intro</td><td>Guillaume</td><td class="r"></td></tr>
     <tr><td>02</td><td>Energizer: guess the tech from emojis</td><td>Guillaume</td><td class="r">10 min</td></tr>
     <tr><td>03</td><td>Cascading info</td><td>Chapter lead</td><td class="r"></td></tr>
-    <tr><td>04</td><td>Managed pipeline: who is where</td><td class="ph">[Who]</td><td class="r"></td></tr>
-    <tr><td>05</td><td>SPA base image</td><td class="ph">[Who]</td><td class="r"></td></tr>
-    <tr><td>06</td><td>Accessibility guideline</td><td class="ph">[Who]</td><td class="r"></td></tr>
-    <tr><td>07</td><td>Team board and GitLab bridge, built with Bob</td><td>Naveen</td><td class="r">20 min</td></tr>
-    <tr><td>08</td><td>Harnessing heroes</td><td>Samar &amp; Laurent</td><td class="r">15 min</td></tr>
+    <tr><td>04</td><td>Team board and GitLab bridge, built with Bob</td><td>Naveen</td><td class="r">20 min</td></tr>
+    <tr><td>05</td><td>Harnessing heroes</td><td>Samar &amp; Laurent</td><td class="r">15 min</td></tr>
     <tr class="bonus"><td>++</td><td>Bonus if time allows: Java craft (talk 5 of 5)</td><td>Guillaume</td><td class="r"></td></tr>
   </table>
 </section>
@@ -199,46 +196,9 @@ a { color: var(--green); }
   </div>
 </section>
 
-<!-- 7. Managed pipeline -->
-<section class="slide alt">
-  <div class="head"><span class="eyebrow">04 · Front-end</span><h2>Managed pipeline: who is where?</h2></div>
-  <table>
-    <tr><th style="width:24%">Team</th><th style="width:22%">Status</th><th>Next step</th><th style="width:20%">Contact</th></tr>
-    <tr><td class="ph">[Team A]</td><td><span class="pill done">migrated</span></td><td class="ph">[—]</td><td class="ph">[Name]</td></tr>
-    <tr><td class="ph">[Team B]</td><td><span class="pill wip">in progress</span></td><td class="ph">[e.g. E2E tests]</td><td class="ph">[Name]</td></tr>
-    <tr><td class="ph">[Team C]</td><td><span class="pill todo">not started</span></td><td class="ph">[e.g. plan the move]</td><td class="ph">[Name]</td></tr>
-    <tr><td class="ph">[Team D]</td><td class="ph">[status]</td><td class="ph">[next step]</td><td class="ph">[Name]</td></tr>
-    <tr><td class="ph">[Team E]</td><td class="ph">[status]</td><td class="ph">[next step]</td><td class="ph">[Name]</td></tr>
-  </table>
-  <p style="font-size:22px;color:var(--muted)">One sentence per team: status, and what blocks you if anything.</p>
-</section>
-
-<!-- 7. SPA base image -->
-<section class="slide">
-  <div class="head"><span class="eyebrow">05 · Front-end</span><h2>SPA base image</h2></div>
-  <div class="cards c3">
-    <div class="card"><span class="k">why</span><h3>The problem</h3><p class="ph">[Why a shared base image for our SPAs]</p></div>
-    <div class="card"><span class="k">what</span><h3>The image</h3><p class="ph">[What it contains: web server, config, security headers]</p></div>
-    <div class="card"><span class="k">how</span><h3>Adopting it</h3><p class="ph">[Steps to move a project onto it]</p></div>
-  </div>
-</section>
-
-<!-- 8. Accessibility -->
-<section class="slide alt">
-  <div class="head"><span class="eyebrow">06 · Front-end · target: WCAG 2.2 AA <span class="ph">[to confirm]</span></span><h2>Accessibility guideline</h2></div>
-  <div class="cards c3">
-    <div class="card"><span class="k">01</span><h3>Semantic HTML</h3><p>Right element before ARIA: button, nav, main, label.</p></div>
-    <div class="card"><span class="k">02</span><h3>Keyboard</h3><p>Everything works with a keyboard, and focus is always visible.</p></div>
-    <div class="card"><span class="k">03</span><h3>Contrast</h3><p>4.5:1 for body text, 3:1 for large text and UI components.</p></div>
-    <div class="card"><span class="k">04</span><h3>Images</h3><p>Useful alt text, or empty alt when the image is decorative.</p></div>
-    <div class="card"><span class="k">05</span><h3>Forms</h3><p>Every field has a label. Errors say what to fix.</p></div>
-    <div class="card"><span class="k">06</span><h3>Testing</h3><p>axe or Lighthouse in CI, plus one pass with a screen reader.</p></div>
-  </div>
-</section>
-
-<!-- 9. Team board & GitLab bridge -->
+<!-- 7. Team board & GitLab bridge -->
 <section class="slide glow">
-  <span class="eyebrow">07 · Demo · 20 min</span>
+  <span class="eyebrow">04 · Demo · 20 min</span>
   <div class="spacer"></div>
   <h1>Team board and<br><span style="color:var(--green)">GitLab bridge</span></h1>
   <p class="lead">Built with Bob</p>
@@ -247,9 +207,9 @@ a { color: var(--green); }
   <p style="font-size:22px" class="ph">[One line: what the board shows and what the bridge syncs with GitLab]</p>
 </section>
 
-<!-- 10. Harnessing heroes -->
+<!-- 8. Harnessing heroes -->
 <section class="slide glow">
-  <span class="eyebrow">08 · Talk</span>
+  <span class="eyebrow">05 · Talk</span>
   <div class="spacer"></div>
   <h1>Harnessing<br><span style="color:var(--green)">heroes</span></h1>
   <div class="who"><span class="pill done">Samar</span><span class="pill done">Laurent</span><span class="pill">15 min</span></div>
@@ -257,7 +217,7 @@ a { color: var(--green); }
   <p style="font-size:22px" class="ph">[One line: what the talk is about]</p>
 </section>
 
-<!-- 11. Bonus -->
+<!-- 9. Bonus -->
 <section class="slide glow">
   <span class="eyebrow">Bonus · if time allows</span>
   <div class="spacer"></div>
@@ -267,7 +227,7 @@ a { color: var(--green); }
   <p style="font-size:22px;color:var(--muted)">Open the deck: <a href="../2026-10-13-devoxx-talk-5-bonus-java-craft/deck.html">2026-10-13-devoxx-talk-5-bonus-java-craft/deck.html</a></p>
 </section>
 
-<!-- 12. Close -->
+<!-- 10. Close -->
 <section class="slide glow">
   <p class="prompt">~/cop $ <b>exit 0</b></p>
   <div class="spacer"></div>
@@ -277,7 +237,7 @@ a { color: var(--green); }
   <p style="font-size:22px;color:var(--muted)">Topic idea for next time? <span class="ph">[channel or contact]</span></p>
 </section>
 
-<div class="foot"><span>CoP Front-end · 2026-10-15</span><span id="pageno">1 / 13</span></div>
+<div class="foot"><span>CoP Front-end · 2026-10-15</span><span id="pageno">1 / 10</span></div>
 <div id="progress"></div>
 </div>
 
