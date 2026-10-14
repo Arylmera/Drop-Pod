@@ -97,7 +97,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** To be fair, here's the setting this was measured in.
 
-## Slide 6 — The study setting, to be fair  ·  IF TIME (full ~1.5 min, short ~0.3 min)
+## Slide 6 — Who was tested, to be fair  ·  IF TIME (full ~1.5 min, short ~0.3 min)
 
 **▶ Not automatically our team or our stack: a strong signal, not a universal law.**
 
