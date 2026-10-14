@@ -394,6 +394,7 @@ function show(i) {
   $("progress").style.width = `${((cur + 1) / slides.length) * 100}%`;
   if (cur !== prev || !s.dataset.typed) { typeIn(s); s.dataset.typed = "1"; }
   if (cur !== gameSlide) pauseTimer();
+  else if (prev !== gameSlide || !tick) { resetTimer(); startTimer(); }
   try { history.replaceState(null, "", "#" + (cur + 1)); } catch {}
 }
 
@@ -441,7 +442,7 @@ function renderGame(pop) {
   if (revealed) { ans.querySelector(".a").textContent = q.a; ans.querySelector(".why").textContent = q.w; }
   else ans.querySelector(".hint").textContent = `// answer hidden · ${q.a.length} chars`;
 }
-function gotoQ(i) { qi = i; revealed = false; resetTimer(); renderGame(true); }
+function gotoQ(i) { qi = i; revealed = false; resetTimer(); startTimer(); renderGame(true); }
 
 let len = 45, left = 45, tick = null;
 function renderTimer() {
@@ -453,6 +454,11 @@ function renderTimer() {
 }
 function pauseTimer() { clearInterval(tick); tick = null; renderTimer(); }
 function resetTimer() { clearInterval(tick); tick = null; left = len; renderTimer(); }
+function startTimer() {
+  clearInterval(tick);
+  tick = setInterval(() => { left = Math.max(0, left - 1); if (left === 0) { clearInterval(tick); tick = null; } renderTimer(); }, 1000);
+  renderTimer();
+}
 function toggleTimer() {
   if (tick) return pauseTimer();
   if (left === 0) left = len;
