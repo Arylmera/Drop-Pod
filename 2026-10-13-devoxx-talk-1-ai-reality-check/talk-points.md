@@ -211,9 +211,16 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - 2 → 4 only if **something else watches instead of you**
 - The permission / shape split is **my reading**, not the original slide
 
-> Seven stages. **One**: browser chat, copy-paste both ways: low trust, total control. **Two**: a coding agent, but **you approve every tool call**. **Three**: collaborator: file edits go through, shell commands still need a yes. **Four**: director: **you judge the end result, not each step**. **Five**: YOLO mode, full trust.
+> Seven stages.  
+> **One**: browser chat. Copy-paste both ways: low trust, total control.  
+> **Two**: a coding agent, but **you approve every tool call**.  
+> **Three**: collaborator. File edits go through, shell commands still need a yes.  
+> **Four**: director. **You judge the end result, not each step.**  
+> **Five**: YOLO mode. Full trust.  
+> **Six**: orchestrator. You **orchestrate a fleet** of subagents.  
+> **Seven**: architect. You **design systems that design systems**.
 >
-> **Six and seven** change the shape of the work: you **orchestrate a fleet** of subagents, then you **design systems that design systems**. My reading, not the original slide: one to five raise permission on one agent; six and seven change who splits the work.
+> My reading, not the original slide: **one to five** raise permission on one agent; **six and seven** change the shape of the work, who splits it.
 >
 > The key point: going from **two to four** is only reasonable if **something else is watching instead of you**: **a test, a build, a CI pipeline**. That's where trust actually goes.
 >
