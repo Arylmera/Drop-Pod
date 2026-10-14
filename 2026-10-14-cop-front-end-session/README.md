@@ -1,7 +1,7 @@
 # CoP Front-end session — 2026-10-15
 
 ## Context
-Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, cascading info from the chapter lead, then Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes" (15 min); bonus talk 1 ("AI, the reality check") if time allows; a ventilation session (open floor); ends by asking who facilitates and who brings the energizer next time.
+Front-end community of practice session, hybrid (on site and remote): intro, an emoji energizer, cascading info from the chapter lead, then Naveen's team board and GitLab bridge (20 min) and Samar and Laurent's "Harnessing heroes" (15 min); bonus talk 1 ("AI, the reality check") if time allows; asks who facilitates and who brings the energizer next time, then ends with a ventilation session (open floor).
 Target: no code project — presentation material to open and present from the work machine.
 
 ## Decisions
