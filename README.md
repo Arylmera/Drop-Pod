@@ -66,4 +66,5 @@ A pod is never edited after landing.
 - [2026-10-13-devoxx-talk-3-context](2026-10-13-devoxx-talk-3-context/) — Devoxx 2026 series, talk 3 of 5: Context is the product (HTML deck + talking points)
 - [2026-10-13-devoxx-talk-4-trust-at-scale](2026-10-13-devoxx-talk-4-trust-at-scale/) — Devoxx 2026 series, talk 4 of 5: Trust at scale (HTML deck + talking points)
 - [2026-10-13-devoxx-talk-5-bonus-java-craft](2026-10-13-devoxx-talk-5-bonus-java-craft/) — Devoxx 2026 series, bonus talk (5 of 5): Bonus: Java craft (HTML deck + talking points)
+- [2026-10-16-opencode-probe](2026-10-16-opencode-probe/) — read-only probe of OpenCode session state, for planning OpenCode support in Administratum
 <!-- /pods:index -->
