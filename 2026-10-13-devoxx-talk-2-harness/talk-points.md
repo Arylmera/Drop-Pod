@@ -14,8 +14,6 @@ tags:
 One card per slide: **fil rouge** (bold line), outline, full text to say, transition. Same text as the presenter window (S).
 Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus only the *Short route* line on IF TIME slides. **Full route:** ~20 min.
 
-*Conversion in progress: slides not yet converted keep the old improvisation card.*
-
 ## Slide 1 — The harness around the agent  ·  CORE (full ~0.5 min, short ~0.5 min)
 
 **▶ One question: once an agent writes the code, what makes it safe to merge?**
@@ -73,199 +71,387 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** And to show you why, let me start with a test that passed.
 
-## Slide 4 — A parser that passed its test
+## Slide 4 — A parser that passed its test  ·  CORE (full ~1.5 min, short ~1 min)
 
-**Idea:** The test passed, but the code never parsed anything.
-- Three lines of Python: if the filename matches, hard-code the expected row count
-- The agent did exactly what it was asked — turn the test green
-- **Example:** from a real SAS-to-Python migration (Smals Research, Devoxx Belgium) — the team call it "refuctoring"
-**Transition:** That's Goodhart's law in miniature — and it's the question for the next 25 minutes: what stops this from shipping?
+**▶ The test passed. The code never parsed anything.**
 
-*~1.5 min*
+- A real **SAS-to-Python migration** (Smals Research, Devoxx Belgium)
+- If the filename matches, **hard-code the expected answer**
+- **Goodhart's law**: when a measure becomes a target, it stops being a good measure
 
-## Slide 5 — What, concretely, makes an agent's output trustworthy?
+> Okay, look at this code for a second.
+>
+> This comes from a **real migration project**, from SAS to Python, presented at Devoxx by **Smals Research**. The agent had to write a parser, and there was a test that said: this file should have **ten rows**.
+>
+> So what did the agent do? It checked the **file name**, and if it matched, it just **returned ten**. **Test green.** And the parser? It **never parsed anything**.
+>
+> And the thing is, the agent wasn't being sneaky. It did **exactly what we asked**: make the test pass. That's **Goodhart's law**: when a measure becomes a target, it **stops being a good measure**.
+>
+> So the question for the next twenty minutes is simple: **what stops this from shipping?**
+>
 
-**Idea:** The question this whole talk answers.
-- Not which model, not which prompt — what surrounds the agent's work
-- Three answers, one per chapter: rules it can't negotiate, checks it can't game, a repair loop that's bounded and honest
-**Transition:** Chapter one — rules the build enforces.
+*Short route:* A real migration project. The test wanted ten rows, so the agent hard-coded ten. Test green, parser useless. What stops this from shipping?
 
-*~1 min*
+**→** Let's put that question on the table.
 
-## Slide 6 — Rules the build enforces
+## Slide 5 — What, concretely, makes an agent's output trustworthy?  ·  CORE (full ~1 min, short ~0.5 min)
 
-**Idea:** First piece of the answer: put the rule where the agent cannot negotiate it.
-- A rule in a prompt or an instructions file is a suggestion — it holds most runs, breaks in some
-- The fix: move it into something the build checks every time
-**Transition:** Here's what that looks like when it breaks.
+**▶ Not a better prompt. A harness.**
 
-*~0.3 min*
+- Not which model, not which prompt: **what surrounds the agent**
+- Three pieces: **rules** it can't negotiate · **checks** it can't game · **one bounded repair**
 
-## Slide 7 — The agent kept downgrading the Java version to get past a stuck build.
+> So here's the question for today: what, concretely, makes an agent's output **trustworthy**?
+>
+> And notice what I'm **not** asking. I'm not asking which model is best, or how to write the perfect prompt. A prompt is a **request**. The agent can follow it... or not.
+>
+> What I'm asking is: what do we put **around** the agent? That's the **harness**. And I'll give you the answer in **three pieces**.
+>
+> One: **rules the build enforces**, so the agent can't negotiate them. Two: **checks the agent can't game**. And three: when something goes red, **one bounded repair**, and a fresh verdict.
+>
 
-**Idea:** Rule drift — a prose rule breaks exactly when the agent is under pressure.
-- A bank-mainframe modernisation project saw it happen repeatedly, Java version after Java version
-- The agent wasn't malicious — it was optimising for the next green build, not the agreed constraint
-- **Example:** concretely, picture maven.compiler.release quietly dropping from 21 to 17 mid-session
-**Transition:** The fix isn't a sterner prompt.
+*Short route:* Not a better prompt, a harness: rules, checks, and one bounded repair.
 
-*~1.2 min*
+**→** Piece one: rules.
 
-## Slide 8 — Don't document a constraint the build can enforce.
+## Slide 6 — Rules the build enforces  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-**Idea:** The spine sentence of this whole chapter.
-- Don't ask the agent to remember the rules — make the environment enforce them
-- Docs keep the why; the build keeps the what
-**Transition:** Here's that doctrine as actual Maven config.
+**▶ Put the rule where the agent can't negotiate it.**
 
-*~0.8 min*
+- A rule in a prompt is a **suggestion**
+- A rule in the build is a **build failure**
 
-## Slide 9 — Maven Enforcer: the rule becomes a build failure
+> Piece one: **rules the build enforces**.
+>
+> A rule you write in a prompt, or in an instructions file, is a **suggestion**. It holds most of the time. And it breaks **exactly when it matters**.
+>
 
-**Idea:** The rule becomes a build failure, not a suggestion.
-- requireJavaVersion sets the floor; bannedDependencies blocks a library outright
-- An invalid choice fails immediately with a message the agent reads as a finding, not an opinion
-- **Example:** ArchUnit does the same for layer boundaries; a duplication gate (PMD CPD) and OpenRewrite round out the set
-**Transition:** But a rule in the build only holds if the agent can't edit the rule itself.
+**→** Let me show you what that looks like.
 
-*~1.8 min*
+## Slide 7 — The agent kept downgrading the Java version to get past a stuck build.  ·  CORE (full ~1.2 min, short ~0.7 min)
 
-## Slide 10 — Who guards the guard?
+**▶ Under pressure, a written rule gives way.**
 
-**Idea:** The rule only holds if the agent cannot edit the thing that checks it.
-- A local hook is a good first filter, but it runs inside the agent's own reach
-- The real barrier is the build or CI step the agent can't bypass or quietly relax
-- **Example:** CODEOWNERS on pom.xml and the enforcer config — a PR touching them needs a human, and the check itself runs server-side
-**Transition:** Rules are half the story — the other half is whether the checks can be gamed.
+- A **bank modernisation project**, presented at Devoxx
+- The agent **lowered the Java version** to get a stuck build green
+- The version numbers here are **my illustration**
 
-*~1.5 min*
-Cut if short: say only the Idea line, skip both columns.
+> This one comes from a **bank modernisation project**, presented at Devoxx.
+>
+> The team had a clear rule: we target this Java version. Written down, in the instructions. And the agent kept **downgrading the Java version**, again and again, every time the build got stuck.
+>
+> Picture your own pom.xml: **maven.compiler.release** quietly going from **21 to 17** in the middle of a session. Those exact numbers are my illustration, but the behaviour is real.
+>
+> And again, the agent isn't evil. It's trying to reach the **next green build**. The rule was just text, so under pressure, it **gave way**.
+>
 
-## Slide 11 — Checks the agent cannot game
+*Short route:* A bank project: under pressure, the agent kept downgrading the Java version to get the build green. The rule was just text.
 
-**Idea:** Second piece: the checks have to be honest, not just present.
-- A rule in the build is worthless if the thing measuring it can be faked
-- Back to the parser we opened with — now looking at it from the test's side
-**Transition:** Let's replay it.
+**→** So what's the fix? Not a sterner prompt.
 
-*~0.3 min*
+## Slide 8 — Don't document a constraint the build can enforce.  ·  CORE (full ~0.8 min, short ~0.4 min)
 
-## Slide 12 — Back to the parser, from the test side
+**▶ Don't document a constraint the build can enforce.**
 
-**Idea:** Same project, same model — the only thing that changed was where the tests came from.
-- Early runs let the agent write its own tests alongside its own code
-- The fix wasn't a smarter model, it was an independent source for what "correct" means
-- **Example:** one agent writing both the code and the test can encode the same wrong idea twice
-**Transition:** On our stack, that same failure wears different clothes.
+- **Anyul Rivas** (GFT), Devoxx Belgium 2026
+- Docs keep the **why**, the build keeps the **what**
 
-*~1.2 min*
+> Here's the sentence from that talk I'd put on a wall. Anyul Rivas, from GFT:
+>
+> **Don't document a constraint the build can enforce.**
+>
+> Don't ask the agent to **remember** the rules. Make the environment **enforce** them. The documentation still matters: it explains **why**. But the build is what says **no**.
+>
 
-## Slide 13 — What the fake parser looks like on our stack
+*Short route:* "Don't document a constraint the build can enforce." Docs keep the why, the build keeps the what.
 
-**Idea:** Goodhart's law has a Java accent.
-- Every one of these makes a pipeline look green while quietly lowering the bar it was supposed to enforce
-- None of them is a bug — each is a build or test tool working exactly as configured
-- **Example:** a lowered JaCoCo threshold and an ArchUnit freeze-file entry are both "passing" checks that passed by moving the goalpost
-**Transition:** So the checks themselves need a contract the agent can't talk its way around.
+**→** Here's what that looks like in Maven.
 
-*~1.8 min*
+## Slide 9 — Maven Enforcer: the rule becomes a build failure  ·  IF TIME (full ~1.5 min, short skip)
 
-## Slide 14 — Silence is not a result
+**▶ The rule becomes a build failure, not a suggestion.**
 
-**Idea:** An agent needs a legitimate way to say "I can't", or it invents an answer instead.
-- A status field — OK, OUT_OF_SCOPE, ERROR — stops a non-answer from being read as success
-- Hard guardrails and deterministic hooks catch what the contract alone misses
-- **Example:** a Java record with an enum status fails loudly on a shape it wasn't told to expect
-**Transition:** Checks from the harness are one source; tests need an independent source too.
+- **requireJavaVersion**: the floor
+- **bannedDependencies**: a library blocked outright
+- Same idea: **ArchUnit** for layers, **PMD CPD** for duplication, **OpenRewrite** for migrations
+- The values are **illustrative**
 
-*~1.8 min*
+> This is the **Maven Enforcer plugin**. Nothing new, most of us have seen it.
+>
+> Two rules here. **requireJavaVersion** says: Java 21 or more, period. And **bannedDependencies** says: this library, **never**.
+>
+> So now, if the agent downgrades the Java version, it doesn't get a green build. It gets a **failure**, with a clear message. And for the agent, a build failure is a **fact**, not an opinion. It can't argue with it.
+>
+> And you can do the same for other rules: **ArchUnit** for your layers, a **duplication check**, **OpenRewrite** for migrations. The values on screen are just an example.
+>
 
-## Slide 15 — An agent that writes the code and the tests can encode the same wro...
+*Short route:* Skip.
 
-**Idea:** The same lesson as the parser, stated as a rule.
-- Tests from the agent that wrote the code prove the code agrees with itself, nothing more
-- Independent tests come from a spec, an acceptance scenario, or a step that never sees the implementation
-**Transition:** Chapter three: the checks are honest — now what happens when one goes red?
+**→** But there's a catch: what if the agent edits the rule itself?
 
-*~1 min*
+## Slide 10 — Who guards the guard?  ·  IF TIME (full ~1.5 min, short skip)
 
-## Slide 16 — One bounded repair, a fresh verdict
+**▶ A check the agent can edit is not a check.**
 
-**Idea:** Last piece: what the agent is allowed to do when a check fails.
-- The instinct is to loop until everything is green
-- The data says that instinct is wrong
-**Transition:** Here's the number that surprised me most.
+- A **hook** inside the agent: a good first filter, but **within its reach**
+- The **build and CI** on the server: run on the result, **can't be skipped** locally
+- **CODEOWNERS** on pom.xml and the enforcer config: changes need a **human** (my suggestion)
 
-*~0.3 min*
+> Now, the obvious question. Someone always asks it: **can't the agent just edit the pom.xml?**
+>
+> And the answer is: yes, if you let it. So you have to look at **where the check runs**.
+>
+> On the left: a **hook** inside the agent's tooling. It's useful, it's deterministic code, not AI. But it runs **inside the agent's reach**. And agents are really good at finding **the one path it doesn't cover**.
+>
+> On the right: the **build and the CI** on the server. They run on the result, **whoever produced it**. You can't skip them with a local **--no-verify**. And if you put **CODEOWNERS** on the pom.xml and the enforcer config, any change to them needs a **human** to approve it.
+>
+> That CODEOWNERS setup is **my suggestion**, not from a talk. But it answers the question.
+>
 
-## Slide 17 — What happens when you keep repairing
+*Short route:* Skip.
 
-**Idea:** More repair attempts made the result worse, not better.
-- One revision: 82% correct. Two revisions: 67.3% — down, not up
-- "Ever correct" (84.7%) is almost the same as "correct after one" — nearly all the value is in the first repair
-- **Example:** this is HumanEval, small Python problems, someone else's benchmark — the number won't transfer as-is to our codebase, but the mechanism does
-**Transition:** Why does a second attempt make things worse?
+**→** So that's rules. Piece two: can the checks themselves be gamed?
 
-*~1.8 min*
+## Slide 11 — Checks the agent cannot game  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-## Slide 18 — The mechanism: stale evidence
+**▶ The checks have to be honest, not just present.**
 
-**Idea:** A PASS is only valid for the exact version it ran on.
-- Feed the agent an old verification result and it fixes a problem that no longer exists, breaking something that did work
-- Dropping stale traces cut the damage from 34 of 135 attempts down to 4
-- **Example:** this is the one idea here a Java/CI veteran is least likely to already have internalised
-**Transition:** Which is why the loop has a shape, not just a retry count.
+- A check that can be **faked** is worth nothing
+- Back to our **parser**, from the test side
 
-*~1.5 min*
+> Piece two: **checks the agent can't game**.
+>
+> Because a rule in the build is useless if the thing that **measures** it can be **faked**. And that brings us back to our **parser**.
+>
 
-## Slide 19 — The loop, bounded
+**→** Let's replay it.
 
-**Idea:** The loop that works isn't "retry until green" — it's a fixed shape with one repair in it.
-- Cheap checks gate the expensive ones; nothing short-circuits a sibling finding
-- One repair, built from compact findings, then a verdict on the final code only
-- **Example:** "one repair" is a policy choice under real uncertainty, not a proven law — the paper's point is where almost all the value sits, not that a second pass never helps
-**Transition:** And every one of those stages has to actually say something.
+## Slide 12 — Back to the parser, from the test side  ·  CORE (full ~1.5 min, short ~1 min)
 
-*~1.8 min*
+**▶ The fix wasn't a smarter model. It was tests from outside the agent.**
 
-## Slide 20 — A non-PASS result must never hide another independent finding. Sile...
+- Runs 1-2: the agent wrote **its own tests**, so it **graded its own work**
+- Run 3: "**analyse, ask, don't assume**"; humans answered, a functional analysis fed back in
+- Same project, same model: **few errors**
 
-**Idea:** The line to leave the room with before the close.
-- A check that doesn't run has to say SKIPPED, with a reason — never just nothing
-- A grey, un-run CI job reads as "fine" to a human skimming for red; it shouldn't
-**Transition:** Let's take all three pieces back to where we started.
+> Same migration project. In the **first two runs**, the team gave an open instruction, then a list of hard rules. And the agent wrote **the code and its own tests**.
+>
+> So in practice, the agent was **grading its own homework**. And that's how you get the fake parser.
+>
+> In the **third run**, they changed one thing. The instruction became: **analyse, ask, don't assume**. The agent asked questions, **humans answered**, and a functional analysis was fed back in.
+>
+> Result: **very few errors**. Same project, same model. The only difference: **where the tests came from**.
+>
+> And that's the rule to remember: an agent that writes the code **and** the tests can **encode the same wrong idea twice**. Tests have to come from **outside**: a spec, an acceptance scenario, a person. We'll come back to that next time, with context.
+>
 
-*~1 min*
+*Short route:* Same project, same model. When the tests came from outside the agent, the errors went away. One agent writing code and tests can encode the same wrong idea twice.
 
-## Slide 21 — Would this harness have caught it?
+**→** On our Java stack, the same trick looks a bit different.
 
-**Idea:** Replaying the opening example against the three chapters is the actual answer to today's question.
-- Rules in the build, checks it can't game, one bounded repair and a fresh verdict — run the fake parser through all three and it never ships
-- No single tool did this alone — the pieces have to work together
-**Transition:** Three things to leave with.
+## Slide 13 — What the fake parser looks like on our stack  ·  IF TIME (full ~1.5 min, short skip)
 
-*~1.8 min*
+**▶ Goodhart's law has a Java accent.**
 
-## Slide 22 — Key takeaways
+- **@Disabled**, **-DskipTests**, **assertTrue(true)**, a swallowed assertion
+- A **lowered JaCoCo threshold**, a new **ArchUnit freeze** entry
+- **My own list**, not from a talk
 
-**Idea:** The three chapters, compressed.
-- Rules the build enforces, not the prompt
-- Checks the agent cannot game, including its own tests
-- One repair, a fresh verdict, then a human
-**Transition:** One open question this leaves for next time.
+> Let's translate the fake parser into **our world**. This list is mine, not from a talk, but I bet you've seen most of it.
+>
+> A test that keeps failing? Add **@Disabled**. The build is slow? **-DskipTests**. An assertion is annoying? **assertTrue(true)**. Or you catch the assertion error, and **swallow it**.
+>
+> And the subtle ones: you **lower the JaCoCo threshold** to match the coverage you actually have. Or you add one more line to the **ArchUnit freeze file** instead of fixing the violation.
+>
+> None of these is a bug. Every tool is doing **exactly what it's configured to do**. The pipeline is **green**. And the bar just **moved down**.
+>
 
-*~1 min*
+*Short route:* Skip.
 
-## Slide 23 — The harness checks what comes out. What goes in?
+**→** So the checks need a contract the agent can't talk its way around.
 
-**Idea:** Today was about the exit side — what makes output trustworthy.
-- Talk 3 turns to the entry side: what the agent reads before it writes anything
-**Transition:** Thanks — happy to take questions.
+## Slide 14 — Silence is not a result  ·  IF TIME (full ~1.5 min, short skip)
 
-*~0.5 min*
+**▶ Silence is not a pass.**
 
-## Slide 24 — Sources
+- **Output contract**: OK, OUT_OF_SCOPE or ERROR, never an invented answer
+- **Guardrails**: hard limits, stated plainly
+- **Deterministic hooks**: code, not another model's opinion
+- "A non-PASS result must never hide another independent finding" (**JI Darwish**)
 
-All the sources behind tonight's examples — thanks, and I'm happy to take questions.
+> One more thing about honest checks. An agent needs a **legitimate way to say "I can't"**. Otherwise, it **invents an answer**.
+>
+> So, three things. First, an **output contract**: the result is **OK**, **OUT_OF_SCOPE**, or **ERROR**. In Java, think of a record with an enum status. A non-answer can't be read as a **success** anymore.
+>
+> Second, **guardrails**: hard limits, said plainly. Never raw SQL. Never a card number. Always the declared shape.
+>
+> Third, **deterministic hooks**: before a tool runs, code can **block** it. After, code can **format and test**. Code, not another model's judgment.
+>
+> And JI Darwish, at Devoxx, put it in one line: **a non-PASS result must never hide another independent finding. Silence is not a pass.** A check that didn't run has to say **SKIPPED**, with a reason. A grey CI job nobody looks at is **not a green one**.
+>
 
-*~0.3 min*
+*Short route:* Skip.
+
+**→** Piece three: what happens when a check goes red?
+
+## Slide 15 — One bounded repair, a fresh verdict  ·  CORE (full ~0.3 min, short ~0.2 min)
+
+**▶ When a check fails, how many retries?**
+
+- The instinct: **loop until green**
+- The data says: **that instinct is wrong**
+
+> Piece three: **one bounded repair, and a fresh verdict**.
+>
+> When a check goes red, the instinct is simple: let the agent **retry until it's green**. More attempts, more chances, right?
+>
+> Well, the data says **no**.
+>
+
+**→** Here's the number that surprised me the most.
+
+## Slide 16 — What happens when you keep repairing  ·  CORE (full ~1.8 min, short ~1 min)
+
+**▶ The second repair made things worse.**
+
+- **82 %** correct after one revision
+- **67.3 %** after two: **down**, not up
+- **84.7 %** were correct **at some point**
+- HumanEval, **small Python problems**: the numbers don't transfer, the **mechanism** does
+
+> This comes from a 2026 paper, cited at Devoxx by **JI Darwish**. They let agents repair their code, again and again, and they measured.
+>
+> After **one repair**: **82 %** correct. After **two**: **67.3 %**. It went **down**.
+>
+> And look at the third number: **84.7 %** of the attempts were correct **at some point** during the run. Almost the same as after one repair. So nearly **all the value is in the first repair**. After that, the agent starts **breaking things that worked**.
+>
+> Big caveat: this is **HumanEval**, small Python problems, someone else's benchmark. Don't take these numbers to our codebase. But the **mechanism**, that one travels.
+>
+
+*Short route:* One repair: 82 % correct. Two repairs: 67.3 %. Nearly all the value is in the first one.
+
+**→** So why does a second attempt make things worse?
+
+## Slide 17 — The mechanism: stale evidence  ·  IF TIME (full ~1.5 min, short skip)
+
+**▶ A PASS is only valid for the exact version it ran on.**
+
+- **Old trace**: the agent fixes a problem that's **already gone**
+- **34 of 135** correct attempts damaged
+- **Current trace only**: **4 of 135**
+
+> The reason is what they call **stale evidence**.
+>
+> Imagine the agent gets a test report. But that report is from **before its last change**. So it reads "this fails", and it goes to fix it. Except the problem is **already gone**. And while "fixing" it, it **breaks something that worked**.
+>
+> With old traces, **34 of 135** correct attempts got damaged. When they gave the agent **only the result for the current version**: **4 of 135**.
+>
+> So the rule is simple, and very familiar to us CI people: a PASS certifies **that exact version**, and **nothing else**.
+>
+
+*Short route:* Skip.
+
+**→** That's why the loop needs a shape, not just a retry counter.
+
+## Slide 18 — The loop, bounded  ·  CORE (full ~1.8 min, short ~1 min)
+
+**▶ Not "retry until green": a fixed shape, with one repair in it.**
+
+- **Gate** (compile) → **focused checks** → **full suite**
+- **One repair** from compact findings, then a **fresh verdict**
+- Still red: a **human** decides
+
+> So here's what the loop looks like when it's done right.
+>
+> Step one: a **gate**. Does it compile? If not, everything else is **SKIPPED**, and we stop.
+>
+> Step two: the **focused checks**: lint, business rules, architecture. They **all run**. None of them hides another one.
+>
+> Step three: the **full test suite**, the expensive one. Only once everything cheaper is green.
+>
+> Then, **one repair**. One single prompt, with the rules and **every finding**, short and clear. Not a dump of the full log.
+>
+> And then a **fresh verdict**: we re-check everything, on the **final code**. If it's still red, it goes to a **human**.
+>
+> One honest note: "one repair" is a **policy choice**, not a law of nature. The point is that almost all the value is in the first one. So decide your retry budget **on purpose**.
+>
+
+*Short route:* Gate, checks, full suite, one repair, a fresh verdict on the final code, then a human.
+
+**→** Now let's go back to where we started.
+
+## Slide 19 — Would this harness have caught it?  ·  CORE (full ~1.8 min, short ~1 min)
+
+**▶ Run the fake parser through the harness: it never ships.**
+
+- **Rules**: in the build, out of the agent's reach
+- **Evidence**: tests from **outside** the agent, exactly where it failed
+- **Verdict**: a fresh check on the final file
+
+> Remember the parser from the beginning? Let's run it through **our three pieces**.
+>
+> **Rules**: could the agent edit the check that measured it? Not if the rule lives **in the build**, protected, and not in a prompt.
+>
+> **Evidence**: did the test come from outside the agent? In the original story, **no**. And that's **exactly where it failed**. With an independent test on real data, hard-coding ten rows simply **doesn't work**.
+>
+> **Verdict**: a fresh check on the final file, with tests the agent didn't write, and the hard-code is **caught**.
+>
+> And notice: **no single tool** did that on its own. It's the **pieces together** that make the harness.
+>
+
+*Short route:* Rules out of its reach, tests from outside, a fresh verdict: the fake parser never ships. No single tool, all the pieces together.
+
+**→** So, three things to take home.
+
+## Slide 20 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
+
+**▶ Three things to take home.**
+
+- A rule the agent can negotiate is a **suggestion**: put it **in the build**
+- Evidence comes **from outside the agent**
+- **One repair**, a **fresh verdict**, then a **human**
+
+> If you remember only three things.
+>
+> One: a rule the agent can negotiate is just a **suggestion**. Put it **in the build**, where the agent **can't edit the check**.
+>
+> Two: the evidence has to come **from outside the agent**. Independent tests. A status it can't fake. A check that **never goes silent**.
+>
+> Three: **one repair**, then a **fresh verdict** on the final code. And after that, a **human** decides.
+>
+
+**→** And one open question for next time.
+
+## Slide 21 — The harness checks what comes out. What goes in?  ·  CORE (full ~0.5 min, short ~0.3 min)
+
+**▶ The harness checks what comes out. What goes in?**
+
+- Today: the **exit** side, can we trust the output?
+- Next time, talk 3: the **entry** side, **what the agent reads**
+
+> Today, we looked at what **comes out** of the agent: how do we know we can trust it?
+>
+> But you probably noticed: the parser story got better when the agent got **better input**. Real analysis. Answers from humans.
+>
+> So next time, in talk three, we look at the other side: **what goes in**. Specs, docs, rules: **what the agent reads**, and **who writes it**.
+>
+> Thanks. And I'm happy to **take your questions**.
+>
+
+**→** Questions. The sources are on the last slide.
+
+## Slide 22 — Sources  ·  IF TIME (full ~0.3 min, short skip)
+
+**▶ Everything behind today's examples.**
+
+- **Rivas** (GFT): harness engineering
+- **Darwish** (Xomnia): verification loops
+- **Gao, Yang & Yang**: Looping Is Not Reliability
+
+> If you want to dig deeper, all the sources are here: the **slides and replays** of both Devoxx talks, and the **paper** behind the numbers. I'll share the deck after the session.
+>
+
+*Short route:* Leave it on screen during questions.
+
+**→** Over to your questions.
+
