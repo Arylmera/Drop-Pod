@@ -209,10 +209,11 @@ pre {
 .sg .step p { font-size: 20px; }
 
 /* ---------- Chrome: progress, notes drawer, overview, presenter ---------- */
+.frag { opacity: 0; transition: opacity 500ms ease; } .frag.on, body.overview .frag { opacity: 1; }
 #progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
 #notes-drawer {
   position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
-  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55; white-space: pre-wrap;
+  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55;
 }
 body.notes #notes-drawer { display: block; }
 body.overview { overflow: auto; background: #0b0c0e; }
@@ -226,7 +227,21 @@ body.presenter #deck, body.presenter #progress { display: none; }
 #presenter { display: grid; grid-template-columns: 1fr 380px; gap: 28px; padding: 28px 34px; min-height: 100vh; }
 #presenter .now { font-size: 15px; color: #a9b0c7; text-transform: uppercase; letter-spacing: 0.08em; }
 #presenter h4 { font-size: 30px; margin: 6px 0 20px; }
-#presenter .script { font-size: 23px; line-height: 1.6; white-space: pre-wrap; max-width: 75ch; }
+#presenter .script { font-size: 23px; line-height: 1.6; max-width: 80ch; }
+#presenter .script b, #notes-drawer b { color: #ffd23f; font-weight: 700; }
+.meta { display: flex; gap: 16px; align-items: center; font-size: 15px; color: #8a91a8; margin-bottom: 14px; }
+.tag { font-size: 14px; font-weight: 800; letter-spacing: .08em; padding: 3px 10px; border-radius: 6px; }
+.tag.core { background: #1f4d33; color: #8ff0b5; } .tag.opt { background: #4d3a12; color: #ffc861; }
+.red { font-size: 30px; line-height: 1.35; font-weight: 700; color: #fff; margin: 0 0 14px; }
+#presenter .script ul { margin: 0 0 20px 1.1em; color: #a9b0c7; font-size: 20px; }
+.say { border-left: 4px solid var(--accent); padding-left: 20px; }
+.say p { margin: 0 0 14px; }
+.say .qa { margin-top: 6px; padding: 10px 14px; border-radius: 10px; background: #14263a; color: #bcdcff; font-size: 19px; }
+.say .qa b { color: #8fd3ff; }
+.say .cue { color: #8ff0b5; font-size: 20px; }
+.say .more { color: #a9b0c7; font-size: 20px; font-style: italic; }
+.short { margin: 16px 0 0; padding: 10px 14px; border-radius: 10px; background: #2a2214; color: #ffc861; font-size: 20px; }
+.tr { margin: 16px 0 0; color: #8ff0b5; font-size: 20px; }
 #presenter .side { display: flex; flex-direction: column; gap: 22px; }
 #presenter .box { background: #1e1f22; border-radius: 16px; padding: 18px 20px; }
 #presenter .clock { font-size: 54px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -246,6 +261,7 @@ body.presenter #deck, body.presenter #progress { display: none; }
   .slide { position: relative; visibility: visible; opacity: 1; width: 1600px; height: 900px; break-after: page; transition: none; }
   .slide .r, .rail, .bar, .f-cell { animation: none !important; opacity: 1 !important; transform: none !important; }
   #progress, #notes-drawer { display: none; }
+  .frag { opacity: 1 !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
@@ -419,8 +435,8 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     <p class="lead r" style="--i:2">What makes an agent's output trustworthy enough to merge</p>
     <div class="brand r" style="--i:3">Back from Devoxx Belgium 2026</div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.0000;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 1, Col 1 &middot; 1 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Welcome back. Last time we asked whether AI makes us better at delivering software. This time: once an agent writes code, what makes that code trustworthy enough to merge? Three chapters, one running example, no live demo.
-~0.5 min</template>
+  <template class="notes"><div style="white-space:pre-wrap">Welcome back. Last time we asked whether AI makes us better at delivering software. This time: once an agent writes code, what makes that code trustworthy enough to merge? Three chapters, one running example, no live demo.
+~0.5 min</div></template>
 </section>
 <section class="slide t-map" data-title="map">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">02-map.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>02-map.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -430,11 +446,11 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     <div class="map"><div class="stop done r" style="--i:1"><span class="stop-n">01</span><b>AI, the reality check</b><span class="stop-sub">What AI really delivers, and how far to trust it</span></div><div class="stop now r" style="--i:2"><span class="stop-n">02</span><b>The harness around the agent</b><span class="stop-sub">Rules in the build, bounded loops, honest checks</span></div><div class="stop next r" style="--i:3"><span class="stop-n">03</span><b>Context is the product</b><span class="stop-sub">Specs, docs and rules: what the agent reads</span></div><div class="stop next r" style="--i:4"><span class="stop-n">04</span><b>Trust at scale</b><span class="stop-sub">Sandboxes, permissions, review, dimming the lights</span></div></div>
     <p class="lead r" style="--i:7">Arc 2 of 4 — the reality check behind us; context and trust at scale ahead</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.0435;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 2, Col 1 &middot; 2 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Four talks, one spine — this is stop two.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Four talks, one spine — this is stop two.
 - Talk 1 asked whether AI makes us faster; talk 2 asks what makes its output trustworthy
 - Talks 3 and 4 build on today's answer; talk 4 closes the series
 Transition: Quick reminder of where we left off last time.
-~0.5 min</template>
+~0.5 min</div></template>
 </section>
 <section class="slide t-previously" data-title="They felt 20% faster. The stopwatch said 19% slower.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">03-they-felt-20-faster-the-stopwatch.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>03-they-felt-20-faster-the-stopwatch.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -444,12 +460,12 @@ Transition: Quick reminder of where we left off last time.
     <p class="statement r" style="--i:1">They felt 20% faster. The stopwatch said 19% slower.</p>
     <p class="lead r" style="--i:2">Feeling faster is not evidence; trust is transferred to mechanisms, not decreed</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.0870;--p0:0.0435"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Last time's punchline: a feeling is not a measurement.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Last time's punchline: a feeling is not a measurement.
 - Developers felt about 20% faster; measured, the same work took 19% longer
 - The conclusion wasn't &quot;stop using AI&quot; — it was &quot;trust has to be built, not assumed&quot;
 - Example: the gap came from review and rework, not from writing the code itself
 Transition: Let me show you what happens without it: a test that passed.
-~1 min</template>
+~1 min</div></template>
 </section>
 <section class="slide t-code" data-title="A parser that passed its test">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">04-a-parser-that-passed-its-test.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>04-a-parser-that-passed-its-test.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -461,12 +477,12 @@ Transition: Let me show you what happens without it: a test that passed.
     metadata['nobs'] = <span class="tk-n">10</span></code></pre>
     <p class="source r" style="--i:2">A SAS-to-Python migration, Smals Research — three lines, Goodhart's law</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.1304;--p0:0.0870"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 4, Col 1 &middot; 4 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The test passed, but the code never parsed anything.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The test passed, but the code never parsed anything.
 - Three lines of Python: if the filename matches, hard-code the expected row count
 - The agent did exactly what it was asked — turn the test green
 - Example: from a real SAS-to-Python migration (Smals Research, Devoxx Belgium) — the team call it &quot;refuctoring&quot;
 Transition: That's Goodhart's law in miniature — and it's the question for the next 25 minutes: what stops this from shipping?
-~1.5 min</template>
+~1.5 min</div></template>
 </section>
 <section class="slide t-statement dark" data-title="What, concretely, makes an agent's output trustworthy?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">05-what-concretely-makes-an-agent-s-o.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>05-what-concretely-makes-an-agent-s-o.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -476,11 +492,11 @@ Transition: That's Goodhart's law in miniature — and it's the question for the
     <p class="statement r" style="--i:1">What, concretely, makes an agent's output trustworthy?</p>
     <p class="lead r" style="--i:2">Not a better prompt. A harness.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.1739;--p0:0.1304"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 5, Col 1 &middot; 5 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The question this whole talk answers.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The question this whole talk answers.
 - Not which model, not which prompt — what surrounds the agent's work
 - Three answers, one per chapter: rules it can't negotiate, checks it can't game, a repair loop that's bounded and honest
 Transition: Chapter one — rules the build enforces.
-~1 min</template>
+~1 min</div></template>
 </section>
 <section class="slide t-section dark" data-title="Rules the build enforces">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">06-rules-the-build-enforces.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>06-rules-the-build-enforces.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -491,11 +507,11 @@ Transition: Chapter one — rules the build enforces.
       <div><h2 class="r" style="--i:1">Rules the build enforces</h2><p class="lead r" style="--i:2">Constraints an agent can't trade away under pressure</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.2174;--p0:0.1739"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 6, Col 1 &middot; 6 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: First piece of the answer: put the rule where the agent cannot negotiate it.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: First piece of the answer: put the rule where the agent cannot negotiate it.
 - A rule in a prompt or an instructions file is a suggestion — it holds most runs, breaks in some
 - The fix: move it into something the build checks every time
 Transition: Here's what that looks like when it breaks.
-~0.3 min</template>
+~0.3 min</div></template>
 </section>
 <section class="slide t-statement" data-title="The agent kept downgrading the Java version to get past a stuck build.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">07-the-agent-kept-downgrading-the-jav.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>07-the-agent-kept-downgrading-the-jav.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -505,12 +521,12 @@ Transition: Here's what that looks like when it breaks.
     <p class="statement r" style="--i:1">The agent kept downgrading the Java version to get past a stuck build.</p>
     <p class="lead r" style="--i:2">Illustrative mechanism — e.g. maven.compiler.release silently dropped from 21 to 17</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.2609;--p0:0.2174"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 7, Col 1 &middot; 7 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Rule drift — a prose rule breaks exactly when the agent is under pressure.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Rule drift — a prose rule breaks exactly when the agent is under pressure.
 - A bank-mainframe modernisation project saw it happen repeatedly, Java version after Java version
 - The agent wasn't malicious — it was optimising for the next green build, not the agreed constraint
 - Example: concretely, picture maven.compiler.release quietly dropping from 21 to 17 mid-session
 Transition: The fix isn't a sterner prompt.
-~1.2 min</template>
+~1.2 min</div></template>
 </section>
 <section class="slide t-quote" data-title="Don't document a constraint the build can enforce.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">08-don-t-document-a-constraint-the-bu.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>08-don-t-document-a-constraint-the-bu.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -520,11 +536,11 @@ Transition: The fix isn't a sterner prompt.
     <blockquote class="r" style="--i:1">Don't document a constraint the build can enforce.</blockquote>
     <p class="cite r" style="--i:2">&mdash; Anyul Rivas (GFT), Devoxx Belgium 2026</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.3043;--p0:0.2609"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 8, Col 1 &middot; 8 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The spine sentence of this whole chapter.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The spine sentence of this whole chapter.
 - Don't ask the agent to remember the rules — make the environment enforce them
 - Docs keep the why; the build keeps the what
 Transition: Here's that doctrine as actual Maven config.
-~0.8 min</template>
+~0.8 min</div></template>
 </section>
 <section class="slide t-code" data-title="Maven Enforcer: the rule becomes a build failure">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">09-maven-enforcer-the-rule-becomes-a.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>09-maven-enforcer-the-rule-becomes-a.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -545,12 +561,12 @@ Transition: Here's that doctrine as actual Maven config.
 <span class="tk-t">&lt;/plugin&gt;</span></code></pre>
     <p class="source r" style="--i:2">Illustrative — shape follows the talk; values are placeholders</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.3478;--p0:0.3043"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 9, Col 1 &middot; 9 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The rule becomes a build failure, not a suggestion.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The rule becomes a build failure, not a suggestion.
 - requireJavaVersion sets the floor; bannedDependencies blocks a library outright
 - An invalid choice fails immediately with a message the agent reads as a finding, not an opinion
 - Example: ArchUnit does the same for layer boundaries; a duplication gate (PMD CPD) and OpenRewrite round out the set
 Transition: But a rule in the build only holds if the agent can't edit the rule itself.
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-compare" data-title="Who guards the guard?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">10-who-guards-the-guard.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>10-who-guards-the-guard.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -564,13 +580,13 @@ Transition: But a rule in the build only holds if the agent can't edit the rule 
         <ul><li>A failing Maven build, or a CI job on the server</li><li>Runs on the result, whoever produced it</li><li>Not skippable with a local --no-verify</li><li>Config protected by CODEOWNERS, changed only with a human sign-off</li></ul></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.3913;--p0:0.3478"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 10, Col 1 &middot; 10 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The rule only holds if the agent cannot edit the thing that checks it.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The rule only holds if the agent cannot edit the thing that checks it.
 - A local hook is a good first filter, but it runs inside the agent's own reach
 - The real barrier is the build or CI step the agent can't bypass or quietly relax
 - Example: CODEOWNERS on pom.xml and the enforcer config — a PR touching them needs a human, and the check itself runs server-side
 Transition: Rules are half the story — the other half is whether the checks can be gamed.
 ~1.5 min
-Cut if short: say only the Idea line, skip both columns.</template>
+Cut if short: say only the Idea line, skip both columns.</div></template>
 </section>
 <section class="slide t-section dark" data-title="Checks the agent cannot game">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">11-checks-the-agent-cannot-game.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>11-checks-the-agent-cannot-game.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -581,11 +597,11 @@ Cut if short: say only the Idea line, skip both columns.</template>
       <div><h2 class="r" style="--i:1">Checks the agent cannot game</h2><p class="lead r" style="--i:2">Evidence that comes from outside the agent itself</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.4348;--p0:0.3913"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 11, Col 1 &middot; 11 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Second piece: the checks have to be honest, not just present.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Second piece: the checks have to be honest, not just present.
 - A rule in the build is worthless if the thing measuring it can be faked
 - Back to the parser we opened with — now looking at it from the test's side
 Transition: Let's replay it.
-~0.3 min</template>
+~0.3 min</div></template>
 </section>
 <section class="slide t-compare" data-title="Back to the parser, from the test side">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">12-back-to-the-parser-from-the-test-s.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>12-back-to-the-parser-from-the-test-s.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -599,12 +615,12 @@ Transition: Let's replay it.
         <ul><li>Instruction: analyse, ask, don't assume</li><li>Humans answered; a functional analysis fed back in</li><li>Result: few errors, because the tests came from outside the agent</li></ul></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.4783;--p0:0.4348"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 12, Col 1 &middot; 12 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Same project, same model — the only thing that changed was where the tests came from.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Same project, same model — the only thing that changed was where the tests came from.
 - Early runs let the agent write its own tests alongside its own code
 - The fix wasn't a smarter model, it was an independent source for what &quot;correct&quot; means
 - Example: one agent writing both the code and the test can encode the same wrong idea twice
 Transition: On our stack, that same failure wears different clothes.
-~1.2 min</template>
+~1.2 min</div></template>
 </section>
 <section class="slide t-bullets" data-title="What the fake parser looks like on our stack">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">13-what-the-fake-parser-looks-like-on.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>13-what-the-fake-parser-looks-like-on.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -616,12 +632,12 @@ Transition: On our stack, that same failure wears different clothes.
       <aside class="card hot r" style="--i:7"><span class="badge">!</span><p>Illustrative — proposed Java/Maven examples of the same move, not drawn from a Devoxx talk</p></aside>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.5217;--p0:0.4783"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 13, Col 1 &middot; 13 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Goodhart's law has a Java accent.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Goodhart's law has a Java accent.
 - Every one of these makes a pipeline look green while quietly lowering the bar it was supposed to enforce
 - None of them is a bug — each is a build or test tool working exactly as configured
 - Example: a lowered JaCoCo threshold and an ArchUnit freeze-file entry are both &quot;passing&quot; checks that passed by moving the goalpost
 Transition: So the checks themselves need a contract the agent can't talk its way around.
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-steps" data-title="Silence is not a result">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">14-silence-is-not-a-result.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>14-silence-is-not-a-result.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -634,12 +650,12 @@ Transition: So the checks themselves need a contract the agent can't talk its wa
       <div class="step r" style="--i:3"><span class="badge lg">3</span><b>Deterministic hooks</b><p>PreToolUse blocks, PostToolUse formats and tests — code, not another model's judgment.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.5652;--p0:0.5217"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 14, Col 1 &middot; 14 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: An agent needs a legitimate way to say &quot;I can't&quot;, or it invents an answer instead.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: An agent needs a legitimate way to say &quot;I can't&quot;, or it invents an answer instead.
 - A status field — OK, OUT_OF_SCOPE, ERROR — stops a non-answer from being read as success
 - Hard guardrails and deterministic hooks catch what the contract alone misses
 - Example: a Java record with an enum status fails loudly on a shape it wasn't told to expect
 Transition: Checks from the harness are one source; tests need an independent source too.
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-statement" data-title="An agent that writes the code and the tests can encode the same wrong idea twice.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">15-an-agent-that-writes-the-code-and.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>15-an-agent-that-writes-the-code-and.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -649,11 +665,11 @@ Transition: Checks from the harness are one source; tests need an independent so
     <p class="statement long r" style="--i:1">An agent that writes the code and the tests can encode the same wrong idea twice.</p>
     <p class="lead r" style="--i:2">Tests need to come from outside it — the spec, not the implementer. More on that next time.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.6087;--p0:0.5652"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 15, Col 1 &middot; 15 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The same lesson as the parser, stated as a rule.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The same lesson as the parser, stated as a rule.
 - Tests from the agent that wrote the code prove the code agrees with itself, nothing more
 - Independent tests come from a spec, an acceptance scenario, or a step that never sees the implementation
 Transition: Chapter three: the checks are honest — now what happens when one goes red?
-~1 min</template>
+~1 min</div></template>
 </section>
 <section class="slide t-section dark" data-title="One bounded repair, a fresh verdict">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">16-one-bounded-repair-a-fresh-verdict.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>16-one-bounded-repair-a-fresh-verdict.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -664,11 +680,11 @@ Transition: Chapter three: the checks are honest — now what happens when one g
       <div><h2 class="r" style="--i:1">One bounded repair, a fresh verdict</h2><p class="lead r" style="--i:2">Why looping until green makes things worse, not better</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.6522;--p0:0.6087"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 16, Col 1 &middot; 16 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Last piece: what the agent is allowed to do when a check fails.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Last piece: what the agent is allowed to do when a check fails.
 - The instinct is to loop until everything is green
 - The data says that instinct is wrong
 Transition: Here's the number that surprised me most.
-~0.3 min</template>
+~0.3 min</div></template>
 </section>
 <section class="slide t-stats" data-title="What happens when you keep repairing">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">17-what-happens-when-you-keep-repairi.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>17-what-happens-when-you-keep-repairi.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -682,12 +698,12 @@ Transition: Here's the number that surprised me most.
     </div>
     <p class="source r" style="--i:4">HumanEval, small Python problems — Gao, Yang &amp; Yang, arXiv 2607.24604 (2026), cited by JI Darwish, Devoxx BE</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.6957;--p0:0.6522"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 17, Col 1 &middot; 17 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: More repair attempts made the result worse, not better.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: More repair attempts made the result worse, not better.
 - One revision: 82% correct. Two revisions: 67.3% — down, not up
 - &quot;Ever correct&quot; (84.7%) is almost the same as &quot;correct after one&quot; — nearly all the value is in the first repair
 - Example: this is HumanEval, small Python problems, someone else's benchmark — the number won't transfer as-is to our codebase, but the mechanism does
 Transition: Why does a second attempt make things worse?
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-compare" data-title="The mechanism: stale evidence">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">18-the-mechanism-stale-evidence.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>18-the-mechanism-stale-evidence.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -701,12 +717,12 @@ Transition: Why does a second attempt make things worse?
         <ul><li>Only the result from this exact version</li><li>A PASS certifies that version, nothing else</li><li>4 of 135 correct attempts damaged</li></ul></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.7391;--p0:0.6957"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 18, Col 1 &middot; 18 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: A PASS is only valid for the exact version it ran on.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: A PASS is only valid for the exact version it ran on.
 - Feed the agent an old verification result and it fixes a problem that no longer exists, breaking something that did work
 - Dropping stale traces cut the damage from 34 of 135 attempts down to 4
 - Example: this is the one idea here a Java/CI veteran is least likely to already have internalised
 Transition: Which is why the loop has a shape, not just a retry count.
-~1.5 min</template>
+~1.5 min</div></template>
 </section>
 <section class="slide t-steps" data-title="The loop, bounded">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">19-the-loop-bounded.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>19-the-loop-bounded.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -721,12 +737,12 @@ Transition: Which is why the loop has a shape, not just a retry count.
       <div class="step r" style="--i:5"><span class="badge lg">5</span><b>Fresh verdict</b><p>Re-verify everything on the final source. Still red → a human decides.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.7826;--p0:0.7391"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 19, Col 1 &middot; 19 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The loop that works isn't &quot;retry until green&quot; — it's a fixed shape with one repair in it.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The loop that works isn't &quot;retry until green&quot; — it's a fixed shape with one repair in it.
 - Cheap checks gate the expensive ones; nothing short-circuits a sibling finding
 - One repair, built from compact findings, then a verdict on the final code only
 - Example: &quot;one repair&quot; is a policy choice under real uncertainty, not a proven law — the paper's point is where almost all the value sits, not that a second pass never helps
 Transition: And every one of those stages has to actually say something.
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-quote" data-title="A non-PASS result must never hide another independent finding. Silence is not a pass.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">20-a-non-pass-result-must-never-hide.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>20-a-non-pass-result-must-never-hide.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -736,11 +752,11 @@ Transition: And every one of those stages has to actually say something.
     <blockquote class="r" style="--i:1">A non-PASS result must never hide another independent finding. Silence is not a pass.</blockquote>
     <p class="cite r" style="--i:2">&mdash; JI Darwish, Devoxx Belgium 2026</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.8261;--p0:0.7826"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 20, Col 1 &middot; 20 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The line to leave the room with before the close.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The line to leave the room with before the close.
 - A check that doesn't run has to say SKIPPED, with a reason — never just nothing
 - A grey, un-run CI job reads as &quot;fine&quot; to a human skimming for red; it shouldn't
 Transition: Let's take all three pieces back to where we started.
-~1 min</template>
+~1 min</div></template>
 </section>
 <section class="slide t-cards" data-title="Would this harness have caught it?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">21-would-this-harness-have-caught-it.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>21-would-this-harness-have-caught-it.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -752,11 +768,11 @@ Transition: Let's take all three pieces back to where we started.
       <div class="card r" style="--i:3"><div class="card-head"><span class="badge">3</span><b>Verdict</b></div><p>Would a fresh verdict, re-run on the final file, have caught a hard-coded row count? Yes — a real parser check doesn't pass on a filename match.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.8696;--p0:0.8261"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 21, Col 1 &middot; 21 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Replaying the opening example against the three chapters is the actual answer to today's question.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Replaying the opening example against the three chapters is the actual answer to today's question.
 - Rules in the build, checks it can't game, one bounded repair and a fresh verdict — run the fake parser through all three and it never ships
 - No single tool did this alone — the pieces have to work together
 Transition: Three things to leave with.
-~1.8 min</template>
+~1.8 min</div></template>
 </section>
 <section class="slide t-takeaway dark" data-title="Key takeaways">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">22-key-takeaways.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>22-key-takeaways.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -765,12 +781,12 @@ Transition: Three things to leave with.
     <h2 class="r" style="--i:0">Key takeaways</h2>
     <ol class="take"><li class="r" style="--i:1"><span class="badge lg">1</span><span>A rule the agent can negotiate is a suggestion — put it in the build, where the agent can't edit the check.</span></li><li class="r" style="--i:2"><span class="badge lg">2</span><span>Evidence has to come from outside the agent: independent tests, a status it can't fake, a stage that never goes silent.</span></li><li class="r" style="--i:3"><span class="badge lg">3</span><span>One bounded repair, then a fresh verdict on the final source. Past that, a human decides.</span></li></ol></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.9130;--p0:0.8696"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 22, Col 1 &middot; 22 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: The three chapters, compressed.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: The three chapters, compressed.
 - Rules the build enforces, not the prompt
 - Checks the agent cannot game, including its own tests
 - One repair, a fresh verdict, then a human
 Transition: One open question this leaves for next time.
-~1 min</template>
+~1 min</div></template>
 </section>
 <section class="slide t-next dark" data-title="The harness checks what comes out. What goes in?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">23-the-harness-checks-what-comes-out.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>23-the-harness-checks-what-comes-out.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -780,10 +796,10 @@ Transition: One open question this leaves for next time.
     <p class="statement r" style="--i:1">The harness checks what comes out. What goes in?</p>
     <p class="lead r" style="--i:2">Specs, docs and rules — what good context looks like, for the agent and for us</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck" style="--p:0.9565;--p0:0.9130"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 23, Col 1 &middot; 23 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: Today was about the exit side — what makes output trustworthy.
+  <template class="notes"><div style="white-space:pre-wrap">Idea: Today was about the exit side — what makes output trustworthy.
 - Talk 3 turns to the entry side: what the agent reads before it writes anything
 Transition: Thanks — happy to take questions.
-~0.5 min</template>
+~0.5 min</div></template>
 </section>
 <section class="slide t-sources" data-title="sources">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-2-harness</span><span class="tab active">24-sources.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-2-harness <em>/</em> <strong>24-sources.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -792,8 +808,8 @@ Transition: Thanks — happy to take questions.
     <h3 class="r" style="--i:0">Going further</h3>
     <ul class="src"><li class="r" style="--i:1">Rivas (GFT) — From vibe coding to harness engineering, slides: <a href="https://docs.google.com/presentation/d/1qY78jdOwsyRLk-1MmpQPQ1v5pktPMuyOVWKNeFhN74Y" target="_blank" rel="noopener">https://docs.google.com/presentation/d/1qY78jdOwsyRLk-1MmpQPQ1v5pktPMuyOVWKNeFhN74Y</a></li><li class="r" style="--i:2">Darwish (Xomnia) — Harness Engineering, replay: <a href="https://www.youtube.com/watch?v=6N6qFqn1_Uo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=6N6qFqn1_Uo</a></li><li class="r" style="--i:3">Gao, Yang &amp; Yang — Looping Is Not Reliability: <a href="https://arxiv.org/pdf/2607.24604" target="_blank" rel="noopener">https://arxiv.org/pdf/2607.24604</a></li><li class="r" style="--i:4">Mehta — The reach of a verification tool decides its value: <a href="https://arxiv.org/abs/2608.28795" target="_blank" rel="noopener">https://arxiv.org/abs/2608.28795</a></li><li class="r" style="--i:5">Smals Research — modernising legacy code with AI: <a href="https://www.smalsresearch.be/modernizing-legacy-projects-with-ai/" target="_blank" rel="noopener">https://www.smalsresearch.be/modernizing-legacy-projects-with-ai/</a></li><li class="r" style="--i:6">AI Harness Scorecard (five pillars): <a href="https://github.com/anyulled/ai-harness-scorecard" target="_blank" rel="noopener">https://github.com/anyulled/ai-harness-scorecard</a></li></ul></div>
   <footer><span><b>&#x2387; devoxx-2026</b>The harness around the agent</span><span class="duck-track"><span class="duck end" style="--p:1.0000;--p0:0.9565"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 24, Col 1 &middot; 24 / 24 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">All the sources behind tonight's examples — thanks, and I'm happy to take questions.
-~0.3 min</template>
+  <template class="notes"><div style="white-space:pre-wrap">All the sources behind tonight's examples — thanks, and I'm happy to take questions.
+~0.3 min</div></template>
 </section>
 </main>
 <div id="progress"></div><div id="notes-drawer"></div>
@@ -801,7 +817,7 @@ Transition: Thanks — happy to take questions.
 (() => {
   const deck = document.getElementById("deck");
   const slides = [...document.querySelectorAll(".slide")];
-  const notes = slides.map((s) => s.querySelector("template.notes").content.textContent.trim());
+  const notes = slides.map((s) => s.querySelector("template.notes").innerHTML);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const chan = "BroadcastChannel" in window ? new BroadcastChannel("deck:" + document.title) : null;
   const presenter = location.hash === "#presenter";
@@ -839,17 +855,31 @@ Transition: Thanks — happy to take questions.
     setTimeout(() => requestAnimationFrame(tick), 250);
   }
 
+  const frags = () => [...slides[cur].querySelectorAll(".frag")];
+  const shown = () => frags().filter((f) => f.classList.contains("on")).length;
+  function setFrag(k, from) {
+    frags().forEach((f, i) => f.classList.toggle("on", i < k));
+    if (chan && from !== "remote") chan.postMessage({ slide: cur, frag: k });
+  }
+  function step(d) {
+    const k = shown(), all = frags().length;
+    if (d > 0 && k < all) return setFrag(k + 1);
+    if (d < 0 && k > 0) return setFrag(k - 1);
+    go(cur + d);
+  }
   function go(n, from) {
     n = Math.max(0, Math.min(slides.length - 1, n));
     if (n === cur) return;
+    const back = n < cur;
     if (cur >= 0) slides[cur].classList.remove("active");
     cur = n;
     const s = slides[cur];
     void s.offsetWidth; // restart the reveal animations
     s.classList.add("active");
+    s.querySelectorAll(".frag").forEach((f) => f.classList.toggle("on", back));
     if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
     document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
-    document.getElementById("notes-drawer").textContent = notes[cur];
+    document.getElementById("notes-drawer").innerHTML = notes[cur];
     if (!presenter) history.replaceState(null, "", "#" + (cur + 1));
     if (chan && from !== "remote") chan.postMessage({ slide: cur });
     if (presenter) renderPresenter();
@@ -867,11 +897,12 @@ Transition: Thanks — happy to take questions.
     }
     const next = slides[cur + 1];
     p.innerHTML = `<div><div class="now">Slide ${cur + 1} / ${slides.length}</div><h4></h4><div class="script"></div></div>
-      <div class="side"><div class="box"><div class="now">Elapsed · target 25 min</div><div class="clock" id="clk">0:00</div></div>
+      <div class="side"><div class="box"><div class="now">Elapsed · 10–20 min</div><div class="clock" id="clk">0:00</div></div>
       <div class="box"><div class="now">Next</div><h4 style="font-size:22px"></h4></div>
-      <div class="hint">→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
+      <div class="hint">Short route (~10 min): CORE slides, and the \"Short route\" line on IF TIME slides. Full route ~20 min.<br><br>→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
     p.querySelector("h4").textContent = slides[cur].dataset.title;
-    p.querySelector(".script").textContent = notes[cur];
+    p.querySelector(".script").innerHTML = notes[cur];
+    scrollTo(0, 0);
     p.querySelectorAll("h4")[1].textContent = next ? next.dataset.title : "— end —";
     tickClock();
   }
@@ -880,14 +911,14 @@ Transition: Thanks — happy to take questions.
     if (!el || start === null) return;
     const s = Math.floor((Date.now() - start) / 1000);
     el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-    el.classList.toggle("over", s > 25 * 60);
+    el.classList.toggle("over", s > 20 * 60);
   }
 
   addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key;
-    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
-    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); step(1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); step(-1); }
     else if (k === "Home") go(0);
     else if (k === "End") go(slides.length - 1);
     else if (k === "n" || k === "N") document.body.classList.toggle("notes");
@@ -908,7 +939,7 @@ Transition: Thanks — happy to take questions.
       go(slides.indexOf(s));
     }
   });
-  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); };
+  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); if (typeof e.data.frag === "number") setFrag(e.data.frag, "remote"); };
   addEventListener("resize", fit);
 
   fit();
