@@ -195,7 +195,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 - A **hook** inside the agent: a good first filter, but **within its reach**
 - The **build and CI** on the server: run on the result, **can't be skipped** locally
-- **CODEOWNERS** on pom.xml and the enforcer config: changes need a **human** (my suggestion)
+- **CODEOWNERS** on pom.xml and the enforcer config: changes need a **human** (one example of a solution)
 
 > Now, the obvious question. Someone always asks it: **can't the agent just edit the pom.xml?**
 >
@@ -205,7 +205,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 >
 > On the right: the **build and the CI** on the server. They run on the result, **whoever produced it**. You can't skip them with a local **--no-verify**. And if you put **CODEOWNERS** on the pom.xml and the enforcer config, any change to them needs a **human** to approve it.
 >
-> That CODEOWNERS setup is **my suggestion**, not from a talk. But it answers the question.
+> CODEOWNERS is just **one example of a solution**. Your platform may have its own way. The point is: **a human** has to approve any change to the check.
 >
 
 *Short route:* Skip.
