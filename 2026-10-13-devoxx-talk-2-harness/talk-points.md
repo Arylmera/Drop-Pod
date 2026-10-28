@@ -9,15 +9,28 @@ tags:
 ---
 
 
-# Arc 2 — The harness around the agent — talking points
+# Arc 2 — The harness around the agent — Speaker text
 
-One card per slide. Improvisation mode: idea, a few points, one example, a transition, a duration — never a script to read aloud.
+One card per slide: **fil rouge** (bold line), outline, full text to say, transition. Same text as the presenter window (S).
+Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus only the *Short route* line on IF TIME slides. **Full route:** ~20 min.
 
-## Slide 1 — The harness around the agent
+*Conversion in progress: slides not yet converted keep the old improvisation card.*
 
-Welcome back. Last time we asked whether AI makes us better at delivering software. This time: once an agent writes code, what makes that code trustworthy enough to merge? Three chapters, one running example, no live demo.
+## Slide 1 — The harness around the agent  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-*~0.5 min*
+**▶ One question: once an agent writes the code, what makes it safe to merge?**
+
+- Back from **Devoxx Belgium 2026**, talk 2 of 4
+- Three chapters: **rules the build enforces** · **checks the agent can't game** · **one bounded repair**
+
+> Welcome back. Last time was the **reality check**: AI **feels** faster than it **is**, and trust has to be **built**, not assumed. Today is about **how we build it**.
+>
+> When an agent writes code, what makes that code **trustworthy enough to merge**? Short answer: not a better prompt, but **what we put around the agent**. At Devoxx they called it **the harness**.
+>
+> Same as last time: this is **my reading**, so if you see it differently, **say so**.
+>
+
+**→** First, where this sits in the series.
 
 ## Slide 2 — Map
 
