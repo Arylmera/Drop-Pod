@@ -18,7 +18,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 ## Slide 1 — The harness around the agent  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-**▶ One question: once an agent writes the code, what makes it **safe to merge**?**
+**▶ One question: once an agent writes the code, what makes it safe to merge?**
 
 - Back from **Devoxx Belgium 2026**, talk 2 of 4
 - Three chapters: **rules the build enforces** · **checks the agent can't game** · **one bounded repair**
@@ -53,15 +53,25 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 **→** A quick reminder of where we left off.
 
-## Slide 3 — They felt 20% faster. The stopwatch said 19% slower.
+## Slide 3 — They felt 20% faster. The stopwatch said 19% slower.  ·  CORE (full ~1 min, short ~0.5 min)
 
-**Idea:** Last time's punchline: a feeling is not a measurement.
-- Developers felt about 20% faster; measured, the same work took 19% longer
-- The conclusion wasn't "stop using AI" — it was "trust has to be built, not assumed"
-- **Example:** the gap came from review and rework, not from writing the code itself
-**Transition:** Let me show you what happens without it: a test that passed.
+**▶ Feeling faster isn't proof. Trust has to be built.**
 
-*~1 min*
+- **Felt 20 % faster**, measured **19 % slower** (METR)
+- The gap came from **review and rework**, not from typing the code
+
+> So, quick reminder of where we left off.
+>
+> Experienced developers, on their own projects, **felt about 20 % faster** with AI. But when you put a **stopwatch** on it, the same work took **19 % longer**.
+>
+> And the time didn't go into writing the code. It went into **reviewing it, and fixing it**.
+>
+> So the lesson wasn't "stop using AI". It was: **don't trust a feeling. Trust a mechanism.** Today, we're going to look at **what that mechanism looks like**.
+>
+
+*Short route:* Felt 20 % faster, measured 19 % slower. So we need a mechanism, not a feeling.
+
+**→** And to show you why, let me start with a test that passed.
 
 ## Slide 4 — A parser that passed its test
 
