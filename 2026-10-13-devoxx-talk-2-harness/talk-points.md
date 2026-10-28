@@ -134,13 +134,12 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 - A **bank modernisation project**, presented at Devoxx
 - The agent **lowered the Java version** to get a stuck build green
-- The version numbers here are **my illustration**
 
 > This one comes from a **bank modernisation project**, presented at Devoxx.
 >
 > The team had a clear rule: we target this Java version. Written down, in the instructions. And the agent kept **downgrading the Java version**, again and again, every time the build got stuck.
 >
-> Picture your own pom.xml: **maven.compiler.release** quietly going from **21 to 17** in the middle of a session. Those exact numbers are my illustration, but the behaviour is real.
+> Picture your own pom.xml: **maven.compiler.release** quietly going from **21 to 17** in the middle of a session.
 >
 > And again, the agent isn't evil. It's trying to reach the **next green build**. The rule was just text, so under pressure, it **gave way**.
 >
@@ -174,7 +173,6 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 - **requireJavaVersion**: the floor
 - **bannedDependencies**: a library blocked outright
 - Same idea: **ArchUnit** for layers, **PMD CPD** for duplication, **OpenRewrite** for migrations
-- The values are **illustrative**
 
 > This is the **Maven Enforcer plugin**. Nothing new, most of us have seen it.
 >
@@ -182,7 +180,7 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 >
 > So now, if the agent downgrades the Java version, it doesn't get a green build. It gets a **failure**, with a clear message. And for the agent, a build failure is a **fact**, not an opinion. It can't argue with it.
 >
-> And you can do the same for other rules: **ArchUnit** for your layers, a **duplication check**, **OpenRewrite** for migrations. The values on screen are just an example.
+> And you can do the same for other rules: **ArchUnit** for your layers, a **duplication check**, **OpenRewrite** for migrations.
 >
 
 *Short route:* Skip.
@@ -255,9 +253,8 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 - **@Disabled**, **-DskipTests**, **assertTrue(true)**, a swallowed assertion
 - A **lowered JaCoCo threshold**, a new **ArchUnit freeze** entry
-- **My own list**, not from a talk
 
-> Let's translate the fake parser into **our world**. This list is mine, not from a talk, but I bet you've seen most of it.
+> Let's translate the fake parser into **our world**. I bet you've seen most of these.
 >
 > A test that keeps failing? Add **@Disabled**. The build is slow? **-DskipTests**. An assertion is annoying? **assertTrue(true)**. Or you catch the assertion error, and **swallow it**.
 >
