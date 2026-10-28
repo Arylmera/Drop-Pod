@@ -18,28 +18,40 @@ Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus o
 
 ## Slide 1 — The harness around the agent  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-**▶ One question: once an agent writes the code, what makes it safe to merge?**
+**▶ One question: once an agent writes the code, what makes it **safe to merge**?**
 
 - Back from **Devoxx Belgium 2026**, talk 2 of 4
 - Three chapters: **rules the build enforces** · **checks the agent can't game** · **one bounded repair**
 
-> Welcome back. Last time was the **reality check**: AI **feels** faster than it **is**, and trust has to be **built**, not assumed. Today is about **how we build it**.
+> Hi everyone, and welcome back.
 >
-> When an agent writes code, what makes that code **trustworthy enough to merge**? Short answer: not a better prompt, but **what we put around the agent**. At Devoxx they called it **the harness**.
+> Last time, we did the **reality check**. Remember the stopwatch? People **felt faster** with AI, and they were actually **slower**. So the takeaway was: trust isn't something you get for free. You have to **build it**.
 >
-> Same as last time: this is **my reading**, so if you see it differently, **say so**.
+> And that's what today is about: **how do we build it?** Say an agent writes some code for you. What would make you **comfortable enough to merge it**?
+>
+> Spoiler: it's **not a better prompt**. It's **everything we put around the agent**. At Devoxx, people called that **the harness**.
+>
+> And as always, this is **my take**. If you see it differently, **just say so**.
 >
 
 **→** First, where this sits in the series.
 
-## Slide 2 — Map
+## Slide 2 — Map  ·  IF TIME (full ~0.5 min, short ~0.1 min)
 
-**Idea:** Four talks, one spine — this is stop two.
-- Talk 1 asked whether AI makes us faster; talk 2 asks what makes its output trustworthy
-- Talks 3 and 4 build on today's answer; talk 4 closes the series
-**Transition:** Quick reminder of where we left off last time.
+**▶ Four talks, one spine. Each one stands alone.**
 
-*~0.5 min*
+- 01 **reality check** · 02 **the harness** (today) · 03 **context** · 04 **trust at scale**
+
+> Just a quick map, so you know where we are.
+>
+> Last time was the **reality check**. Today is **the harness**: the stuff around the agent that makes its output trustworthy. Next time, we'll talk about **context**, so what the agent actually reads before it writes anything. And we'll finish with **trust at scale**: sandboxes, permissions, review.
+>
+> And don't worry: **each talk stands on its own**. If you missed the first one, you're fine.
+>
+
+*Short route:* This is talk two of four, and each one stands on its own. Let's go.
+
+**→** A quick reminder of where we left off.
 
 ## Slide 3 — They felt 20% faster. The stopwatch said 19% slower.
 
