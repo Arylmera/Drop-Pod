@@ -69,5 +69,4 @@ A pod is never edited after landing.
 - [2026-10-16-opencode-probe](2026-10-16-opencode-probe/) — read-only probe of OpenCode session state, for planning OpenCode support in Administratum
 - [2026-10-16-opencode-probe-v2](2026-10-16-opencode-probe-v2/) — second read-only OpenCode 2.x probe: pending permissions, pid-to-session mapping, server auth source
 - [2026-11-22-opencode-context-mode](2026-11-22-opencode-context-mode/) — install Context Mode in OpenCode (sandboxed tool output for uncached models), with the Geneseed guard gap
-- [2026-11-22-opencode-ponytail](2026-11-22-opencode-ponytail/) — use Geneseed's ponytail mode in OpenCode, plus upstream audit and debt commands
 <!-- /pods:index -->
