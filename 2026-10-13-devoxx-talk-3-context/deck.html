@@ -209,10 +209,11 @@ pre {
 .sg .step p { font-size: 20px; }
 
 /* ---------- Chrome: progress, notes drawer, overview, presenter ---------- */
+.frag { opacity: 0; transition: opacity 500ms ease; } .frag.on, body.overview .frag { opacity: 1; }
 #progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); z-index: 5; }
 #notes-drawer {
   position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; z-index: 6; display: none;
-  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55; white-space: pre-wrap;
+  background: rgba(10, 11, 13, 0.95); color: #e9ecf5; padding: 22px 32px 28px; font-size: 18px; line-height: 1.55;
 }
 body.notes #notes-drawer { display: block; }
 body.overview { overflow: auto; background: #0b0c0e; }
@@ -226,7 +227,21 @@ body.presenter #deck, body.presenter #progress { display: none; }
 #presenter { display: grid; grid-template-columns: 1fr 380px; gap: 28px; padding: 28px 34px; min-height: 100vh; }
 #presenter .now { font-size: 15px; color: #a9b0c7; text-transform: uppercase; letter-spacing: 0.08em; }
 #presenter h4 { font-size: 30px; margin: 6px 0 20px; }
-#presenter .script { font-size: 23px; line-height: 1.6; white-space: pre-wrap; max-width: 75ch; }
+#presenter .script { font-size: 23px; line-height: 1.6; max-width: 80ch; }
+#presenter .script b, #notes-drawer b { color: #ffd23f; font-weight: 700; }
+.meta { display: flex; gap: 16px; align-items: center; font-size: 15px; color: #8a91a8; margin-bottom: 14px; }
+.tag { font-size: 14px; font-weight: 800; letter-spacing: .08em; padding: 3px 10px; border-radius: 6px; }
+.tag.core { background: #1f4d33; color: #8ff0b5; } .tag.opt { background: #4d3a12; color: #ffc861; }
+.red { font-size: 30px; line-height: 1.35; font-weight: 700; color: #fff; margin: 0 0 14px; }
+#presenter .script ul { margin: 0 0 20px 1.1em; color: #a9b0c7; font-size: 20px; }
+.say { border-left: 4px solid var(--accent); padding-left: 20px; }
+.say p { margin: 0 0 14px; }
+.say .qa { margin-top: 6px; padding: 10px 14px; border-radius: 10px; background: #14263a; color: #bcdcff; font-size: 19px; }
+.say .qa b { color: #8fd3ff; }
+.say .cue { color: #8ff0b5; font-size: 20px; }
+.say .more { color: #a9b0c7; font-size: 20px; font-style: italic; }
+.short { margin: 16px 0 0; padding: 10px 14px; border-radius: 10px; background: #2a2214; color: #ffc861; font-size: 20px; }
+.tr { margin: 16px 0 0; color: #8ff0b5; font-size: 20px; }
 #presenter .side { display: flex; flex-direction: column; gap: 22px; }
 #presenter .box { background: #1e1f22; border-radius: 16px; padding: 18px 20px; }
 #presenter .clock { font-size: 54px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -246,6 +261,7 @@ body.presenter #deck, body.presenter #progress { display: none; }
   .slide { position: relative; visibility: visible; opacity: 1; width: 1600px; height: 900px; break-after: page; transition: none; }
   .slide .r, .rail, .bar, .f-cell { animation: none !important; opacity: 1 !important; transform: none !important; }
   #progress, #notes-drawer { display: none; }
+  .frag { opacity: 1 !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
@@ -419,8 +435,7 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     <p class="lead r" style="--i:2">What the agent reads before it starts, and who writes it</p>
     <div class="brand r" style="--i:3">Back from Devoxx Belgium 2026</div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.0000;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 1, Col 1 &middot; 1 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Welcome back for part three of this series. Talk two built the harness that checks an agent's output. Today's question comes earlier: before any of that runs, what did we actually hand the agent to read? The claim ahead: good context for an agent is the same thing a new hire needs on day one — the why, not just the what.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.5 min · short ~0.5 min</span></div><p class="red">One question: before the agent writes a line, <b>what did we give it to read</b>?</p><ul><li>Back from <b>Devoxx Belgium 2026</b>, talk 3 of 4</li><li>Three chapters: <b>before</b> (the spec) · <b>during</b> (rules and skills) · <b>after</b> (the docs)</li></ul><div class="say"><p>Hi everyone, and welcome back.</p><p>Last time, we built <b>the harness</b>: rules in the build, checks the agent can't game, one bounded repair. All of that looks at what <b>comes out</b> of the agent.</p><p>Today, we look at the other side: <b>what goes in</b>. Specs, docs, rules: <b>what the agent reads</b>, and <b>who writes it</b>.</p><p>And here's my claim for today: good context for an agent is <b>the same thing a new hire needs on day one</b>. The <b>why</b>, not just the what.</p><p>As always, this is <b>my take</b>. If you see it differently, <b>just say so</b>.</p></div><p class="tr">→ First, where this sits in the series.</p></template>
 </section>
 <section class="slide t-map" data-title="map">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">02-map.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>02-map.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -430,13 +445,7 @@ h1, .t-takeaway h2, .f-factor { padding-bottom: 0.16em; margin-bottom: -0.16em; 
     <div class="map"><div class="stop done r" style="--i:1"><span class="stop-n">01</span><b>AI, the reality check</b><span class="stop-sub">What AI really delivers, and how far to trust it</span></div><div class="stop done r" style="--i:2"><span class="stop-n">02</span><b>The harness around the agent</b><span class="stop-sub">Rules in the build, bounded loops, honest checks</span></div><div class="stop now r" style="--i:3"><span class="stop-n">03</span><b>Context is the product</b><span class="stop-sub">Specs, docs and rules: what the agent reads</span></div><div class="stop next r" style="--i:4"><span class="stop-n">04</span><b>Trust at scale</b><span class="stop-sub">Sandboxes, permissions, review, dimming the lights</span></div></div>
     </div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.0455;--p0:0.0000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 2, Col 1 &middot; 2 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: this is talk three of four on moving from chat to agentic coding.
-- Talk one: does AI actually make us faster
-- Talk two: the harness that makes an agent's output trustworthy
-- Talk three, today: what the agent reads before it starts
-- Example: one more stop after this — autonomy at scale, which closes the series
-Transition: a quick look back at talk two before we start.
-~0.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~0.5 min · short ~0.1 min</span></div><p class="red">Four talks, one spine. <b>Each one stands alone.</b></p><ul><li>01 <b>reality check</b> · 02 <b>the harness</b> · 03 <b>context</b> (today) · 04 <b>trust at scale</b></li></ul><div class="say"><p>Just a quick map, so you know where we are.</p><p>Talk one was the <b>reality check</b>: does AI really make us faster? Talk two was <b>the harness</b>: what makes an agent's output trustworthy. Today is <b>context</b>: what the agent reads, before and while it works. And next time, we close with <b>trust at scale</b>: how far we can let it run.</p><p>And again: <b>each talk stands on its own</b>. If you missed one, you're fine.</p></div><p class="short">Short route: This is talk three of four, and each one stands on its own. Let's go.</p><p class="tr">→ A quick reminder of where we left off.</p></template>
 </section>
 <section class="slide t-previously" data-title="Rules the build enforces, checks it cannot game, one bounded repair, a fresh verdict.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">03-rules-the-build-enforces-checks-it.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>03-rules-the-build-enforces-checks-it.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -446,13 +455,7 @@ Transition: a quick look back at talk two before we start.
     <p class="statement long r" style="--i:1">Rules the build enforces, checks it cannot game, one bounded repair, a fresh verdict.</p>
     <p class="lead r" style="--i:2">An agent is only as good as its harness.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.0909;--p0:0.0455"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 3, Col 1 &middot; 3 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: talk two's whole argument was that trust lives in the harness around the agent, not in the agent itself.
-- A rule in prose is a suggestion; the same rule in the build is a fact
-- Independent checks the agent can neither read nor edit
-- One bounded repair, then a fresh verdict on the final code, never on stale evidence
-- Example: a Maven Enforcer rule failing the build on a banned dependency, not a sentence in a rules file
-Transition: the harness checks what comes out. Today, what goes in?
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1 min · short ~0.5 min</span></div><p class="red">An agent is only as good as <b>its harness</b>.</p><ul><li>A rule in a prompt is a <b>suggestion</b>; in the build, it's a <b>build failure</b></li><li>Tests from <b>outside the agent</b>, a status it <b>can't fake</b></li><li><b>One repair</b>, then a <b>fresh verdict</b> on the final code</li></ul><div class="say"><p>So, quick reminder of last time.</p><p>Remember the <b>fake parser</b>? The test wanted ten rows, so the agent <b>hard-coded ten</b>. Test green, parser useless.</p><p>What stops that from shipping is <b>the harness</b>. Rules <b>in the build</b>, not in a prompt. Checks the agent <b>can't game</b>, with tests that come <b>from outside</b> the agent. And <b>one repair</b>, then a <b>fresh verdict</b> on the final code.</p><p>And remember how the parser story got better: the team stopped letting the agent <b>guess</b>. The instruction became "<b>analyse, ask, don't assume</b>", and <b>humans answered</b>. Better input, fewer errors. That's where today starts.</p></div><p class="short">Short route: Last time: rules in the build, honest checks, one repair. And the parser got better when the agent got better input. That's today.</p><p class="tr">→ So, what goes in?</p></template>
 </section>
 <section class="slide t-statement dark" data-title="The harness checks what comes out. What did we hand it to read first?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">04-the-harness-checks-what-comes-out.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>04-the-harness-checks-what-comes-out.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -462,12 +465,7 @@ Transition: the harness checks what comes out. Today, what goes in?
     <p class="statement r" style="--i:1">The harness checks what comes out. What did we hand it to read first?</p>
     <p class="lead r" style="--i:2">Your agent is the fastest new hire you've ever onboarded.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.1364;--p0:0.0909"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 4, Col 1 &middot; 4 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: an agent is the fastest new hire a team has ever had, and we are about to hand it the same undocumented mess that burned out the last one.
-- Could you rebuild your own system from what you just handed it, and explain why each step is mandatory
-- A chatbot searching the codebase is still searching, not reading a spec
-- Example: ask yourself right now — could a new hire onboard from what sits in your repo today
-Transition: three chapters, following what the agent reads at each moment: before, during, after.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.2 min · short ~0.7 min</span></div><p class="red">Your agent is <b>the fastest new hire</b> you've ever onboarded.</p><ul><li>The harness checks what <b>comes out</b>; today: what <b>goes in</b></li><li>A new hire and an agent need <b>the same thing</b>: the <b>why</b></li><li>The test: from what's in your repo, could someone understand <b>why each part is there</b>?</li></ul><div class="say"><p>The harness checks what <b>comes out</b>. But what did we hand the agent to <b>read first</b>?</p><p>Here's a way to think about it. Your agent is <b>the fastest new hire</b> you've ever onboarded. It starts in seconds, it reads everything, and it never takes a coffee break.</p><p>But think about what we give it. Usually, the <b>same undocumented mess</b> we gave the last new hire. A ticket, a codebase, maybe a wiki page from three years ago.</p><p>And an agent that <b>searches the codebase</b> is still just searching. It finds <b>what</b> the code does. It doesn't find <b>why</b>.</p><p>So ask yourself: from what's in your repo today, could a new colleague <b>understand why each part is there</b>? If not, <b>neither can the agent</b>.</p></div><p class="short">Short route: Your agent is the fastest new hire you've ever onboarded, and we hand it the same undocumented mess. It finds what the code does, never why.</p><p class="tr">→ Let's follow what the agent reads, in three moments: before, during, after.</p></template>
 </section>
 <section class="slide t-section dark" data-title="Before: what you hand it to start">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">05-before-what-you-hand-it-to-start.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>05-before-what-you-hand-it-to-start.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -478,12 +476,7 @@ Transition: three chapters, following what the agent reads at each moment: befor
       <div><h2 class="r" style="--i:1">Before: what you hand it to start</h2><p class="lead r" style="--i:2">Specs as the human-owned source of truth</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.1818;--p0:0.1364"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 5, Col 1 &middot; 5 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: before a single line is written, the spec is the one artifact a human and an agent can read the same way.
-- Spec before coding beats code during and docs after, because it alone carries intent
-- The human owns the content and the why
-- Example: a use case with acceptance criteria an agent and a JUnit suite can both consume
-Transition: here is the table that runs through this whole talk.
-~0.3 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">Before the first line: <b>the spec</b>.</p><ul><li>The spec is the one thing a <b>human and an agent</b> read the same way</li><li>The human owns the <b>content</b> and the <b>why</b></li></ul><div class="say"><p>Chapter one: <b>before</b>. What you hand the agent <b>to start</b>.</p><p>And before a single line of code exists, there's one thing a human and an agent can read <b>the same way</b>: <b>the spec</b>.</p></div><p class="tr">→ Here's the table that runs through this whole talk.</p></template>
 </section>
 <section class="slide t-cards" data-title="Single source of truth: before, during, after">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">06-single-source-of-truth-before-duri.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>06-single-source-of-truth-before-duri.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -495,12 +488,7 @@ Transition: here is the table that runs through this whole talk.
       <div class="card r" style="--i:3"><div class="card-head"><span class="badge">open</span><b>Docs — after</b></div><p>Only as good as the context it carries. Worthless if it just restates the code in prose.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.2273;--p0:0.1818"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 6, Col 1 &middot; 6 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: truth can live in three places — the spec before coding, the code during coding, the docs after — and only one of them is reliable for both a human and an agent.
-- Code always has bugs, and a bug becomes the truth the agent copies next
-- Docs only count if they carry the why, not a rewrite of the code in prose
-- Example: this same table comes back filled in at the end of the talk
-Transition: start at the top of the table — the spec, before a line of code exists.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.2 min · short ~0.6 min</span></div><p class="red">Truth lives in three places. Only <b>one</b> works for humans and agents alike.</p><ul><li><b>Spec</b>, before: precise enough for <b>both</b> to act on</li><li><b>Code</b>, during: always has bugs, and <b>bugs become the truth</b></li><li><b>Docs</b>, after: only as good as the <b>context</b> they carry</li></ul><div class="say"><p>This idea comes from <b>Christian Heitzmann</b>'s talk at Devoxx. Where does the <b>truth</b> about a system live? There are three candidates.</p><p>One: the <b>spec</b>, written <b>before</b> the code. If it's precise, it works for a human <b>and</b> for an agent. That's the good one.</p><p>Two: the <b>code</b>, during. The problem: code <b>always has bugs</b>. And when an agent reads the code, <b>the bug becomes the truth</b>. It copies it. And code carries <b>no context</b>: why this sort order, why this version.</p><p>Three: the <b>docs</b>, after. They're only as good as the <b>context</b> they carry. If they just repeat the code in prose, they're <b>worthless</b>.</p><p>So, two question marks for now. We'll come back to this table <b>at the end</b>.</p></div><p class="short">Short route: Spec before, code during, docs after. Only the spec works for both humans and agents. In the code, bugs become the truth.</p><p class="tr">→ Let me show you why the code alone isn't enough.</p></template>
 </section>
 <section class="slide t-code" data-title="The line an agent would have deleted">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">07-the-line-an-agent-would-have-delet.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>07-the-line-an-agent-would-have-delet.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -516,14 +504,9 @@ Transition: start at the top of the table — the spec, before a line of code ex
         page.withSort(Sort.by(<span class="tk-s">&quot;visitDate&quot;</span>).and(Sort.by(<span class="tk-s">&quot;id&quot;</span>)))
     );
 }</code></pre>
-    <p class="source r" style="--i:2">Illustrative — the method before: one line of Javadoc, no reason given, the id tiebreaker already quietly dropped once</p></div>
+    <p class="source r" style="--i:2">The method before: one line of Javadoc, no reason given, the id tiebreaker already quietly dropped once</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.2727;--p0:0.2273"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 7, Col 1 &middot; 7 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: a one-line comment is the difference between an agent that keeps a fix and one that cheerfully reverts it next sprint.
-- Before: one line of Javadoc, no reason, the id tiebreaker already removed once by someone being tidy
-- After: a two-line comment carrying the why — MySQL's sort is not stable without it
-- Example: losing that id tiebreaker silently broke pagination further down the line
-Transition: that is what a good spec gives the agent before it ever opens this file.
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~0.8 min</span></div><p class="red">One comment is the difference between <b>keeping a fix</b> and <b>reverting it</b>.</p><ul><li>Pagination needs a <b>deterministic sort</b>: <b>id</b> as the final tiebreaker</li><li>Before: one line of Javadoc, <b>no reason</b>, the tiebreaker <b>already dropped once</b></li><li>After: two lines of comment carrying <b>the why</b> (story from <b>Victor Rentea</b>'s Deep Dive)</li></ul><div class="say"><p>Look at this method. It pages through the visits of an owner, sorted by date, and then <b>by id</b>.</p><p>Why the id? Because when two visits have the <b>same date</b>, MySQL doesn't guarantee <b>their order</b>. So page two can <b>repeat</b> rows from page one. The id makes the sort <b>stable</b>.</p><p>Now, in the version before, there was one line of Javadoc, and <b>no reason</b>. And someone had already removed that tiebreaker once, just <b>tidying up</b>. Pagination broke, quietly.</p><p>An agent reading that old version would do <b>exactly the same</b>. It sees an extra sort, and it <b>simplifies it</b>. It's trying to be helpful.</p><p>The fix is <b>two lines of comment</b>. Not what the code does: <b>why it must stay</b>. And now the agent <b>keeps it</b>.</p></div><p class="short">Short route: Sort by date, then by id, because MySQL doesn't keep the order of ties. Without the why, an agent "simplifies" it away. Two lines of comment keep it.</p><p class="tr">→ And the best place for that why is before the code even exists: the spec.</p></template>
 </section>
 <section class="slide t-steps" data-title="A spec is a use case, not a document">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">08-a-spec-is-a-use-case-not-a-documen.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>08-a-spec-is-a-use-case-not-a-documen.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -537,12 +520,7 @@ Transition: that is what a good spec gives the agent before it ever opens this f
       <div class="step r" style="--i:4"><span class="badge lg">4</span><b>Acceptance criteria</b><p>Written as checks, not prose — becomes the test suite directly.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.3182;--p0:0.2727"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 8, Col 1 &middot; 8 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: remember the visit-pet spec from session one — a use case is already a spec an agent and a test suite can both read.
-- This is not a new stage bolted onto your tickets; it is the acceptance criteria you half-write already, made precise
-- Victor Rentea's own guardrail: markdown specs for at most twenty percent of issues, not every ticket
-- Example: acceptance criteria phrased so each one maps onto one JUnit or Cucumber test
-Transition: a spec only works if someone asked the right questions before writing it.
-~2 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.5 min · short ~0.8 min</span></div><p class="red">A spec is <b>a use case</b>, not a document.</p><ul><li><b>Actor &amp; precondition</b> → the context · <b>Main flow</b> → the implementation</li><li><b>Alternative flows</b> → the edge cases agents <b>miss</b></li><li><b>Acceptance criteria</b> → the <b>test suite</b></li><li>Keep it proportionate: specs for <b>at most ~20 %</b> of issues (Victor Rentea)</li></ul><div class="say"><p>So what does a good spec look like? Not a fifty-page document. <b>A use case</b>. Four parts, and each one has a job. This frame comes from <b>Jonathan Vila López</b>'s talk, "Agents With Seatbelts".</p><p><b>Actor and precondition</b>: who triggers it, and what must already be true. That becomes the agent's <b>context</b>.</p><p><b>Main flow</b>: the steps, in order. That becomes the <b>implementation</b>.</p><p><b>Alternative flows</b>: the edge cases. And that's <b>exactly what an agent misses</b> on its own.</p><p><b>Acceptance criteria</b>: written as checks, not prose. And those become <b>the test suite</b>, directly. Remember last time: the tests have to come <b>from outside the agent</b>. This is where they come from.</p><p>And no, this isn't a new heavy stage on every ticket. It's the acceptance criteria you <b>half-write already</b>, made precise. Victor Rentea's own guardrail: markdown specs for <b>at most about 20 %</b> of issues. The ones with <b>real ambiguity or risk</b>.</p></div><p class="short">Short route: A use case: actor, main flow, edge cases, acceptance criteria. The criteria become the tests from outside the agent. For at most 20 % of tickets, not all of them.</p><p class="tr">→ But a spec is only as good as the questions asked before writing it.</p></template>
 </section>
 <section class="slide t-compare" data-title="Interview before you dictate">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">09-interview-before-you-dictate.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>09-interview-before-you-dictate.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -556,12 +534,7 @@ Transition: a spec only works if someone asked the right questions before writin
         <ul><li>How many owners, growing how fast?</li><li>Business question first, technical after</li><li>Push back — the right answer is often C</li></ul></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.3636;--p0:0.3182"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 9, Col 1 &middot; 9 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: a vague ticket pasted into a frontier model with a cold brain is how you get twenty fields you will delete seven of later.
-- Ask non-technical, business questions first, so the product owner can sit in the room too
-- One question at a time, a recommended answer offered, the human corrects it
-- Example: Victor Rentea's own habit — grill before any feature touches code
-Transition: that closes the before chapter. Now, what the agent keeps reading while it works.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.3 min · short skip</span></div><p class="red"><b>Ask before you write.</b> A vague ticket lets the agent fill every gap.</p><ul><li>One-line ticket: "<b>Add pagination</b> to the owners grid": no volume, no urgency</li><li>Instead: <b>one question at a time</b>, <b>business first</b>, a <b>recommended answer</b></li><li>The "<b>grill-me</b>" habit (Matt Pocock's skill, used by Victor Rentea)</li></ul><div class="say"><p>Here's a ticket: "<b>Add pagination to the owners grid</b>." That's it. No volume, no urgency, no UX hint.</p><p>Paste that into an agent and it <b>fills every gap itself</b>. You get twenty fields, and you delete seven of them later.</p><p>The alternative: let the agent <b>interview you</b> first. <b>One question at a time</b>. How many owners? Growing how fast? <b>Business questions first</b>, so the product owner can sit in too. Technical ones after.</p><p>And for each question, it offers <b>a recommended answer</b>, and the human <b>corrects it</b>. Often the right answer is option C, the one nobody wrote down.</p><p>Victor Rentea does this before any feature touches the code. It's called "<b>grill-me</b>", a skill by Matt Pocock.</p></div><p class="short">Short route: Skip.</p><p class="tr">→ That's the before. Now, what the agent keeps reading while it works.</p></template>
 </section>
 <section class="slide t-section dark" data-title="During: what it keeps reading">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">10-during-what-it-keeps-reading.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>10-during-what-it-keeps-reading.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -572,12 +545,7 @@ Transition: that closes the before chapter. Now, what the agent keeps reading wh
       <div><h2 class="r" style="--i:1">During: what it keeps reading</h2><p class="lead r" style="--i:2">Rules and skills, and the rot nobody deletes</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.4091;--p0:0.3636"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 10, Col 1 &middot; 10 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: a spec gets the agent started; what it reads turn after turn is a different, and much leakier, kind of context.
-- Rules files and skills — anything the model merely reads instead of the build enforcing
-- These are advisory, not binding — the model can always choose to ignore them
-- Example: a CLAUDE.md or AGENTS.md file nobody has trimmed in months
-Transition: here is the problem with anything the model only reads.
-~0.3 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">While it works, the agent reads <b>rules and skills</b>. And those <b>rot</b>.</p><ul><li>Rules files, skills: things the model <b>reads</b>, nothing <b>enforces</b></li><li><b>Advisory</b>, not binding: the model can <b>ignore</b> them</li></ul><div class="say"><p>Chapter two: <b>during</b>. What the agent <b>keeps reading</b>, turn after turn.</p><p>Rules files, like a <b>CLAUDE.md</b> or an <b>AGENTS.md</b>. Skills. All the things the model <b>reads</b>, but nothing <b>enforces</b>. They're <b>advice</b>. The model can follow them, or not.</p></div><p class="tr">→ And here's the problem with anything the model only reads.</p></template>
 </section>
 <section class="slide t-statement dark" data-title="Rules rot: what a rule compensates for changes as the model and the harness improve.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">11-rules-rot-what-a-rule-compensates.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>11-rules-rot-what-a-rule-compensates.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -587,12 +555,7 @@ Transition: here is the problem with anything the model only reads.
     <p class="statement long r" style="--i:1">Rules rot: what a rule compensates for changes as the model and the harness improve.</p>
     <p class="lead r" style="--i:2">Different from the harness: this is what the model reads before it starts, not what the build checks after.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.4545;--p0:0.4091"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 11, Col 1 &middot; 11 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: talk two was about what the build enforces on the way out; this is about what the model reads on the way in, and that file needs gardening too.
-- A rule nobody deletes keeps costing context long after the model stopped needing it
-- Skills rot even faster than rules, because they are optional and easy to forget exist
-- Example: a fifteen-line rules file doing three precise things beats a six-hundred-line one doing everything once
-Transition: a question worth answering in your own head before we move on.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1.2 min · short ~0.7 min</span></div><p class="red"><b>Rules rot.</b> What a rule compensates for changes as models improve.</p><ul><li><b>Daniela Petruzalek</b>, "State of Agentic Coding"</li><li>Talk 2: what the build checks on the way <b>out</b>. Today: what the model reads on the way <b>in</b></li><li>A rule <b>nobody deletes</b> keeps costing context</li></ul><div class="say"><p><b>Daniela Petruzalek</b> put it well at Devoxx: <b>rules rot</b>.</p><p>A line in a rules file is there to <b>compensate</b> for something. The model kept making a mistake, so we wrote a rule. But models <b>improve</b>. Tools improve. And six months later, that line compensates for <b>nothing</b>. But it's still there, <b>costing context</b> on every request.</p><p>And careful, this isn't last talk again. Last time was what the <b>build enforces</b> on the way <b>out</b>. This is what the model <b>reads</b> on the way <b>in</b>. And that file needs <b>gardening</b> too.</p><p>Skills rot <b>even faster</b>, because they're optional. People forget <b>they exist</b>.</p><p>A <b>short</b> rules file that does three precise things beats a <b>six-hundred-line</b> one that does everything once.</p></div><p class="short">Short route: Rules rot: what a rule compensates for disappears as models improve, but the line stays and costs context. Short and precise beats long.</p><p class="tr">→ A quick question for you.</p></template>
 </section>
 <section class="slide t-bullets" data-title="Ask yourself, right now">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">12-ask-yourself-right-now.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>12-ask-yourself-right-now.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -604,13 +567,7 @@ Transition: a question worth answering in your own head before we move on.
       <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>No repo needed on screen for this one — just do the arithmetic in your head.</p></aside>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.5000;--p0:0.4545"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 12, Col 1 &middot; 12 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: rot stops being an abstract claim the moment you can answer these about your own file.
-- A file that only grows, line after line, is not a rules file — it is a diary nobody edits
-- Deleting a line is the only evidence the team still understands what each rule is for
-- Example: a file that started at twenty lines and is now six hundred, every change an addition
-Transition: the antidote is not more rules, it is less reliance on anything merely read.
-~1.5 min
-Cut if short: say only the diary line, skip the example.</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1 min · short ~0.2 min</span></div><p class="red">A rules file that only grows is <b>a diary</b>.</p><ul><li>How many lines is <b>your</b> AGENTS.md or CLAUDE.md?</li><li>When did anyone last <b>delete</b> a line?</li><li>Can you explain <b>why</b> each rule is still there?</li></ul><div class="say"><p>Don't answer out loud, just think about it. <b>How many lines</b> is your AGENTS.md, or your CLAUDE.md, today?</p><p>When did anyone last <b>delete a line</b>, instead of adding one?</p><p>And could you explain <b>why each rule</b> is still there?</p><p>If the file <b>only grows</b>, it's not a rules file anymore. It's <b>a diary</b>. And deleting a line is the only proof the team still <b>understands</b> what each rule is for.</p></div><p class="short">Short route: If your rules file only grows, it's not a rules file, it's a diary.</p><p class="tr">→ The fix isn't more rules. It's relying less on things the model only reads.</p></template>
 </section>
 <section class="slide t-compare" data-title="Generate a diagram, don't draw one">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">13-generate-a-diagram-don-t-draw-one.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>13-generate-a-diagram-don-t-draw-one.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -624,12 +581,7 @@ Cut if short: say only the diary line, skip the example.</template>
         <ul><li>A deterministic script produces the view</li><li>Re-run it and it's honest again, for free</li><li>The agent reads a fact, not an opinion</li></ul></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.5455;--p0:0.5000"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 13, Col 1 &middot; 13 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: an architecture diagram the agent reads is only as trustworthy as whoever last drew it, and nobody redraws on every commit.
-- Ask an agent to write the deterministic script that produces the view, not to draw the view itself
-- A generated diagram costs zero tokens on every later run and cannot go stale
-- Example: Victor Rentea testing a diagram's embedded XML against the code itself
-Transition: one more context artifact that is generated and enforced, not merely read.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.2 min · short skip</span></div><p class="red"><b>Ask for a script, not an opinion.</b></p><ul><li>A hand-drawn diagram <b>drifts</b> as soon as the code moves</li><li>A <b>script</b> that generates the view: re-run it, it's <b>honest again</b></li><li>The agent reads <b>a fact</b>, not a picture (Victor Rentea, "Architecture Observability and Guardrails")</li></ul><div class="say"><p>Same idea, applied to architecture diagrams.</p><p>A diagram someone drew by hand is only as true as <b>the last time someone redrew it</b>. And nobody redraws it on every commit. So it <b>drifts</b>, and the agent inherits <b>a picture, not a fact</b>.</p><p>Victor Rentea's advice: don't ask the agent to <b>draw</b> the diagram. Ask it to write the <b>script that generates</b> it, from the code.</p><p>Then you re-run the script, and the diagram is <b>honest again</b>, for free. It can't go stale. He even <b>tests</b> the diagram against the code.</p></div><p class="short">Short route: Skip.</p><p class="tr">→ And there's one more kind of context that's checked, not just read.</p></template>
 </section>
 <section class="slide t-code" data-title="This is also context">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">14-this-is-also-context.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>14-this-is-also-context.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -645,14 +597,9 @@ Transition: one more context artifact that is generated and enforced, not merely
           .should().dependOnClassesThat()
           .resideInAPackage(&quot;..persistence..&quot;);
 }</code></pre>
-    <p class="source r" style="--i:2">ArchUnit — same rule as the architecture-views material, read here as agent context, not just as a build gate</p></div>
+    <p class="source r" style="--i:2">ArchUnit — read here as agent context, not just as a build gate</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.5909;--p0:0.5455"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 14, Col 1 &middot; 14 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: a rule the build enforces is worth more to an agent than a paragraph telling it not to, because this one fails loudly instead of being politely ignored.
-- The agent reads this file before touching the module, same as a human would
-- It cannot silently negotiate it away — the build fails, not a suggestion
-- Example: notification code reaching into persistence, caught the same day it's written
-Transition: that closes during. Now, after the code exists, what can it never say on its own.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.2 min · short skip</span></div><p class="red">A rule the build enforces is <b>context the agent can't ignore</b>.</p><ul><li><b>ArchUnit</b>: notification code must <b>not reach persistence</b></li><li>The agent reads this <b>before</b> touching the module</li><li>Break it, and the <b>build fails</b>, the same day</li></ul><div class="say"><p>This is <b>ArchUnit</b>. A test that says: code in the <b>notification</b> package must <b>never depend</b> on the <b>persistence</b> package.</p><p>You saw this kind of rule last time, as a <b>build gate</b>. Today, look at it differently: it's also <b>context</b>. The agent can read this file before it touches the module, just like a new colleague would. And it says, <b>precisely</b>, where the walls are.</p><p>And unlike a paragraph in a rules file, it <b>can't be politely ignored</b>. If the agent breaks it, the <b>build fails</b>. Same day.</p></div><p class="short">Short route: Skip.</p><p class="tr">→ That's the during. Now, after: what can the code never say on its own?</p></template>
 </section>
 <section class="slide t-section dark" data-title="After: what the code can never say">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">15-after-what-the-code-can-never-say.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>15-after-what-the-code-can-never-say.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -663,12 +610,7 @@ Transition: that closes during. Now, after the code exists, what can it never sa
       <div><h2 class="r" style="--i:1">After: what the code can never say</h2><p class="lead r" style="--i:2">Even perfect code describes a brick, never a house</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.6364;--p0:0.5909"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 15, Col 1 &middot; 15 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: once the spec is spent and the rules are read, the code is all that's left — and code alone cannot carry the reasons.
-- A class describes itself; it never describes the system it sits inside
-- Every rejected design, every warning, every why is invisible unless something writes it down
-- Example: a perfectly clean method that still can't tell you why it exists
-Transition: Heitzmann's own line for this.
-~0.3 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.3 min · short ~0.2 min</span></div><p class="red">Even perfect code <b>can't carry the why</b>.</p><ul><li>A class describes <b>itself</b>, never <b>the system</b></li><li>Rejected designs, warnings, reasons: <b>invisible</b> unless someone writes them down</li></ul><div class="say"><p>Chapter three: <b>after</b>. The code exists. What can it <b>never</b> tell you?</p><p>A class describes <b>itself</b>. It never describes <b>the system</b> around it. And every rejected design, every warning, every <b>why</b>, is invisible, unless someone <b>writes it down</b>.</p></div><p class="tr">→ Heitzmann has a great image for this.</p></template>
 </section>
 <section class="slide t-statement" data-title="Even perfect code describes a brick. It never describes the house.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">16-even-perfect-code-describes-a-bric.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>16-even-perfect-code-describes-a-bric.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -678,12 +620,7 @@ Transition: Heitzmann's own line for this.
     <p class="statement r" style="--i:1">Even perfect code describes a brick. It never describes the house.</p>
     <p class="lead r" style="--i:2">Christian Heitzmann — paraphrase, Devoxx 2026</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.6818;--p0:0.6364"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 16, Col 1 &middot; 16 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: &quot;the code is the documentation&quot; is the line every developer has said at least once, and it's wrong at exactly the altitude that matters for architecture.
-- Self-documenting code is self-documenting only to the person who wrote it
-- It describes one class perfectly and the whole system not at all
-- Example: a hundred immaculate classes still won't tell a new hire, or an agent, why the system is shaped this way
-Transition: so what altitude does each kind of writing belong at.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1 min · short ~0.6 min</span></div><p class="red">Code describes <b>a brick</b>. It never describes <b>the house</b>.</p><ul><li><b>Christian Heitzmann</b>, Devoxx Belgium 2026 (paraphrase)</li><li>"The code is the documentation" is wrong at <b>the level that matters</b></li></ul><div class="say"><p><b>Christian Heitzmann</b> said it like this, roughly: <b>even perfect code describes a brick. It never describes the house.</b></p><p>We've all said "<b>the code is the documentation</b>". And for one class, sure. But self-documenting code is self-documenting mostly <b>for the person who wrote it</b>.</p><p>A hundred <b>clean classes</b> still won't tell a new hire, or an agent, <b>why the system is shaped this way</b>.</p></div><p class="short">Short route: Perfect code describes a brick, never the house. Clean classes don't explain why the system is shaped this way.</p><p class="tr">→ So what should the docs carry?</p></template>
 </section>
 <section class="slide t-bullets" data-title="What docs must carry">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">17-what-docs-must-carry.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>17-what-docs-must-carry.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -695,12 +632,7 @@ Transition: so what altitude does each kind of writing belong at.
       <aside class="card hot r" style="--i:5"><span class="badge">!</span><p>Rewriting code as prose is pointless. Docs exist for what code cannot say at all.</p></aside>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.7273;--p0:0.6818"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 17, Col 1 &middot; 17 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: don't explain function internals in an architecture diagram, and don't explain architecture in a source comment — the altitude question collapses to that one line.
-- Docs carry the invisible: decisions, rejected designs and why, warnings, how-tos
-- An agent handed a spec and these notes behaves differently from one left to search a wiki
-- Example: &quot;we tried that and decided against it, because...&quot; is an ADR an agent can actually use
-Transition: now put the three places truth lives back together, filled in this time.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~1.2 min · short ~0.3 min</span></div><p class="red">Docs exist for <b>what the code can't say</b>.</p><ul><li><b>Architecture</b> in diagrams, never in a source comment</li><li><b>APIs</b> in Javadoc, <b>internals</b> in comments</li><li><b>Decisions</b>, <b>rejected designs</b>, and why</li><li><b>Warnings</b>: "single-thread only, because..."</li></ul><div class="say"><p>Here's the short list.</p><p><b>Architecture</b> goes in diagrams, not in a source comment. And the other way round: don't explain function internals in an architecture diagram.</p><p><b>APIs</b> in Javadoc, <b>internals</b> in comments. Don't mix them up.</p><p><b>Decisions</b>, and especially the <b>rejected designs</b>, and <b>why</b>. "We tried that, and we decided against it, because..." That's gold, for a new hire <b>and</b> for an agent. Without it, the agent proposes <b>the rejected design again</b>.</p><p><b>Warnings</b>: "single-thread only, because..."</p><p>And what's pointless? <b>Rewriting the code in prose</b>. Docs are for what the code <b>can't say at all</b>.</p></div><p class="short">Short route: Docs carry decisions, rejected designs and warnings. Not the code rewritten in prose.</p><p class="tr">→ Let's go back to our table.</p></template>
 </section>
 <section class="slide t-cards" data-title="The table, filled in">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">18-the-table-filled-in.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>18-the-table-filled-in.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -712,12 +644,7 @@ Transition: now put the three places truth lives back together, filled in this t
       <div class="card r" style="--i:3"><div class="card-head"><span class="badge">good</span><b>Docs — after</b></div><p>Works now: carries the why, the rejected designs, the warnings the code can't say.</p></div>
     </div></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.7727;--p0:0.7273"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 18, Col 1 &middot; 18 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: the same three rows from the start of this talk, now with during and after answered instead of left open.
-- Spec was always the strong row; code was always the weak one
-- Docs only move from a question mark to a yes when they carry context, not a restatement of the code
-- Example: good documentation matters more, not less, because now an agent reads it too
-Transition: one rule splits the work between the human and the model on all three rows.
-~1.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1 min · short ~0.6 min</span></div><p class="red">Docs matter <b>more</b>, not less: <b>now an agent reads them too</b>.</p><ul><li><b>Spec</b>: still the source of truth for <b>both</b></li><li><b>Code</b>: never the whole truth</li><li><b>Docs</b>: they work, <b>when they carry the why</b></li></ul><div class="say"><p>Same table as the start, now filled in.</p><p>The <b>spec</b>: still the one source of truth that works for <b>humans and agents</b>.</p><p>The <b>code</b>: still <b>never the whole truth</b>. Bugs become fact, and the context is missing.</p><p>And the <b>docs</b>: they move from a question mark to <b>a yes</b>. But only when they carry <b>the why</b>: the rejected designs, the warnings.</p><p>So good documentation matters <b>more</b> now, not less. Because now <b>an agent reads it too</b>.</p></div><p class="short">Short route: Spec: yes. Code: never the whole truth. Docs: yes, when they carry the why. And they matter more now, because an agent reads them too.</p><p class="tr">→ So who writes what?</p></template>
 </section>
 <section class="slide t-statement dark" data-title="The human owns the content and the why. The model owns the form.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">19-the-human-owns-the-content-and-the.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>19-the-human-owns-the-content-and-the.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -727,12 +654,7 @@ Transition: one rule splits the work between the human and the model on all thre
     <p class="statement r" style="--i:1">The human owns the content and the why. The model owns the form.</p>
     <p class="lead r" style="--i:2">Use AI for language, never for reverse engineering.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.8182;--p0:0.7727"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 19, Col 1 &middot; 19 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: one clean split answers every question in this talk about who should write what.
-- The human decides the why: the decision, the trade-off, the reason it stays this way
-- The model does the form: spelling, grammar, turning notes into clear prose
-- Example: never ask an agent to reverse-engineer intent from code it did not write
-Transition: which answers the question this whole talk opened with.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.8 min · short ~0.5 min</span></div><p class="red">The human owns <b>the content and the why</b>. The model owns <b>the form</b>.</p><ul><li>Human: the <b>decision</b>, the <b>trade-off</b>, the <b>reason</b></li><li>Model: spelling, grammar, <b>clear prose</b></li><li>Use AI for <b>language</b>, never for <b>reverse engineering</b></li></ul><div class="say"><p>One clean split, again from Heitzmann.</p><p>The <b>human</b> owns <b>the content and the why</b>: the decision, the trade-off, the reason it stays this way.</p><p>The <b>model</b> owns <b>the form</b>: spelling, grammar, turning your rough notes into clear text.</p><p>And one rule: use AI for <b>language</b>, never for <b>reverse engineering</b>. Don't ask an agent to <b>guess the intent</b> from code it didn't write. It will give you an answer. It will sound good. And it may be <b>completely wrong</b>.</p></div><p class="short">Short route: The human owns the why, the model owns the form. Use AI for language, never to guess intent from code.</p><p class="tr">→ And that answers the question we started with.</p></template>
 </section>
 <section class="slide t-statement" data-title="What is good context for the agent is good context for the human.">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">20-what-is-good-context-for-the-agent.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>20-what-is-good-context-for-the-agent.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -742,12 +664,7 @@ Transition: which answers the question this whole talk opened with.
     <p class="statement r" style="--i:1">What is good context for the agent is good context for the human.</p>
     <p class="lead r" style="--i:2">Read your own spec back: if a new hire could onboard from it, so can the agent.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.8636;--p0:0.8182"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 20, Col 1 &middot; 20 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: the hook asked what we hand the fastest new hire we've ever onboarded; the answer was in front of us the whole time.
-- Specs as use cases, docs that carry the why, rules sharp enough that they do not rot
-- A spec a new hire could onboard from is a spec an agent can use, and the reverse holds too
-- Example: read your own spec back right now and ask which of the two it would actually onboard
-Transition: three things worth keeping from today.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.8 min · short ~0.5 min</span></div><p class="red"><b>Good context for the agent is good context for the human.</b></p><ul><li>Specs as <b>use cases</b>, docs that carry <b>the why</b>, rules that <b>don't rot</b></li><li>The test: could <b>a new hire</b> onboard from it?</li></ul><div class="say"><p>Remember the start: the agent is <b>the fastest new hire</b> you've ever onboarded. So what do we give it to read?</p><p>The answer was in front of us all along: <b>what is good context for the agent is good context for the human</b>.</p><p>Specs written as <b>use cases</b>. Docs that carry <b>the why</b>. Rules <b>short enough</b> that they don't rot.</p><p>So read your own spec back. If <b>a new hire</b> could onboard from it, so can the agent. And if not, <b>neither can</b>.</p></div><p class="short">Short route: Good context for the agent is good context for the human. If a new hire could onboard from your spec, so can the agent.</p><p class="tr">→ So, three things to take home.</p></template>
 </section>
 <section class="slide t-takeaway dark" data-title="Key takeaways">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">21-key-takeaways.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>21-key-takeaways.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -756,12 +673,7 @@ Transition: three things worth keeping from today.
     <h2 class="r" style="--i:0">Key takeaways</h2>
     <ol class="take"><li class="r" style="--i:1"><span class="badge lg">1</span><span>The spec is the source of truth before coding — precise enough for a human and an agent to both act on it.</span></li><li class="r" style="--i:2"><span class="badge lg">2</span><span>Rules and skills rot. Keep them lean, delete lines, push anything deterministic into scripts, not prose.</span></li><li class="r" style="--i:3"><span class="badge lg">3</span><span>Code alone never carries the why. Docs matter more, not less, now that an agent reads them too.</span></li></ol></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.9091;--p0:0.8636"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 21, Col 1 &middot; 21 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: three things to carry out of this room, in the order they came.
-- A use-case spec is the one artifact that serves both a human reader and an agent equally
-- A rules file that only grows is not a rules file anymore, it's a diary — delete, don't just add
-- Code describes a brick, never a house — the why still needs a human to write it down
-Transition: next time, we ask how far we can let an agent run with all of this in place.
-~1 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~1 min · short ~0.7 min</span></div><p class="red">Three things to take home.</p><ul><li>The <b>spec</b> is the source of truth <b>before</b> coding</li><li>Rules and skills <b>rot</b>: keep them <b>lean</b>, <b>delete</b> lines</li><li>Code never carries <b>the why</b>: docs matter <b>more</b></li></ul><div class="say"><p>If you remember only three things.</p><p>One: <b>the spec is the source of truth before coding</b>. A use case, precise enough for a human <b>and</b> an agent to act on. And its acceptance criteria become <b>your tests</b>.</p><p>Two: <b>rules and skills rot</b>. Keep them <b>lean</b>. <b>Delete</b> lines, don't just add them. And anything deterministic: put it in <b>a script or the build</b>, not in prose.</p><p>Three: <b>code never carries the why</b>. Docs matter <b>more</b> now, not less, because an agent reads them too.</p></div><p class="tr">→ And one open question for next time.</p></template>
 </section>
 <section class="slide t-next dark" data-title="With a harness and good context, how far can we let it run?">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">22-with-a-harness-and-good-context-ho.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>22-with-a-harness-and-good-context-ho.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -771,12 +683,7 @@ Transition: next time, we ask how far we can let an agent run with all of this i
     <p class="statement r" style="--i:1">With a harness and good context, how far can we let it run?</p>
     <p class="lead r" style="--i:2">Boundaries it cannot negotiate, and trust dimmed only as it is earned.</p></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck" style="--p:0.9545;--p0:0.9091"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 22, Col 1 &middot; 22 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">Idea: a harness from talk two and good context from today still leave one open question for next time.
-- How much autonomy does a team hand over, and on what evidence
-- Boundaries the agent cannot negotiate, a second AI, then a human, dimming earned not assumed
-- Example: the series closes next with open questions for the team, not a finished recipe
-Transition: that's the close of this one. Thank you, happy to take questions.
-~0.5 min</template>
+  <template class="notes"><div class="meta"><span class="tag core">CORE</span><span>full ~0.5 min · short ~0.3 min</span></div><p class="red">With a harness and good context, <b>how far can we let it run?</b></p><ul><li>Next time, talk 4: <b>trust at scale</b></li><li><b>Boundaries</b> it can't negotiate, review <b>dimmed</b> as trust is <b>earned</b></li></ul><div class="say"><p>So now we have <b>a harness</b> that checks what comes out, and <b>good context</b> going in.</p><p>That leaves one question for the last talk: <b>how far can we let the agent run</b>, without watching every step? <b>Boundaries</b> it can't negotiate, and review that we <b>dim</b>, only as trust is <b>earned</b>.</p><p>Thanks. And I'm happy to <b>take your questions</b>.</p></div><p class="tr">→ Questions. The sources are on the last slide.</p></template>
 </section>
 <section class="slide t-sources" data-title="sources">
   <div class="chrome"><span class="lights"><i></i><i></i><i></i></span><span class="tab">arc-3-context</span><span class="tab active">23-sources.md</span><span class="crumb">devoxx-2026 <em>/</em> arc-3-context <em>/</em> <strong>23-sources.md</strong></span><span class="cmdk">&#8984;K</span></div>
@@ -785,8 +692,7 @@ Transition: that's the close of this one. Thank you, happy to take questions.
     <h3 class="r" style="--i:0">Going further</h3>
     <ul class="src"><li class="r" style="--i:1">Christian Heitzmann — Why Documentation Won't Write Itself (Devoxx BE 2026): <a href="https://www.youtube.com/watch?v=A8TBUalnfdc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=A8TBUalnfdc</a></li><li class="r" style="--i:2">Victor Rentea — Responsibly Dimming the Lights in the Software Factory (replay): <a href="https://www.youtube.com/watch?v=C10mZ3pCnGo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=C10mZ3pCnGo</a></li><li class="r" style="--i:3">Victor Rentea — Architecture Observability and Guardrails (replay): <a href="https://youtu.be/BOcNjR2lBus" target="_blank" rel="noopener">https://youtu.be/BOcNjR2lBus</a></li><li class="r" style="--i:4">Daniela Petruzalek — State of Agentic Coding: <a href="https://github.com/danicat/state-of-agentic-coding" target="_blank" rel="noopener">https://github.com/danicat/state-of-agentic-coding</a></li><li class="r" style="--i:5">Jonathan Vila López — Agents With Seatbelts, talk 9032: <a href="https://dvbe26.cfp.dev/api/public/talks/9032" target="_blank" rel="noopener">https://dvbe26.cfp.dev/api/public/talks/9032</a></li><li class="r" style="--i:6">ArchUnit: <a href="https://www.archunit.org/" target="_blank" rel="noopener">https://www.archunit.org/</a></li><li class="r" style="--i:7">Anthropic — Effective Context Engineering for AI Agents: <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></li><li class="r" style="--i:8">Model Context Protocol specification: <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">https://modelcontextprotocol.io</a></li></ul></div>
   <footer><span><b>&#x2387; devoxx-2026</b>Context is the product</span><span class="duck-track"><span class="duck end" style="--p:1.0000;--p0:0.9545"><svg viewBox="0 0 44 36" aria-hidden="true"><path d="M4 21c-2-4 1-7 4-5l5 2c3-3 8-4 13-3 7 1 12 5 12 11 0 6-7 9-17 9S5 32 4 21z" fill="#ffd23f"/><path d="M14 24c4 4 11 4 15 0" fill="none" stroke="#e6a800" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="11" r="8.5" fill="#ffd23f"/><path d="M37 11c3-1 6 0 7 2-2 2-5 2-7 1z" fill="#ff8a1f"/><circle cx="32" cy="9" r="1.7" fill="#14161a"/></svg></span></span><span>Ln 23, Col 1 &middot; 23 / 23 &middot; UTF-8 &middot; Markdown</span></footer>
-  <template class="notes">All the sources for tonight are listed here, with links to replays and the primary material behind each claim. Where a quote is a paraphrase from an auto-translated transcript rather than an official caption, the notes file says so explicitly. Thanks for staying through part three — see you in two weeks for talk four.
-~0.3 min</template>
+  <template class="notes"><div class="meta"><span class="tag opt">IF TIME</span><span>full ~0.3 min · short skip</span></div><p class="red">Everything behind today's examples.</p><ul><li><b>Heitzmann</b>: Why Documentation Won't Write Itself</li><li><b>Rentea</b>: Dimming the Lights, and Architecture Observability</li><li><b>Petruzalek</b>: State of Agentic Coding · <b>Vila López</b>: Agents With Seatbelts</li></ul><div class="say"><p>If you want to dig deeper, all the sources are here: the <b>replays</b> of the Devoxx talks, <b>ArchUnit</b>, and Anthropic's article on <b>context engineering</b>. I'll share the deck after the session.</p></div><p class="short">Short route: Leave it on screen during questions.</p><p class="tr">→ Over to your questions.</p></template>
 </section>
 </main>
 <div id="progress"></div><div id="notes-drawer"></div>
@@ -794,7 +700,7 @@ Transition: that's the close of this one. Thank you, happy to take questions.
 (() => {
   const deck = document.getElementById("deck");
   const slides = [...document.querySelectorAll(".slide")];
-  const notes = slides.map((s) => s.querySelector("template.notes").content.textContent.trim());
+  const notes = slides.map((s) => s.querySelector("template.notes").innerHTML);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const chan = "BroadcastChannel" in window ? new BroadcastChannel("deck:" + document.title) : null;
   const presenter = location.hash === "#presenter";
@@ -832,17 +738,31 @@ Transition: that's the close of this one. Thank you, happy to take questions.
     setTimeout(() => requestAnimationFrame(tick), 250);
   }
 
+  const frags = () => [...slides[cur].querySelectorAll(".frag")];
+  const shown = () => frags().filter((f) => f.classList.contains("on")).length;
+  function setFrag(k, from) {
+    frags().forEach((f, i) => f.classList.toggle("on", i < k));
+    if (chan && from !== "remote") chan.postMessage({ slide: cur, frag: k });
+  }
+  function step(d) {
+    const k = shown(), all = frags().length;
+    if (d > 0 && k < all) return setFrag(k + 1);
+    if (d < 0 && k > 0) return setFrag(k - 1);
+    go(cur + d);
+  }
   function go(n, from) {
     n = Math.max(0, Math.min(slides.length - 1, n));
     if (n === cur) return;
+    const back = n < cur;
     if (cur >= 0) slides[cur].classList.remove("active");
     cur = n;
     const s = slides[cur];
     void s.offsetWidth; // restart the reveal animations
     s.classList.add("active");
+    s.querySelectorAll(".frag").forEach((f) => f.classList.toggle("on", back));
     if (!document.body.classList.contains("overview")) s.querySelectorAll("[data-count]").forEach(countUp);
     document.getElementById("progress").style.transform = `scaleX(${(cur + 1) / slides.length})`;
-    document.getElementById("notes-drawer").textContent = notes[cur];
+    document.getElementById("notes-drawer").innerHTML = notes[cur];
     if (!presenter) history.replaceState(null, "", "#" + (cur + 1));
     if (chan && from !== "remote") chan.postMessage({ slide: cur });
     if (presenter) renderPresenter();
@@ -860,11 +780,12 @@ Transition: that's the close of this one. Thank you, happy to take questions.
     }
     const next = slides[cur + 1];
     p.innerHTML = `<div><div class="now">Slide ${cur + 1} / ${slides.length}</div><h4></h4><div class="script"></div></div>
-      <div class="side"><div class="box"><div class="now">Elapsed · target 25 min</div><div class="clock" id="clk">0:00</div></div>
+      <div class="side"><div class="box"><div class="now">Elapsed · 10–20 min</div><div class="clock" id="clk">0:00</div></div>
       <div class="box"><div class="now">Next</div><h4 style="font-size:22px"></h4></div>
-      <div class="hint">→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
+      <div class="hint">Short route (~10 min): CORE slides, and the \"Short route\" line on IF TIME slides. Full route ~20 min.<br><br>→ / Space next · ← previous · R reset timer<br>The audience window follows this one.</div></div>`;
     p.querySelector("h4").textContent = slides[cur].dataset.title;
-    p.querySelector(".script").textContent = notes[cur];
+    p.querySelector(".script").innerHTML = notes[cur];
+    scrollTo(0, 0);
     p.querySelectorAll("h4")[1].textContent = next ? next.dataset.title : "— end —";
     tickClock();
   }
@@ -873,14 +794,14 @@ Transition: that's the close of this one. Thank you, happy to take questions.
     if (!el || start === null) return;
     const s = Math.floor((Date.now() - start) / 1000);
     el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-    el.classList.toggle("over", s > 25 * 60);
+    el.classList.toggle("over", s > 20 * 60);
   }
 
   addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key;
-    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
-    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); step(1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); step(-1); }
     else if (k === "Home") go(0);
     else if (k === "End") go(slides.length - 1);
     else if (k === "n" || k === "N") document.body.classList.toggle("notes");
@@ -901,7 +822,7 @@ Transition: that's the close of this one. Thank you, happy to take questions.
       go(slides.indexOf(s));
     }
   });
-  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); };
+  if (chan) chan.onmessage = (e) => { if (typeof e.data.slide === "number") go(e.data.slide, "remote"); if (typeof e.data.frag === "number") setFrag(e.data.frag, "remote"); };
   addEventListener("resize", fit);
 
   fit();

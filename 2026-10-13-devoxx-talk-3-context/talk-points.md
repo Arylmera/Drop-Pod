@@ -9,232 +9,468 @@ tags:
 ---
 
 
-# Arc 3 — Context is the product — talk points
 
-One card per slide, for improvisation delivery (no script). Each card: idea, points, a concrete example, a transition, a duration.
+# Arc 3 — Context is the product — Speaker text
 
+One card per slide: **fil rouge** (bold line), outline, full text to say, transition. Same text as the presenter window (S).
+Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus only the *Short route* line on IF TIME slides. **Full route:** ~20 min.
 
-## Slide 1 — Context is the product
+## Slide 1 — Context is the product  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-Welcome back for part three of this series. Talk two built the harness that checks an agent's output. Today's question comes earlier: before any of that runs, what did we actually hand the agent to read? The claim ahead: good context for an agent is the same thing a new hire needs on day one — the why, not just the what.
+**▶ One question: before the agent writes a line, what did we give it to read?**
 
-*~1 min*
+- Back from **Devoxx Belgium 2026**, talk 3 of 4
+- Three chapters: **before** (the spec) · **during** (rules and skills) · **after** (the docs)
 
-## Slide 2 — Map
+> Hi everyone, and welcome back.
+>
+> Last time, we built **the harness**: rules in the build, checks the agent can't game, one bounded repair. All of that looks at what **comes out** of the agent.
+>
+> Today, we look at the other side: **what goes in**. Specs, docs, rules: **what the agent reads**, and **who writes it**.
+>
+> And here's my claim for today: good context for an agent is **the same thing a new hire needs on day one**. The **why**, not just the what.
+>
+> As always, this is **my take**. If you see it differently, **just say so**.
+>
 
-**Idea:** this is talk three of four on moving from chat to agentic coding.
-- Talk one: does AI actually make us faster
-- Talk two: the harness that makes an agent's output trustworthy
-- Talk three, today: what the agent reads before it starts
-- **Example:** one more stop after this — autonomy at scale, which closes the series
-**Transition:** a quick look back at talk two before we start.
+**→** First, where this sits in the series.
 
-*~0.5 min*
+## Slide 2 — Map  ·  IF TIME (full ~0.5 min, short ~0.1 min)
 
-## Slide 3 — Rules the build enforces, checks it cannot game, one bounded repair...
+**▶ Four talks, one spine. Each one stands alone.**
 
-**Idea:** talk two's whole argument was that trust lives in the harness around the agent, not in the agent itself.
-- A rule in prose is a suggestion; the same rule in the build is a fact
-- Independent checks the agent can neither read nor edit
-- One bounded repair, then a fresh verdict on the final code, never on stale evidence
-- **Example:** a Maven Enforcer rule failing the build on a banned dependency, not a sentence in a rules file
-**Transition:** the harness checks what comes out. Today, what goes in?
+- 01 **reality check** · 02 **the harness** · 03 **context** (today) · 04 **trust at scale**
 
-*~1 min*
+> Just a quick map, so you know where we are.
+>
+> Talk one was the **reality check**: does AI really make us faster? Talk two was **the harness**: what makes an agent's output trustworthy. Today is **context**: what the agent reads, before and while it works. And next time, we close with **trust at scale**: how far we can let it run.
+>
+> And again: **each talk stands on its own**. If you missed one, you're fine.
+>
 
-## Slide 4 — The harness checks what comes out. What did we hand it to read first?
+*Short route:* This is talk three of four, and each one stands on its own. Let's go.
 
-**Idea:** an agent is the fastest new hire a team has ever had, and we are about to hand it the same undocumented mess that burned out the last one.
-- Could you rebuild your own system from what you just handed it, and explain why each step is mandatory
-- A chatbot searching the codebase is still searching, not reading a spec
-- **Example:** ask yourself right now — could a new hire onboard from what sits in your repo today
-**Transition:** three chapters, following what the agent reads at each moment: before, during, after.
+**→** A quick reminder of where we left off.
 
-*~1.5 min*
+## Slide 3 — Rules the build enforces, checks it cannot game, one bounded repair, a fresh verdict.  ·  CORE (full ~1 min, short ~0.5 min)
 
-## Slide 5 — Before: what you hand it to start
+**▶ An agent is only as good as its harness.**
 
-**Idea:** before a single line is written, the spec is the one artifact a human and an agent can read the same way.
-- Spec before coding beats code during and docs after, because it alone carries intent
-- The human owns the content and the why
-- **Example:** a use case with acceptance criteria an agent and a JUnit suite can both consume
-**Transition:** here is the table that runs through this whole talk.
+- A rule in a prompt is a **suggestion**; in the build, it's a **build failure**
+- Tests from **outside the agent**, a status it **can't fake**
+- **One repair**, then a **fresh verdict** on the final code
 
-*~0.3 min*
+> So, quick reminder of last time.
+>
+> Remember the **fake parser**? The test wanted ten rows, so the agent **hard-coded ten**. Test green, parser useless.
+>
+> What stops that from shipping is **the harness**. Rules **in the build**, not in a prompt. Checks the agent **can't game**, with tests that come **from outside** the agent. And **one repair**, then a **fresh verdict** on the final code.
+>
+> And remember how the parser story got better: the team stopped letting the agent **guess**. The instruction became "**analyse, ask, don't assume**", and **humans answered**. Better input, fewer errors. That's where today starts.
+>
 
-## Slide 6 — Single source of truth: before, during, after
+*Short route:* Last time: rules in the build, honest checks, one repair. And the parser got better when the agent got better input. That's today.
 
-**Idea:** truth can live in three places — the spec before coding, the code during coding, the docs after — and only one of them is reliable for both a human and an agent.
-- Code always has bugs, and a bug becomes the truth the agent copies next
-- Docs only count if they carry the why, not a rewrite of the code in prose
-- **Example:** this same table comes back filled in at the end of the talk
-**Transition:** start at the top of the table — the spec, before a line of code exists.
+**→** So, what goes in?
 
-*~1.5 min*
+## Slide 4 — The harness checks what comes out. What did we hand it to read first?  ·  CORE (full ~1.2 min, short ~0.7 min)
 
-## Slide 7 — The line an agent would have deleted
+**▶ Your agent is the fastest new hire you've ever onboarded.**
 
-**Idea:** a one-line comment is the difference between an agent that keeps a fix and one that cheerfully reverts it next sprint.
-- Before: one line of Javadoc, no reason, the id tiebreaker already removed once by someone being tidy
-- After: a two-line comment carrying the why — MySQL's sort is not stable without it
-- **Example:** losing that id tiebreaker silently broke pagination further down the line
-**Transition:** that is what a good spec gives the agent before it ever opens this file.
+- The harness checks what **comes out**; today: what **goes in**
+- A new hire and an agent need **the same thing**: the **why**
+- The test: from what's in your repo, could someone understand **why each part is there**?
 
-*~2 min*
+> The harness checks what **comes out**. But what did we hand the agent to **read first**?
+>
+> Here's a way to think about it. Your agent is **the fastest new hire** you've ever onboarded. It starts in seconds, it reads everything, and it never takes a coffee break.
+>
+> But think about what we give it. Usually, the **same undocumented mess** we gave the last new hire. A ticket, a codebase, maybe a wiki page from three years ago.
+>
+> And an agent that **searches the codebase** is still just searching. It finds **what** the code does. It doesn't find **why**.
+>
+> So ask yourself: from what's in your repo today, could a new colleague **understand why each part is there**? If not, **neither can the agent**.
+>
 
-## Slide 8 — A spec is a use case, not a document
+*Short route:* Your agent is the fastest new hire you've ever onboarded, and we hand it the same undocumented mess. It finds what the code does, never why.
 
-**Idea:** remember the visit-pet spec from session one — a use case is already a spec an agent and a test suite can both read.
-- This is not a new stage bolted onto your tickets; it is the acceptance criteria you half-write already, made precise
-- Victor Rentea's own guardrail: markdown specs for at most twenty percent of issues, not every ticket
-- **Example:** acceptance criteria phrased so each one maps onto one JUnit or Cucumber test
-**Transition:** a spec only works if someone asked the right questions before writing it.
+**→** Let's follow what the agent reads, in three moments: before, during, after.
 
-*~2 min*
+## Slide 5 — Before: what you hand it to start  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-## Slide 9 — Interview before you dictate
+**▶ Before the first line: the spec.**
 
-**Idea:** a vague ticket pasted into a frontier model with a cold brain is how you get twenty fields you will delete seven of later.
-- Ask non-technical, business questions first, so the product owner can sit in the room too
-- One question at a time, a recommended answer offered, the human corrects it
-- **Example:** Victor Rentea's own habit — grill before any feature touches code
-**Transition:** that closes the before chapter. Now, what the agent keeps reading while it works.
+- The spec is the one thing a **human and an agent** read the same way
+- The human owns the **content** and the **why**
 
-*~1.5 min*
+> Chapter one: **before**. What you hand the agent **to start**.
+>
+> And before a single line of code exists, there's one thing a human and an agent can read **the same way**: **the spec**.
+>
 
-## Slide 10 — During: what it keeps reading
+**→** Here's the table that runs through this whole talk.
 
-**Idea:** a spec gets the agent started; what it reads turn after turn is a different, and much leakier, kind of context.
-- Rules files and skills — anything the model merely reads instead of the build enforcing
-- These are advisory, not binding — the model can always choose to ignore them
-- **Example:** a CLAUDE.md or AGENTS.md file nobody has trimmed in months
-**Transition:** here is the problem with anything the model only reads.
+## Slide 6 — Single source of truth: before, during, after  ·  CORE (full ~1.2 min, short ~0.6 min)
 
-*~0.3 min*
+**▶ Truth lives in three places. Only one works for humans and agents alike.**
 
-## Slide 11 — Rules rot: what a rule compensates for changes as the model and the...
+- **Spec**, before: precise enough for **both** to act on
+- **Code**, during: always has bugs, and **bugs become the truth**
+- **Docs**, after: only as good as the **context** they carry
 
-**Idea:** talk two was about what the build enforces on the way out; this is about what the model reads on the way in, and that file needs gardening too.
-- A rule nobody deletes keeps costing context long after the model stopped needing it
-- Skills rot even faster than rules, because they are optional and easy to forget exist
-- **Example:** a fifteen-line rules file doing three precise things beats a six-hundred-line one doing everything once
-**Transition:** a question worth answering in your own head before we move on.
+> This idea comes from **Christian Heitzmann**'s talk at Devoxx. Where does the **truth** about a system live? There are three candidates.
+>
+> One: the **spec**, written **before** the code. If it's precise, it works for a human **and** for an agent. That's the good one.
+>
+> Two: the **code**, during. The problem: code **always has bugs**. And when an agent reads the code, **the bug becomes the truth**. It copies it. And code carries **no context**: why this sort order, why this version.
+>
+> Three: the **docs**, after. They're only as good as the **context** they carry. If they just repeat the code in prose, they're **worthless**.
+>
+> So, two question marks for now. We'll come back to this table **at the end**.
+>
 
-*~1.5 min*
+*Short route:* Spec before, code during, docs after. Only the spec works for both humans and agents. In the code, bugs become the truth.
 
-## Slide 12 — Ask yourself, right now
+**→** Let me show you why the code alone isn't enough.
 
-**Idea:** rot stops being an abstract claim the moment you can answer these about your own file.
-- A file that only grows, line after line, is not a rules file — it is a diary nobody edits
-- Deleting a line is the only evidence the team still understands what each rule is for
-- **Example:** a file that started at twenty lines and is now six hundred, every change an addition
-**Transition:** the antidote is not more rules, it is less reliance on anything merely read.
+## Slide 7 — The line an agent would have deleted  ·  CORE (full ~1.5 min, short ~0.8 min)
 
-*~1.5 min*
-Cut if short: say only the diary line, skip the example.
+**▶ One comment is the difference between keeping a fix and reverting it.**
 
-## Slide 13 — Generate a diagram, don't draw one
+- Pagination needs a **deterministic sort**: **id** as the final tiebreaker
+- Before: one line of Javadoc, **no reason**, the tiebreaker **already dropped once**
+- After: two lines of comment carrying **the why** (story from **Victor Rentea**'s Deep Dive)
 
-**Idea:** an architecture diagram the agent reads is only as trustworthy as whoever last drew it, and nobody redraws on every commit.
-- Ask an agent to write the deterministic script that produces the view, not to draw the view itself
-- A generated diagram costs zero tokens on every later run and cannot go stale
-- **Example:** Victor Rentea testing a diagram's embedded XML against the code itself
-**Transition:** one more context artifact that is generated and enforced, not merely read.
+> Look at this method. It pages through the visits of an owner, sorted by date, and then **by id**.
+>
+> Why the id? Because when two visits have the **same date**, MySQL doesn't guarantee **their order**. So page two can **repeat** rows from page one. The id makes the sort **stable**.
+>
+> Now, in the version before, there was one line of Javadoc, and **no reason**. And someone had already removed that tiebreaker once, just **tidying up**. Pagination broke, quietly.
+>
+> An agent reading that old version would do **exactly the same**. It sees an extra sort, and it **simplifies it**. It's trying to be helpful.
+>
+> The fix is **two lines of comment**. Not what the code does: **why it must stay**. And now the agent **keeps it**.
+>
 
-*~1.5 min*
+*Short route:* Sort by date, then by id, because MySQL doesn't keep the order of ties. Without the why, an agent "simplifies" it away. Two lines of comment keep it.
 
-## Slide 14 — This is also context
+**→** And the best place for that why is before the code even exists: the spec.
 
-**Idea:** a rule the build enforces is worth more to an agent than a paragraph telling it not to, because this one fails loudly instead of being politely ignored.
-- The agent reads this file before touching the module, same as a human would
-- It cannot silently negotiate it away — the build fails, not a suggestion
-- **Example:** notification code reaching into persistence, caught the same day it's written
-**Transition:** that closes during. Now, after the code exists, what can it never say on its own.
+## Slide 8 — A spec is a use case, not a document  ·  CORE (full ~1.5 min, short ~0.8 min)
 
-*~1.5 min*
+**▶ A spec is a use case, not a document.**
 
-## Slide 15 — After: what the code can never say
+- **Actor & precondition** → the context · **Main flow** → the implementation
+- **Alternative flows** → the edge cases agents **miss**
+- **Acceptance criteria** → the **test suite**
+- Keep it proportionate: specs for **at most ~20 %** of issues (Victor Rentea)
 
-**Idea:** once the spec is spent and the rules are read, the code is all that's left — and code alone cannot carry the reasons.
-- A class describes itself; it never describes the system it sits inside
-- Every rejected design, every warning, every why is invisible unless something writes it down
-- **Example:** a perfectly clean method that still can't tell you why it exists
-**Transition:** Heitzmann's own line for this.
+> So what does a good spec look like? Not a fifty-page document. **A use case**. Four parts, and each one has a job. This frame comes from **Jonathan Vila López**'s talk, "Agents With Seatbelts".
+>
+> **Actor and precondition**: who triggers it, and what must already be true. That becomes the agent's **context**.
+>
+> **Main flow**: the steps, in order. That becomes the **implementation**.
+>
+> **Alternative flows**: the edge cases. And that's **exactly what an agent misses** on its own.
+>
+> **Acceptance criteria**: written as checks, not prose. And those become **the test suite**, directly. Remember last time: the tests have to come **from outside the agent**. This is where they come from.
+>
+> And no, this isn't a new heavy stage on every ticket. It's the acceptance criteria you **half-write already**, made precise. Victor Rentea's own guardrail: markdown specs for **at most about 20 %** of issues. The ones with **real ambiguity or risk**.
+>
 
-*~0.3 min*
+*Short route:* A use case: actor, main flow, edge cases, acceptance criteria. The criteria become the tests from outside the agent. For at most 20 % of tickets, not all of them.
 
-## Slide 16 — Even perfect code describes a brick. It never describes the house.
+**→** But a spec is only as good as the questions asked before writing it.
 
-**Idea:** "the code is the documentation" is the line every developer has said at least once, and it's wrong at exactly the altitude that matters for architecture.
-- Self-documenting code is self-documenting only to the person who wrote it
-- It describes one class perfectly and the whole system not at all
-- **Example:** a hundred immaculate classes still won't tell a new hire, or an agent, why the system is shaped this way
-**Transition:** so what altitude does each kind of writing belong at.
+## Slide 9 — Interview before you dictate  ·  IF TIME (full ~1.3 min, short skip)
 
-*~1 min*
+**▶ Ask before you write. A vague ticket lets the agent fill every gap.**
 
-## Slide 17 — What docs must carry
+- One-line ticket: "**Add pagination** to the owners grid": no volume, no urgency
+- Instead: **one question at a time**, **business first**, a **recommended answer**
+- The "**grill-me**" habit (Matt Pocock's skill, used by Victor Rentea)
 
-**Idea:** don't explain function internals in an architecture diagram, and don't explain architecture in a source comment — the altitude question collapses to that one line.
-- Docs carry the invisible: decisions, rejected designs and why, warnings, how-tos
-- An agent handed a spec and these notes behaves differently from one left to search a wiki
-- **Example:** "we tried that and decided against it, because..." is an ADR an agent can actually use
-**Transition:** now put the three places truth lives back together, filled in this time.
+> Here's a ticket: "**Add pagination to the owners grid**." That's it. No volume, no urgency, no UX hint.
+>
+> Paste that into an agent and it **fills every gap itself**. You get twenty fields, and you delete seven of them later.
+>
+> The alternative: let the agent **interview you** first. **One question at a time**. How many owners? Growing how fast? **Business questions first**, so the product owner can sit in too. Technical ones after.
+>
+> And for each question, it offers **a recommended answer**, and the human **corrects it**. Often the right answer is option C, the one nobody wrote down.
+>
+> Victor Rentea does this before any feature touches the code. It's called "**grill-me**", a skill by Matt Pocock.
+>
 
-*~1.5 min*
+*Short route:* Skip.
 
-## Slide 18 — The table, filled in
+**→** That's the before. Now, what the agent keeps reading while it works.
 
-**Idea:** the same three rows from the start of this talk, now with during and after answered instead of left open.
-- Spec was always the strong row; code was always the weak one
-- Docs only move from a question mark to a yes when they carry context, not a restatement of the code
-- **Example:** good documentation matters more, not less, because now an agent reads it too
-**Transition:** one rule splits the work between the human and the model on all three rows.
+## Slide 10 — During: what it keeps reading  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-*~1.5 min*
+**▶ While it works, the agent reads rules and skills. And those rot.**
 
-## Slide 19 — The human owns the content and the why. The model owns the form.
+- Rules files, skills: things the model **reads**, nothing **enforces**
+- **Advisory**, not binding: the model can **ignore** them
 
-**Idea:** one clean split answers every question in this talk about who should write what.
-- The human decides the why: the decision, the trade-off, the reason it stays this way
-- The model does the form: spelling, grammar, turning notes into clear prose
-- **Example:** never ask an agent to reverse-engineer intent from code it did not write
-**Transition:** which answers the question this whole talk opened with.
+> Chapter two: **during**. What the agent **keeps reading**, turn after turn.
+>
+> Rules files, like a **CLAUDE.md** or an **AGENTS.md**. Skills. All the things the model **reads**, but nothing **enforces**. They're **advice**. The model can follow them, or not.
+>
 
-*~1 min*
+**→** And here's the problem with anything the model only reads.
 
-## Slide 20 — What is good context for the agent is good context for the human.
+## Slide 11 — Rules rot: what a rule compensates for changes as the model and the harness improve.  ·  CORE (full ~1.2 min, short ~0.7 min)
 
-**Idea:** the hook asked what we hand the fastest new hire we've ever onboarded; the answer was in front of us the whole time.
-- Specs as use cases, docs that carry the why, rules sharp enough that they do not rot
-- A spec a new hire could onboard from is a spec an agent can use, and the reverse holds too
-- **Example:** read your own spec back right now and ask which of the two it would actually onboard
-**Transition:** three things worth keeping from today.
+**▶ Rules rot. What a rule compensates for changes as models improve.**
 
-*~1 min*
+- **Daniela Petruzalek**, "State of Agentic Coding"
+- Talk 2: what the build checks on the way **out**. Today: what the model reads on the way **in**
+- A rule **nobody deletes** keeps costing context
 
-## Slide 21 — Key takeaways
+> **Daniela Petruzalek** put it well at Devoxx: **rules rot**.
+>
+> A line in a rules file is there to **compensate** for something. The model kept making a mistake, so we wrote a rule. But models **improve**. Tools improve. And six months later, that line compensates for **nothing**. But it's still there, **costing context** on every request.
+>
+> And careful, this isn't last talk again. Last time was what the **build enforces** on the way **out**. This is what the model **reads** on the way **in**. And that file needs **gardening** too.
+>
+> Skills rot **even faster**, because they're optional. People forget **they exist**.
+>
+> A **short** rules file that does three precise things beats a **six-hundred-line** one that does everything once.
+>
 
-**Idea:** three things to carry out of this room, in the order they came.
-- A use-case spec is the one artifact that serves both a human reader and an agent equally
-- A rules file that only grows is not a rules file anymore, it's a diary — delete, don't just add
-- Code describes a brick, never a house — the why still needs a human to write it down
-**Transition:** next time, we ask how far we can let an agent run with all of this in place.
+*Short route:* Rules rot: what a rule compensates for disappears as models improve, but the line stays and costs context. Short and precise beats long.
 
-*~1 min*
+**→** A quick question for you.
 
-## Slide 22 — With a harness and good context, how far can we let it run?
+## Slide 12 — Ask yourself, right now  ·  IF TIME (full ~1 min, short ~0.2 min)
 
-**Idea:** a harness from talk two and good context from today still leave one open question for next time.
-- How much autonomy does a team hand over, and on what evidence
-- Boundaries the agent cannot negotiate, a second AI, then a human, dimming earned not assumed
-- **Example:** the series closes next with open questions for the team, not a finished recipe
-**Transition:** that's the close of this one. Thank you, happy to take questions.
+**▶ A rules file that only grows is a diary.**
 
-*~0.5 min*
+- How many lines is **your** AGENTS.md or CLAUDE.md?
+- When did anyone last **delete** a line?
+- Can you explain **why** each rule is still there?
 
-## Slide 23 — Sources
+> Don't answer out loud, just think about it. **How many lines** is your AGENTS.md, or your CLAUDE.md, today?
+>
+> When did anyone last **delete a line**, instead of adding one?
+>
+> And could you explain **why each rule** is still there?
+>
+> If the file **only grows**, it's not a rules file anymore. It's **a diary**. And deleting a line is the only proof the team still **understands** what each rule is for.
+>
 
-All the sources for tonight are listed here, with links to replays and the primary material behind each claim. Where a quote is a paraphrase from an auto-translated transcript rather than an official caption, the notes file says so explicitly. Thanks for staying through part three — see you in two weeks for talk four.
+*Short route:* If your rules file only grows, it's not a rules file, it's a diary.
 
-*~0.3 min*
+**→** The fix isn't more rules. It's relying less on things the model only reads.
+
+## Slide 13 — Generate a diagram, don't draw one  ·  IF TIME (full ~1.2 min, short skip)
+
+**▶ Ask for a script, not an opinion.**
+
+- A hand-drawn diagram **drifts** as soon as the code moves
+- A **script** that generates the view: re-run it, it's **honest again**
+- The agent reads **a fact**, not a picture (Victor Rentea, "Architecture Observability and Guardrails")
+
+> Same idea, applied to architecture diagrams.
+>
+> A diagram someone drew by hand is only as true as **the last time someone redrew it**. And nobody redraws it on every commit. So it **drifts**, and the agent inherits **a picture, not a fact**.
+>
+> Victor Rentea's advice: don't ask the agent to **draw** the diagram. Ask it to write the **script that generates** it, from the code.
+>
+> Then you re-run the script, and the diagram is **honest again**, for free. It can't go stale. He even **tests** the diagram against the code.
+>
+
+*Short route:* Skip.
+
+**→** And there's one more kind of context that's checked, not just read.
+
+## Slide 14 — This is also context  ·  IF TIME (full ~1.2 min, short skip)
+
+**▶ A rule the build enforces is context the agent can't ignore.**
+
+- **ArchUnit**: notification code must **not reach persistence**
+- The agent reads this **before** touching the module
+- Break it, and the **build fails**, the same day
+
+> This is **ArchUnit**. A test that says: code in the **notification** package must **never depend** on the **persistence** package.
+>
+> You saw this kind of rule last time, as a **build gate**. Today, look at it differently: it's also **context**. The agent can read this file before it touches the module, just like a new colleague would. And it says, **precisely**, where the walls are.
+>
+> And unlike a paragraph in a rules file, it **can't be politely ignored**. If the agent breaks it, the **build fails**. Same day.
+>
+
+*Short route:* Skip.
+
+**→** That's the during. Now, after: what can the code never say on its own?
+
+## Slide 15 — After: what the code can never say  ·  CORE (full ~0.3 min, short ~0.2 min)
+
+**▶ Even perfect code can't carry the why.**
+
+- A class describes **itself**, never **the system**
+- Rejected designs, warnings, reasons: **invisible** unless someone writes them down
+
+> Chapter three: **after**. The code exists. What can it **never** tell you?
+>
+> A class describes **itself**. It never describes **the system** around it. And every rejected design, every warning, every **why**, is invisible, unless someone **writes it down**.
+>
+
+**→** Heitzmann has a great image for this.
+
+## Slide 16 — Even perfect code describes a brick. It never describes the house.  ·  CORE (full ~1 min, short ~0.6 min)
+
+**▶ Code describes a brick. It never describes the house.**
+
+- **Christian Heitzmann**, Devoxx Belgium 2026 (paraphrase)
+- "The code is the documentation" is wrong at **the level that matters**
+
+> **Christian Heitzmann** said it like this, roughly: **even perfect code describes a brick. It never describes the house.**
+>
+> We've all said "**the code is the documentation**". And for one class, sure. But self-documenting code is self-documenting mostly **for the person who wrote it**.
+>
+> A hundred **clean classes** still won't tell a new hire, or an agent, **why the system is shaped this way**.
+>
+
+*Short route:* Perfect code describes a brick, never the house. Clean classes don't explain why the system is shaped this way.
+
+**→** So what should the docs carry?
+
+## Slide 17 — What docs must carry  ·  IF TIME (full ~1.2 min, short ~0.3 min)
+
+**▶ Docs exist for what the code can't say.**
+
+- **Architecture** in diagrams, never in a source comment
+- **APIs** in Javadoc, **internals** in comments
+- **Decisions**, **rejected designs**, and why
+- **Warnings**: "single-thread only, because..."
+
+> Here's the short list.
+>
+> **Architecture** goes in diagrams, not in a source comment. And the other way round: don't explain function internals in an architecture diagram.
+>
+> **APIs** in Javadoc, **internals** in comments. Don't mix them up.
+>
+> **Decisions**, and especially the **rejected designs**, and **why**. "We tried that, and we decided against it, because..." That's gold, for a new hire **and** for an agent. Without it, the agent proposes **the rejected design again**.
+>
+> **Warnings**: "single-thread only, because..."
+>
+> And what's pointless? **Rewriting the code in prose**. Docs are for what the code **can't say at all**.
+>
+
+*Short route:* Docs carry decisions, rejected designs and warnings. Not the code rewritten in prose.
+
+**→** Let's go back to our table.
+
+## Slide 18 — The table, filled in  ·  CORE (full ~1 min, short ~0.6 min)
+
+**▶ Docs matter more, not less: now an agent reads them too.**
+
+- **Spec**: still the source of truth for **both**
+- **Code**: never the whole truth
+- **Docs**: they work, **when they carry the why**
+
+> Same table as the start, now filled in.
+>
+> The **spec**: still the one source of truth that works for **humans and agents**.
+>
+> The **code**: still **never the whole truth**. Bugs become fact, and the context is missing.
+>
+> And the **docs**: they move from a question mark to **a yes**. But only when they carry **the why**: the rejected designs, the warnings.
+>
+> So good documentation matters **more** now, not less. Because now **an agent reads it too**.
+>
+
+*Short route:* Spec: yes. Code: never the whole truth. Docs: yes, when they carry the why. And they matter more now, because an agent reads them too.
+
+**→** So who writes what?
+
+## Slide 19 — The human owns the content and the why. The model owns the form.  ·  CORE (full ~0.8 min, short ~0.5 min)
+
+**▶ The human owns the content and the why. The model owns the form.**
+
+- Human: the **decision**, the **trade-off**, the **reason**
+- Model: spelling, grammar, **clear prose**
+- Use AI for **language**, never for **reverse engineering**
+
+> One clean split, again from Heitzmann.
+>
+> The **human** owns **the content and the why**: the decision, the trade-off, the reason it stays this way.
+>
+> The **model** owns **the form**: spelling, grammar, turning your rough notes into clear text.
+>
+> And one rule: use AI for **language**, never for **reverse engineering**. Don't ask an agent to **guess the intent** from code it didn't write. It will give you an answer. It will sound good. And it may be **completely wrong**.
+>
+
+*Short route:* The human owns the why, the model owns the form. Use AI for language, never to guess intent from code.
+
+**→** And that answers the question we started with.
+
+## Slide 20 — What is good context for the agent is good context for the human.  ·  CORE (full ~0.8 min, short ~0.5 min)
+
+**▶ Good context for the agent is good context for the human.**
+
+- Specs as **use cases**, docs that carry **the why**, rules that **don't rot**
+- The test: could **a new hire** onboard from it?
+
+> Remember the start: the agent is **the fastest new hire** you've ever onboarded. So what do we give it to read?
+>
+> The answer was in front of us all along: **what is good context for the agent is good context for the human**.
+>
+> Specs written as **use cases**. Docs that carry **the why**. Rules **short enough** that they don't rot.
+>
+> So read your own spec back. If **a new hire** could onboard from it, so can the agent. And if not, **neither can**.
+>
+
+*Short route:* Good context for the agent is good context for the human. If a new hire could onboard from your spec, so can the agent.
+
+**→** So, three things to take home.
+
+## Slide 21 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
+
+**▶ Three things to take home.**
+
+- The **spec** is the source of truth **before** coding
+- Rules and skills **rot**: keep them **lean**, **delete** lines
+- Code never carries **the why**: docs matter **more**
+
+> If you remember only three things.
+>
+> One: **the spec is the source of truth before coding**. A use case, precise enough for a human **and** an agent to act on. And its acceptance criteria become **your tests**.
+>
+> Two: **rules and skills rot**. Keep them **lean**. **Delete** lines, don't just add them. And anything deterministic: put it in **a script or the build**, not in prose.
+>
+> Three: **code never carries the why**. Docs matter **more** now, not less, because an agent reads them too.
+>
+
+**→** And one open question for next time.
+
+## Slide 22 — With a harness and good context, how far can we let it run?  ·  CORE (full ~0.5 min, short ~0.3 min)
+
+**▶ With a harness and good context, how far can we let it run?**
+
+- Next time, talk 4: **trust at scale**
+- **Boundaries** it can't negotiate, review **dimmed** as trust is **earned**
+
+> So now we have **a harness** that checks what comes out, and **good context** going in.
+>
+> That leaves one question for the last talk: **how far can we let the agent run**, without watching every step? **Boundaries** it can't negotiate, and review that we **dim**, only as trust is **earned**.
+>
+> Thanks. And I'm happy to **take your questions**.
+>
+
+**→** Questions. The sources are on the last slide.
+
+## Slide 23 — Sources  ·  IF TIME (full ~0.3 min, short skip)
+
+**▶ Everything behind today's examples.**
+
+- **Heitzmann**: Why Documentation Won't Write Itself
+- **Rentea**: Dimming the Lights, and Architecture Observability
+- **Petruzalek**: State of Agentic Coding · **Vila López**: Agents With Seatbelts
+
+> If you want to dig deeper, all the sources are here: the **replays** of the Devoxx talks, **ArchUnit**, and Anthropic's article on **context engineering**. I'll share the deck after the session.
+>
+
+*Short route:* Leave it on screen during questions.
+
+**→** Over to your questions.
