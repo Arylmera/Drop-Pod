@@ -9,209 +9,476 @@ tags:
 ---
 
 
-# Arc 4 — Trust at scale: talk points
 
-## Slide 1 — Trust at scale
+# Arc 4 — Trust at scale — Speaker text
 
-**Idea:** the series finale asks one question — once the harness works and the context is good, how much autonomy do we hand over, and what never moves?
-- Three chapters: boundaries the agent can't negotiate, dimming review as trust is earned, measured by outcomes
-- Sources: two Docker sessions, a JetBrains talk, Victor Rentea's Deep Dive, Jonathan Vila's seatbelts
-**Transition:** first, the series so far.
+One card per slide: **fil rouge** (bold line), outline, full text to say, transition. Same text as the presenter window (S).
+Timing is flexible, 10 to 20 min. **Short route (~10 min):** CORE slides, plus only the *Short route* line on IF TIME slides. **Full route:** ~20 min.
 
-*~1 min*
+## Slide 1 — Trust at scale  ·  CORE (full ~0.5 min, short ~0.5 min)
 
-## Slide 2 — Map
+**▶ Last question of the series: how far can an agent run without us watching?**
 
-**Idea:** four AI talks, one thread — reality check, harness, context, and now scale.
-- Talk 1 asked what to trust; talk 2 built the harness; talk 3 fed it good context
-- **Example:** talk 1's ladder of trust, talk 2's enforced rules, talk 3's specs — tonight asks how far that earns the agent
-**Transition:** a one-line recap of where talk 3 left off.
+- Back from **Devoxx Belgium 2026**, talk 4 of 4, the **finale**
+- Three chapters: **why boundaries** · **the boundary it can't negotiate** · **dimming the lights**
 
-*~1 min*
+> Hi everyone, and welcome to the **last talk** of the series.
+>
+> So far, we have a **harness** that checks what comes out of the agent, and **good context** going in. Today's question: once all that works, **how much autonomy** do we hand over? And what should **never move**?
+>
+> Three chapters. **Why** autonomy needs boundaries. **The boundary** the agent can't negotiate. And **dimming the lights**: reviewing less, but only as trust is earned.
+>
+> As always, this is **my take**. If you see it differently, **just say so**.
+>
 
-## Slide 3 — Specs as use cases, docs that carry the why, rules that don't rot.
+**→** First, where we are in the series.
 
-**Idea:** talk 3 closed on good context — specs, docs, rules an agent can actually read.
-- That's the input side solved; tonight is about what happens once the agent starts acting on it
-- **Example:** an acceptance-criteria spec tells the agent what done means; tonight asks what it's allowed to do while getting there
-**Transition:** that's tonight's question, asked straight.
+## Slide 2 — Map  ·  IF TIME (full ~0.5 min, short ~0.1 min)
 
-*~1 min*
+**▶ Four talks, one spine. Today closes it.**
 
-## Slide 4 — Good brakes are what let you go fast.
+- 01 **reality check** · 02 **the harness** · 03 **context** · 04 **trust at scale** (today)
 
-**Idea:** the hook — more autonomy only pays off if something else lets us trust it moving fast.
-- Quick poll: who has given an agent a GitHub token? Who gave it delete rights?
-- **Example:** Docker's SVP Jean-Laurent de Morlhon polled the room on agents holding GitHub tokens with delete rights, then admitted: "I did it. I got caught by my security team."
-**Transition:** that trust can't live in the agent's own head. Chapter one: why autonomy needs boundaries.
+> Just a quick map.
+>
+> Talk one asked **what to trust**: remember the **trust ladder**. Talk two built **the harness**. Talk three gave the agent **good context**. And today: **trust at scale**, so how far all of that lets the agent run.
+>
+> And as always, **each talk stands on its own**.
+>
 
-*~1.5 min*
+*Short route:* Last talk of four, and it stands on its own. Let's go.
 
-## Slide 5 — Why autonomy needs boundaries
+**→** A quick reminder of where we left off.
 
-**Idea:** autonomy is the whole point of agents, so the limits have to sit outside the agent, not inside its judgment.
-- Agents fail without malice: bold tasks, a model switch, a context clear that quietly drops the goal
-- **Example:** a developer laptop already holds GitHub and SSH keys, cloud tokens, old secrets sitting in shell history
-**Transition:** one phrase names exactly why that combination is dangerous.
+## Slide 3 — Specs as use cases, docs that carry the why, rules that don't rot.  ·  CORE (full ~0.8 min, short ~0.4 min)
 
-*~0.5 min*
+**▶ Good context is covered. Now: what is the agent allowed to do?**
 
-## Slide 6 — Autonomy, private data, external access: together, exactly what mak...
+- Talk 3: specs as **use cases**, docs that carry **the why**, rules that **don't rot**
+- Good context for the agent is **good context for the human**
 
-**Idea:** the lethal trifecta names the three ingredients that, combined, turn a helpful agent into an exfiltration channel.
-- Autonomy to act, access to private data, and a path to the outside world: remove any one and the risk collapses
-- **Example:** an agent with repo write access, a customer database tool, and internet access ticks all three at once
-**Transition:** three popular fixes all try to put that boundary inside the agent's own reach instead.
+> Last time was about **context**: what the agent reads.
+>
+> Specs written as **use cases**. Docs that carry **the why**. Rules short enough that **they don't rot**. And the conclusion: **good context for the agent is good context for the human**.
+>
+> So the input side is covered. A good spec tells the agent **what done means**. Today: what is it **allowed to do** while it gets there?
+>
 
-*~1 min*
+*Short route:* Last time: good context, specs, docs with the why. Today: what is the agent allowed to do?
 
-## Slide 7 — Three approaches that don't pass the bar
+**→** Let's ask the question straight.
 
-**Idea:** three approaches a team reaches for first, none of which a security team can sign off for hundreds of developers.
-- A container: still the host kernel underneath
-- Allow/deny command lists: a game the agent always eventually wins
-- **Example:** block rm -rf and the agent writes the same delete into a generated script instead
-**Transition:** that third one has a name, and a very concrete failure.
+## Slide 4 — Good brakes are what let you go fast.  ·  CORE (full ~1.3 min, short ~0.8 min)
 
-*~1 min*
+**▶ Good brakes are what let you go fast.**
 
-## Slide 8 — The classifier refused a dangerous script — twice. It ran the same...
+- Kawasaki's 1970s superbike: an engine **ahead of its brakes**
+- Jaguar won Le Mans on **disc brakes**
+- Show of hands (remote: **reaction or chat**): who gave an agent a **GitHub token**? With **delete rights**?
 
-**Idea:** AI vetting AI fails in a way that's almost funny, which is exactly why it doesn't pass as a security control.
-- Same request, same danger, different wrapping — the classifier caught it twice, then waved it through after a routine context clear
-- **Example:** a context clear is routine maintenance, not an attack; the safety evaporated on its own, with no trigger needed
-**Transition:** so the boundary has to be structural — something the agent can't talk its way around.
+> An image from **Oleg Šelajev**, from Docker, at Devoxx. In the seventies, Kawasaki built a superbike with an amazing engine, and brakes that **couldn't keep up**. Around the same time, Jaguar won **Le Mans** with **disc brakes**. Not the biggest engine. The best **brakes**.
+>
+> Because **good brakes are what let you go fast**. Same with agents: more autonomy only pays off if something lets us **trust it at speed**.
+>
+> So, a quick show of hands. In the room, raise your hand; remote, use a reaction or the chat. **Who has given an agent a GitHub token?** And who gave it one with **delete rights**?
+>
+> At the Devoxx keynote, **Jean-Laurent de Morlhon**, from Docker, asked the same thing. And then he said about himself: "**I did it. I got caught by my security team.**"
+>
+> So the question for today: **how much autonomy** can we give an agent, **without losing control**?
+>
 
-*~1 min*
+*Short route:* Good brakes are what let you go fast. Who gave an agent a GitHub token with delete rights? Even a Docker executive did, and got caught.
 
-## Slide 9 — The boundary it can't negotiate
+**→** Chapter one: why autonomy needs boundaries.
 
-**Idea:** if the boundary can't live in the agent's judgment, it has to live in what the agent is physically able to reach.
-- Scope the agents, the filesystem, the network — structurally, not by asking nicely
-- **Example:** the same discipline a Java team already applies to any external integration, just pointed at the agent itself
-**Transition:** start with the smallest unit — one sub-agent, one scope.
+## Slide 5 — Why autonomy needs boundaries  ·  CORE (full ~0.4 min, short ~0.2 min)
 
-*~0.5 min*
+**▶ What makes an agent productive is exactly what lets it leak.**
 
-## Slide 10 — Scope the sub-agent, not the prompt
+- Agents fail **without malice**: a bold task, a model switch, a **context clear**
+- A dev laptop already holds **SSH keys**, **cloud tokens**, old secrets in the **shell history**
 
-**Idea:** the first boundary is decomposition — split one god-agent holding every tool into scoped sub-agents, each exposing only what its job needs.
-- Testable alone, blast radius contained, each sub-agent can even run a different model
-- **Example:** the Orders bean simply has no cancelOrder or refund method on it at all — scope, not a prompt asking it to behave (talk 3 already owns description wording)
-**Transition:** scale that same scoping instinct from one sub-agent's toolset to the whole machine it runs on.
+> Chapter one: **why autonomy needs boundaries**.
+>
+> An agent doesn't need to be **evil** to cause damage. A bold task, a model switch, a **context clear** that quietly drops the goal. That's enough.
+>
+> And think about what sits on a developer laptop: **SSH keys**, GitHub tokens, **cloud credentials**, old secrets in the **shell history**. All within reach.
+>
 
-*~1.5 min*
+**→** There's a name for that dangerous combination.
 
-## Slide 11 — Scoping the machine, not just the tool
+## Slide 6 — Autonomy, private data, external access: together, exactly what makes an agent useful — and lets it leak.  ·  CORE (full ~1.2 min, short ~0.7 min)
 
-**Idea:** the same four moves — contain, scope the filesystem, scope the network, keep secrets outside — make the boundary structural instead of a policy the agent agreed to.
-- Control lives outside the agent: not a rule it reads, a wall it can't see past
-- **Example:** a ticket to touch a reporting microservice gets the repo and one deploy token, nothing a Maven build or an SSH key would expose
-**Transition:** the same discipline applies the moment that machine talks to anything external.
+**▶ The lethal trifecta: autonomy, private data, external access.**
 
-*~1 min*
+- **Simon Willison**, 2025
+- **Autonomy** to act · **private data** · a path to **the outside**
+- Remove **any one**, and the risk collapses
 
-## Slide 12 — Securing what the agent calls out to: five knights
+> **Simon Willison** gave it a name in 2025: **the lethal trifecta**.
+>
+> Three things. **Autonomy**: the agent can act. **Private data**: it can read things that matter. And **external access**: it can talk to the outside world.
+>
+> And here's the uncomfortable part: those three together are **exactly what makes an agent useful**. And exactly what lets it **leak**.
+>
+> An agent with write access to the repo, a tool on the customer database, and internet access? **All three**, at once.
+>
+> The good news: **remove any one** of the three, and the risk **collapses**.
+>
 
-**Idea:** five concrete ways an external connection goes wrong, each with a mitigation a Java team can adopt tomorrow.
-- The fifth is the one that scales: a single governed gateway instead of ad hoc servers per team
-- **Example:** a developer pastes a prod JDBC URL with its password into the chat; an unofficial MCP server can log that forever
-**Transition:** even with all five closed, one thing a sandbox was never built to protect.
+*Short route:* Autonomy, private data, external access: the lethal trifecta. Exactly what makes an agent useful, and what lets it leak. Remove one and the risk collapses.
 
-*~1.5 min*
-Cut if short: name only the gateway mitigation, skip the other four.
+**→** So how do teams try to control it? Three popular answers.
 
-## Slide 13 — A sandbox protects the machine. The repository is still ours to pro...
+## Slide 7 — Three approaches that don't pass the bar  ·  CORE (full ~1.2 min, short ~0.5 min)
 
-**Idea:** containment stops a machine-level disaster, not a workspace-level one — a scoped sandbox can still push bad code with a valid token.
-- Clone or branch mode plus a minimal-scope token close that gap; mount mode alone does not
-- The same gap reopens the moment one agent delegates to another: the boundary has to travel across that hop too, not just agent-to-tool
-- **Example:** in mount mode, an agent can still delete or leak project files and push with the one token it was handed
-**Transition:** the machine side is covered. What about the team around it?
+**▶ Three common fixes that don't pass the bar.**
 
-*~1.5 min*
+- **A container**: shares the host kernel; hand it your Docker daemon and it's **as good as root**
+- **Allow/deny lists**: block rm -rf, and it writes it **into a script**
+- **AI vetting the AI**: an **opinion**, not a wall
 
-## Slide 14 — Dimming the lights
+> Three things teams reach for first. And none of them is something a security team can sign off **for hundreds of developers**.
+>
+> One: **a container**. Sounds safe. But a container **shares the host kernel**. And a coding agent needs Docker for its tests, Testcontainers for example. So you hand it the host's Docker daemon. And that's **as good as root**.
+>
+> Two: **allow and deny lists** of commands. It's **cat and mouse**. Block rm -rf, and the agent writes the same delete **into a generated script**. A false sense of security.
+>
+> Three: **an AI watching the AI**. A classifier model that checks what the acting model does. But that's **an opinion**, not a wall. And an opinion **can be talked around**.
+>
 
-**Idea:** once the boundaries hold, the remaining question is how much human review stays on every PR — and the answer is: it depends on trust earned, not on vibes.
-- First rule: a human is not the first reviewer
-- **Example:** between a "white factory" where humans review everything and a "dark factory" where nobody does, the dial moves gradually, on purpose
-**Transition:** why a second AI, not a human, goes first.
+*Short route:* A container shares the kernel. Deny lists get worked around. An AI watching the AI is an opinion, not a wall.
 
-*~0.5 min*
+**→** That last one failed in a way that's almost funny.
 
-## Slide 15 — Humans should not review AI-generated code before a second AI does.
+## Slide 8 — The classifier refused a dangerous script — twice. It ran the same script right after a context clear.  ·  CORE (full ~1 min, short ~0.5 min)
 
-**Idea:** the first reviewer of an agent's code should be a different model, because the author is structurally the worst-placed judge of its own output.
-- Deterministic guardrails still run first — static analysis, linters, hooks — before any model opinion
-- **Example:** who in this room finds that terrifying? Who finds it inevitable? It can be both
-**Transition:** what that review actually looks like as a pipeline stage.
+**▶ The classifier said no twice. Then a context clear, and it said yes.**
 
-*~1.5 min*
+- **Oleg Šelajev**'s own test (Docker), reported on stage
+- Refused, refused again in a new wrapping, **ran after a context clear**
+- "**Two foxes** whispering about a henhouse"
 
-## Slide 16 — A review stage a Java team already recognises
+> Oleg Šelajev tried this himself, with an agent in **auto mode**, protected by a classifier.
+>
+> He asked for a **dangerous script**. Refused. He wrapped it differently, inside a dependency. **Refused again**. Good.
+>
+> Then a **context clear**. Routine maintenance, not an attack. Same script: **it ran**.
+>
+> His image: "**two foxes whispering about a henhouse**". The safety didn't even need an attacker. It **evaporated on its own**.
+>
+> So the boundary has to be **structural**. Something the agent **can't talk its way around**.
+>
 
-**Idea:** the second-AI rule is one more stage in a pipeline this room already runs, not a new ritual.
-- The merge gate blocks on unresolved findings; a human approval step stays only where the risk tier demands it
-- **Example:** mvn verify goes green, a second model flags a missing null check against the ticket's acceptance criteria, the gate holds until it's fixed
-**Transition:** that risk tier is the actual mechanism of dimming.
+*Short route:* Refused twice, then it ran the script after a routine context clear. Two foxes guarding a henhouse. The boundary has to be structural.
 
-*~1 min*
+**→** Chapter two: the boundary it can't negotiate.
 
-## Slide 17 — Dimming, by risk tier
+## Slide 9 — The boundary it can't negotiate  ·  CORE (full ~0.3 min, short ~0.2 min)
 
-**Idea:** dimming is not one dial for the whole org — it's a ladder, set per service by how much a mistake there would cost.
-- This talk's own illustration of the ends of the ladder: a payment path that never loses its reviewer, a prototype that merges on green CI alone
-- **Example:** Rentea's own rule for the middle — a low-risk reporting service earns spot-checks only after months of clean output, never from day one
-**Transition:** trust earned this way still has to be measured, not felt — and it isn't free.
+**▶ Scope what it can reach, before it ever acts.**
 
-*~1.5 min*
+- Scope the **agents**, the **filesystem**, the **network**
+- Structurally, **not by asking nicely**
 
-## Slide 18 — Cheaper than the incident it prevents
+> Chapter two: **the boundary it can't negotiate**.
+>
+> If the boundary can't live in the agent's judgment, it has to live in **what the agent can physically reach**. The agents, the filesystem, the network. **Structurally**, not by asking nicely.
+>
 
-**Idea:** a second AI reviewing the first does cost money, but the actual bill on a real demo PR is small next to what a bad merge costs.
-- Review with a smarter model than the one that wrote the code: it reads a lot, writes little, so it stays cheap
-- **Example:** fifteen dollars to implement, five for a quorum of adversarial reviewers, nine for auto-fixes, thirty cents for the guide — one real PR
-**Transition:** the sharpest objection is still unanswered — what if the reviewer shares the author's blind spot?
+**→** Let's start small: one sub-agent.
 
-*~1 min*
+## Slide 10 — Scope the sub-agent, not the prompt  ·  CORE (full ~1.3 min, short ~0.7 min)
 
-## Slide 19 — Cross-model review is a review, not a boundary.
+**▶ The method doesn't exist, so no prompt can reach it.**
 
-**Idea:** the obvious objection — isn't a second AI reviewing the first just chapter one's rejected AI-vets-AI again — is answered by the distinction, not by the model choice alone.
-- Chapter two's sandbox and scoping must already hold with no model's opinion involved; review only runs after that, and a human still decides on the tiers that need one
-- **Example:** Rentea's own framing — "at least throw the dice twice," with a different model each time
-**Transition:** all of this lands on the question the hook opened with.
+- A supervisor delegates to **Orders**, **Pay**, **Support** sub-agents, each with its **own MCP server**
+- The Orders bean has **no cancelOrder, no refund**
+- **Blast radius** contained, each one testable **alone** (Jonathan Vila López, "Agents With Seatbelts")
 
-*~1 min*
+> The first boundary is **decomposition**. Instead of one big agent holding **every tool**, you split it.
+>
+> A supervisor delegates to **scoped sub-agents**: Orders, Pay, Support. Each one has **its own MCP server**, exposing only **what its job needs**.
+>
+> Look at the Orders tools here. It can **find an order**. That's it. There's **no cancelOrder**, **no refund** method on this bean. Not "please don't refund". The method **doesn't exist**.
+>
+> So a mistake in Orders has **nothing to reach** in Pay. The blast radius is **contained**, and each sub-agent is **testable on its own**. This comes from **Jonathan Vila López**'s "Agents With Seatbelts".
+>
 
-## Slide 20 — Boundaries it cannot negotiate. A second AI, then a human, as trust...
+*Short route:* Split the agent into scoped sub-agents. The Orders bean has no refund method: not a rule, the method doesn't exist.
 
-**Idea:** this is the direct answer to the hook — autonomy scales only inside boundaries it can't talk its way out of, with review that dims on evidence.
-- Boundaries live outside the agent's judgment; review tightens or loosens by risk tier and track record, never by vibe
-- **Example:** the metric that should move is change-failure rate on agent-authored PRs — remember talk 1's 19 %, a feeling is not a measurement
-**Transition:** three sentences to leave the room with.
+**→** Same instinct, now for the whole machine.
 
-*~1.5 min*
+## Slide 11 — Scoping the machine, not just the tool  ·  CORE (full ~1.3 min, short ~0.7 min)
 
-## Slide 21 — Key takeaways
+**▶ Control lives outside the agent: a wall, not a rule it reads.**
 
-**Idea:** three sentences carrying the whole talk, in the order they were built.
-- Scope first, outside the agent's reach; review second, a different model before a human, dimmed by risk; measure third, outcomes over feeling
-- **Example:** the Orders bean with no refund method, the payment path that keeps its reviewer, change-failure rate on agent PRs — one anchor per sentence
-**Transition:** one place this stays open, deliberately.
+- **Containment**: its own kernel, a micro-VM, its own Docker daemon
+- **Filesystem**: only the chosen folders, never **~/.ssh** or **settings.xml**
+- **Network**: **deny by default**, logged
+- **Secrets never inside**: a dummy value, swapped **on the way out**
 
-*~1 min*
+> Now scale that to the machine the agent runs on. Four moves. Docker showed them with their sandboxes, but the idea is **general**.
+>
+> **Containment**: each agent gets **its own kernel**. A micro-VM, not a shared container. With **its own Docker daemon** inside, for tests and builds.
+>
+> **Filesystem scope**: only the folders the task needs. A ticket on a reporting service should **never see** your **~/.ssh**, or your Maven **settings.xml**.
+>
+> **Network**: **deny by default**. Only the registries and services the task needs, and every call is **logged**.
+>
+> And **secrets never go inside**. The agent gets a **dummy value**, and the real one is swapped in **on the way out**. The agent can't print a secret it **never holds**.
+>
 
-## Slide 22 — Open questions, for us as a team
+*Short route:* Its own kernel, only the needed folders, network denied by default, secrets swapped in on the way out. A wall, not a rule.
 
-**Idea:** the series closes as questions, not a roadmap — these are for this team to answer, not for one talk to settle.
-- None of these have a slide-ready answer tonight, on purpose
-- **Example:** "who approves the exception when one ticket genuinely needs a boundary relaxed, and for how long?"
-**Transition:** sources for tonight, for anyone who wants the originals.
+**→** Same discipline for everything the agent calls out to.
 
-*~1 min*
+## Slide 12 — Securing what the agent calls out to: five knights  ·  IF TIME (full ~1.3 min, short ~0.3 min)
 
-## Slide 23 — Sources
+**▶ Every server the agent calls is part of the boundary.**
 
-Sources for tonight's talk, for anyone who wants to go to the originals.
+- **Leaked secrets** · a **double agent** server · **black-box CVEs** · **context pollution** · **sprawl**
+- The fix that scales: **one governed gateway** (Jonathan Vila López, "The 5 Knights of the MCP Apocalypse")
+
+> Jonathan Vila López calls these **the five knights** of the MCP apocalypse. Five ways an external connection goes wrong.
+>
+> One: **leaked secrets**. Paste a prod password in the chat, and it can sit in a server's **logs forever**.
+>
+> Two: a server as a **double agent**. An unofficial copy that siphons keys and data. Check it's the **official** one.
+>
+> Three: **black-box CVEs**. A vulnerable library inside the server. Run your usual **SCA and DAST** on it.
+>
+> Four: **context pollution**. A hundred pages fetched for one paragraph, or injected data read as fact. Use **one scoped server** per sub-agent.
+>
+> Five: **sprawl**. Ten servers, three doing the same job, no shared policy. The answer that scales: **one governed gateway**.
+>
+
+*Short route:* Five ways external servers go wrong. The fix that scales: one governed gateway, not ten ad hoc servers.
+
+**→** Even with all five closed, there's one thing a sandbox doesn't protect.
+
+## Slide 13 — A sandbox protects the machine. The repository is still ours to protect.  ·  IF TIME (full ~1.2 min, short ~0.3 min)
+
+**▶ A sandbox protects the machine. The repository is still ours to protect.**
+
+- **Mount mode**: it can still delete, leak, and **push with its token**
+- Use **clone or branch** mode, and a **minimal-scope token**
+- The boundary must follow **every delegation**, agent to agent
+
+> A sandbox stops a disaster on **the machine**. Not in **the workspace**.
+>
+> If you **mount** your project folder into the sandbox, the agent can still **delete** files, **leak** them, and **push** bad code with the token you gave it.
+>
+> So use **clone or branch mode**, and give it a token with the **smallest scope** possible.
+>
+> And one more: the moment one agent **delegates** to another agent, the boundary has to **travel across that hop** too. Not just from agent to tool.
+>
+
+*Short route:* A sandbox protects the machine, not the repo. Clone or branch mode, and a minimal token.
+
+**→** The machine side is covered. Now, the team around it.
+
+## Slide 14 — Dimming the lights  ·  CORE (full ~0.4 min, short ~0.2 min)
+
+**▶ Review less, only as the agent earns it.**
+
+- From a **white factory** (humans review everything) to a **dark factory** (nobody does)
+- The dial moves **gradually**, **on purpose**
+
+> Chapter three: **dimming the lights**. The phrase comes from **Victor Rentea**'s Deep Dive at Devoxx.
+>
+> Imagine a dial. At one end, a **white factory**: humans review **everything**. At the other end, a **dark factory**: **nobody** reviews anything.
+>
+> The question is how far to turn it. And the answer: **gradually, on purpose**, based on **trust earned**. Not on vibes.
+>
+
+**→** And the first rule surprised me.
+
+## Slide 15 — Humans should not review AI-generated code before a second AI does.  ·  CORE (full ~1.2 min, short ~0.7 min)
+
+**▶ A second AI reviews first. Then the human.**
+
+- The author agent is in its **"dumb zone"**; a fresh reviewer is in the **"smart zone"**
+- **Deterministic checks** still run first: static analysis, linters, hooks
+- "At least **throw the dice twice**" (Victor Rentea)
+
+> Victor Rentea's rule: **humans should not review AI-generated code before a second AI does**.
+>
+> Why? The agent that wrote the code is deep in its own session, committed to its own choices. He calls it **the dumb zone**. A **fresh** reviewer, with a clean context, is in **the smart zone**.
+>
+> And of course, the **deterministic checks** still run first: static analysis, linters, the harness from talk two. **Before** any model gives an opinion.
+>
+> His phrase: "**at least throw the dice twice**".
+>
+> Who finds that **terrifying**? Who finds it **inevitable**? Honestly, it can be **both**.
+>
+
+*Short route:* A second AI reviews before a human does: the author is in its dumb zone, a fresh reviewer is in the smart zone.
+
+**→** So what does that look like in a pipeline?
+
+## Slide 16 — A review stage a Java team already recognises  ·  IF TIME (full ~0.8 min, short skip)
+
+**▶ One more stage in a pipeline we already run.**
+
+- **mvn verify**, same as today
+- **Second-model review** against the ticket's **acceptance criteria**
+- **Merge gate** blocks on open findings · **human approval** only where the risk demands it
+
+> And it's not a new ritual. It's **one more stage** in a pipeline we already know.
+>
+> Build and unit tests: **mvn verify**, same as today. Then a **different model** scores the diff against the ticket's **acceptance criteria**, and writes its findings on the PR.
+>
+> Then a **merge gate**: an open finding above a threshold **blocks the merge**. And a **human approval**, only for the repos that still need **100 % review**, like the payment path.
+>
+> For example: mvn verify is green, the second model flags a **missing null check** against the acceptance criteria, and the gate **holds** until it's fixed.
+>
+
+*Short route:* Skip.
+
+**→** That "repos that still need review" part is the real mechanism of dimming.
+
+## Slide 17 — Dimming, by risk tier  ·  CORE (full ~1.3 min, short ~0.7 min)
+
+**▶ Dimming is a ladder per service, set by what a mistake costs.**
+
+- **Payment / ledger**: 100 % human review, **forever**
+- **Reporting service**: spot-checks after **months of clean output**
+- **Throwaway prototype**: merge on **green CI**
+
+> Dimming isn't **one dial** for the whole company. It's a **ladder**, set **per service**, by how much **a mistake there would cost**.
+>
+> At the top: **payment, ledger**. **100 % human review**, forever. No amount of clean history changes that.
+>
+> In the middle: a **reporting service**. Rentea's rule: after **months** of consistently clean output, review **half the lines**. Then half again. **Never from day one**.
+>
+> At the bottom: a **throwaway prototype**. Merge on **green CI** alone.
+>
+> Remember the **trust ladder** from talk one? Same idea, applied to **review**.
+>
+
+*Short route:* Payment: 100 % review, forever. Reporting: spot-checks after months of clean output. Prototype: merge on green CI.
+
+**→** And yes, a second AI costs money. How much?
+
+## Slide 18 — Cheaper than the incident it prevents  ·  IF TIME (full ~0.8 min, short ~0.2 min)
+
+**▶ Cheaper than the incident it prevents.**
+
+- One demo PR: **$15** implement · **$5** review (5 reviewers) · **$9** auto-fixes · **$0.30** guide
+- Review with a **smarter model**: it reads a lot, writes little
+
+> Here's a real bill, from Victor Rentea's demo, on **one PR**.
+>
+> **Fifteen dollars** to implement. **Five** for a review by five adversarial reviewers. **Nine** for the auto-fixes. And **thirty cents** for the guide.
+>
+> So about fifteen dollars for the whole review side. Compare that to **one bad merge** reaching production.
+>
+> And a tip: review with a **smarter model** than the one that wrote the code. A reviewer **reads a lot and writes little**, so it stays **cheap**.
+>
+
+*Short route:* One PR: 15 dollars to write it, about 15 to review and fix it. Cheaper than one bad merge.
+
+**→** Now, the sharpest objection.
+
+## Slide 19 — Cross-model review is a review, not a boundary.  ·  IF TIME (full ~1 min, short ~0.3 min)
+
+**▶ Cross-model review is a review, not a boundary.**
+
+- Isn't this **AI vetting AI** again, from chapter one?
+- **No**: the sandbox from chapter two must hold **on its own**
+- A **different model** finds more than the same model reviewing itself
+
+> You might say: wait. In chapter one, you said **AI vetting AI** doesn't work. And now you want a second AI?
+>
+> The difference: in chapter one, the AI was used as **the boundary**. The only wall. Here, it's **a review**. A quality check.
+>
+> The boundary is still **the sandbox and the scoping** from chapter two. They hold **on their own**, with **no model's opinion** involved. The review only runs **after** that. And for the tiers that need it, a **human still decides**.
+>
+> And Rentea's claim: a **different model** reviewing finds **more** than the same model reviewing itself. Throw the dice twice, with a **different die**.
+>
+
+*Short route:* AI as the wall fails. AI as a review, behind a real wall, helps. The sandbox holds on its own.
+
+**→** So let's answer the question we started with.
+
+## Slide 20 — Boundaries it cannot negotiate. A second AI, then a human, as trust is earned. Measured by outcomes.  ·  CORE (full ~1 min, short ~0.6 min)
+
+**▶ Boundaries it can't negotiate. Review dimmed as trust is earned. Judged by outcomes.**
+
+- Boundaries live **outside the agent's judgment**
+- Review moves by **risk tier** and **track record**, never by vibe
+- Remember the **19 %**: measure the **change-failure rate**, not felt speed
+
+> How far can an agent run without us watching? Here's my answer.
+>
+> **Boundaries it can't negotiate**. They live **outside its judgment**: the machine, the files, the network, the secrets.
+>
+> **A second AI, then a human**. And that review is **dimmed** only as trust is **earned**, by risk tier and track record.
+>
+> And all of it **measured by outcomes**. Remember talk one: people **felt 20 % faster** and were **19 % slower**. A feeling is **not a measurement**. What should move is the **change-failure rate** on agent-written PRs.
+>
+
+*Short route:* Boundaries it can't negotiate, review dimmed as trust is earned, measured by change-failure rate, not by feeling.
+
+**→** Three things to take home.
+
+## Slide 21 — Key takeaways  ·  CORE (full ~1 min, short ~0.7 min)
+
+**▶ Three things to take home.**
+
+- **Scope** what it can reach, **before** it acts
+- A **different model** before the human; dim **by risk tier**
+- Judge by **outcomes**, not felt speed
+
+> If you remember only three things.
+>
+> One: **scope what it can reach**. Files, network, secrets, tools. **Before** it acts. And nobody edits that scope, **not even the agent**.
+>
+> Two: put **a different model** between the author agent and the human. And dim human review **by risk tier**, never just because it **feels** fine.
+>
+> Three: **judge by outcomes**. Change-failure rate, not felt speed. The same measure as **every talk** in this series.
+>
+
+**→** And to close, some questions for us.
+
+## Slide 22 — Open questions, for us as a team  ·  CORE (full ~1 min, short ~0.5 min)
+
+**▶ The series ends with questions for us, not a roadmap.**
+
+- Who owns the **exception process** when a boundary must flex?
+- What **risk tier** is each of our services, and **who decides**?
+- What **audit trail** proves what an agent could touch?
+- Which services have **earned** lighter review, and **on what evidence**?
+
+> I don't want to end with a recipe. I want to end with **questions for us, as a team**.
+>
+> When one ticket genuinely needs a boundary relaxed: **who approves the exception**, and for how long?
+>
+> What **risk tier** does each of our services sit at? And **who decides**?
+>
+> After the fact, what **audit trail** proves what an agent was **allowed to touch**?
+>
+> And which of our services has **earned** a lighter review, and **on what evidence**?
+>
+> I don't have the answers today, **on purpose**. These are **ours** to answer. Thanks for following the whole series, and I'm happy to **take your questions**.
+>
+
+*Short route:* Four open questions for us: exceptions, risk tiers, audit trail, and who has earned a lighter review. Thanks, and over to your questions.
+
+**→** Questions. The sources are on the last slide.
+
+## Slide 23 — Sources  ·  IF TIME (full ~0.3 min, short skip)
+
+**▶ Everything behind today's examples.**
+
+- **Willison**: the lethal trifecta · **Šelajev** & **de Morlhon** (Docker): sandboxes
+- **Vila López**: the 5 knights of MCP · **Rentea**: dimming the lights
+- **OWASP** Top 10 for LLM apps: excessive agency
+
+> If you want to dig deeper, all the sources are here: the **articles**, the Devoxx **replays**, Rentea's **human-review** repo, and the **OWASP** list for LLM applications. I'll share the deck after the session.
+>
+
+*Short route:* Leave it on screen during questions.
+
+**→** Over to your questions.
